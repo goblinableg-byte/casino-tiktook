@@ -1155,20 +1155,44 @@ function switchMain(name){
 }
 
 // ================================================================
-//  WEBSOCKET
+//  WEBSOCKET — с автопереподключением (экспоненциальный backoff)
 // ================================================================
-function connectStream(){
-  const username=document.getElementById('username-input').value.trim().replace('@','');
+function connectStream(isReconnect){
+  const username=isReconnect
+    ?S.username
+    :document.getElementById('username-input').value.trim().replace('@','');
   if(!username){alert('Введи ник!');return;}
   S.username=username;
-  showGame();
+  if(!isReconnect){showGame();S._reconnectDelay=1000;}
+
   const proto=location.protocol==='https:'?'wss:':'ws:';
   const ws=new WebSocket(`${proto}//${location.host}?username=${encodeURIComponent(username)}`);
   S.ws=ws;
-  ws.onopen=()=>{setConnected(true);addChatMsg('system','✅','Подключено к @'+username);};
+
+  ws.onopen=()=>{
+    // ✅ FIX 4: Сброс задержки при успешном подключении
+    S._reconnectDelay=1000;
+    setConnected(true);
+    addChatMsg('system','✅',isReconnect?'♻️ Переподключено к @'+username:'Подключено к @'+username);
+  };
   ws.onmessage=e=>{try{routeEvent(JSON.parse(e.data));}catch{}};
-  ws.onerror=()=>{setConnected(false);addChatMsg('system','❌','Ошибка подключения');};
-  ws.onclose=()=>{setConnected(false);addChatMsg('system','🔌','Соединение закрыто');};
+  ws.onerror=()=>{setConnected(false);};
+  ws.onclose=()=>{
+    setConnected(false);
+    // ✅ FIX 4: Автопереподключение — только для реального стрима, не для демо
+    if(S.username&&!S.demo){
+      const delay=S._reconnectDelay||1000;
+      addChatMsg('system','🔌','Обрыв! Переподключение через '+Math.round(delay/1000)+'с...');
+      setTimeout(()=>{
+        // Проверяем что пользователь не отключился вручную
+        if(S.username&&!S.demo)connectStream(true);
+      },delay);
+      // Экспоненциальный backoff: 1с → 2с → 4с → ... → макс 30с
+      S._reconnectDelay=Math.min((S._reconnectDelay||1000)*2,30000);
+    } else {
+      addChatMsg('system','🔌','Соединение закрыто');
+    }
+  };
 }
 
 function routeEvent(msg){
@@ -1235,8 +1259,10 @@ function setConnected(v,demo){
 function disconnect(){
   if(S.ws){S.ws.close();S.ws=null;}
   if(S.demoInterval){clearInterval(S.demoInterval);S.demoInterval=null;}
+  // ✅ FIX 4: Сбрасываем username ПЕРВЫМ — это стопит автопереподключение
   Object.assign(S,{connected:false,demo:false,username:'',stats:{viewers:0,gifts:0,coins:0},
-    energy:0,level:1,xp:0,leaderboard:{},combo:0,multiplier:1,effects:{},boss:null});
+    energy:0,level:1,xp:0,leaderboard:{},combo:0,multiplier:1,effects:{},boss:null,
+    _reconnectDelay:1000});
   document.getElementById('connect-panel').style.display='';
   document.getElementById('game-container').style.display='none';
   document.getElementById('disconnect-btn').style.display='none';
