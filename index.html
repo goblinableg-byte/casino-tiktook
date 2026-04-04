@@ -623,7 +623,7 @@ function fadeChaosOut(dur){
 }
 
 function playGiftSound(coins){
-  if(AUDIO._donorPlaying||AUDIO._bossActive)return;
+  if(AUDIO._donorPlaying||AUDIO._bossActive||S._creditsActive)return;
   const src=coins<=10?SND.cheap:coins<100?SND.mid:SND.big;
   const a=new Audio(src);a.volume=0.6;a.play().catch(()=>{});
 }
@@ -1226,6 +1226,7 @@ function triggerGlitch(){
 }
 
 function shakeScreen(){
+  if(S._creditsActive)return;
   document.body.classList.add('shake');
   setTimeout(()=>document.body.classList.remove('shake'),500);
 }
@@ -1413,6 +1414,7 @@ function addChatMsg(type,user,text){
 //  BIG EVENTS
 // ================================================================
 function showBigEvent(emoji,title,sub){
+  if(S._creditsActive)return;
   const ov=document.getElementById('event-overlay');
   ov.innerHTML='';
   const el=document.createElement('div');el.className='big-event';
@@ -1421,6 +1423,7 @@ function showBigEvent(emoji,title,sub){
 }
 
 function showFullscreenEvent(emoji,title,sub){
+  if(S._creditsActive)return;
   const fs=document.getElementById('fullscreen-event');
   document.getElementById('fs-emoji').textContent=emoji;
   document.getElementById('fs-title').textContent=title;
@@ -1439,6 +1442,7 @@ function showNearMiss(){
 //  PARTICLES
 // ================================================================
 function spawnParticles(emoji,count){
+  if(S._creditsActive)return;
   count=Math.min(count||8,12);
   const cx=window.innerWidth/2,cy=window.innerHeight/2;
   const frag=document.createDocumentFragment();
@@ -1458,6 +1462,7 @@ function spawnParticles(emoji,count){
 }
 
 function spawnCoinRain(emoji,count){
+  if(S._creditsActive)return;
   emoji=emoji||'💰';count=Math.min(count||15,25);
   for(let i=0;i<count;i++){
     setTimeout(()=>{
@@ -1500,7 +1505,16 @@ function _runDonorAnimation(user,coins){
   miniEl.style.display='none';nickEl.textContent='';nickEl.className='donor-nick';S._donorActive=true;
   requestAnimationFrame(()=>{overlay.style.transition='background 1.5s ease';overlay.style.background='rgba(18,18,18,0.97)';});
   setTimeout(()=>{nickEl.textContent=user;nickEl.classList.add('show');setTimeout(()=>nickEl.classList.add('dance'),80);spawnParticles('✨',16);spawnCoinRain('💰',25);},10500);
-  setTimeout(()=>{nickEl.classList.remove('show','dance');nickEl.style.opacity='0';miniEl.textContent=user;miniEl.style.display='block';miniEl.style.transition='opacity 0.8s ease';requestAnimationFrame(()=>miniEl.classList.add('show'));},30000);
+  setTimeout(()=>{
+    nickEl.classList.remove('show','dance');nickEl.style.opacity='0';
+    miniEl.textContent=user;miniEl.style.display='block';miniEl.style.transition='opacity 0.8s ease';
+    requestAnimationFrame(()=>miniEl.classList.add('show'));
+    // Размораживаем экран — убираем серый оверлей, ник остаётся в углу
+    overlay.style.transition='background 0.8s ease';
+    overlay.style.background='rgba(0,0,0,0)';
+    overlay.style.pointerEvents='none';
+    S._donorActive=false;
+  },30000);
   track.addEventListener('ended',()=>{
     if(AUDIO.chaos&&AUDIO._savedChaosVol>0)AUDIO.chaos.volume=AUDIO._savedChaosVol;
     miniEl.classList.remove('show');miniEl.classList.add('fly-away');
@@ -1537,6 +1551,7 @@ function _showQueueBurst(items,cb){
 // ================================================================
 function startEndStream(){
   if(!confirm('Завершить стрим и показать титры?'))return;
+  S._creditsActive=true; // блокирует все эффекты/звуки
   const scene=document.getElementById('credits-scene');
   const scroll=document.getElementById('credits-scroll');
   const final=document.getElementById('credits-final');
@@ -1593,10 +1608,9 @@ function startEndStream(){
     const scrollDur=Math.max(totalDur-8000,20000);
     scroll.style.animationDuration=scrollDur+'ms';
     scroll.style.animationTimingFunction='linear';
-    // Show final at end of music
+    // Show final at end of music — NO extra effects during credits, only music
     setTimeout(()=>{
       final.classList.add('show');
-      spawnParticles('✨',20);spawnCoinRain('⭐',20);
     },totalDur-4000);
   });
 
@@ -1615,7 +1629,7 @@ function startEndStream(){
   creditsAudio.addEventListener('ended',()=>{
     setTimeout(()=>{
       scene.style.transition='opacity 1.5s ease';scene.style.opacity='0';
-      setTimeout(()=>{scene.classList.remove('active');final.classList.remove('false');scene.style.opacity='';},1500);
+      setTimeout(()=>{scene.classList.remove('active');final.classList.remove('false');scene.style.opacity='';S._creditsActive=false;},1500);
     },5000);
   });
 }
