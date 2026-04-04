@@ -2,110 +2,107 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>🎰 STREAM CHAOS CASINO</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --gold:#FFD700;--gold2:#FFA500;--pink:#FF2D78;--cyan:#00F5FF;
-  --green:#39FF14;--purple:#B44FFF;--red:#FF3333;--orange:#FF6B35;
-  --dark:#0A0A14;--dark2:#12121F;--dark3:#1A1A2E;
-  --panel:rgba(255,255,255,0.04);--border:rgba(255,215,0,0.2);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Rajdhani',sans-serif;background:var(--dark);color:#fff;min-height:100vh;overflow-x:hidden;}
+:root{--gold:#FFD700;--gold2:#FFA500;--pink:#FF2D78;--cyan:#00F5FF;--green:#39FF14;--purple:#B44FFF;--red:#FF3333;--orange:#FF6B35;--dark:#0A0A14;--dark2:#12121F;--dark3:#1A1A2E;--panel:rgba(255,255,255,0.04);--border:rgba(255,215,0,0.2);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Rajdhani',sans-serif;background:var(--dark);color:#fff;min-height:100vh;overflow-x:hidden;overscroll-behavior:none;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
 .app{position:relative;z-index:1;}
 
 /* SCREEN EFFECTS */
 body.shake{animation:bodyShake 0.5s ease;}
-body.glitch{animation:bodyGlitch 0.3s steps(2) infinite;}
-body.dark-mode{filter:brightness(0.15);}
-body.hyper{animation:bodyHyper 0.1s ease infinite;}
-@keyframes bodyShake{0%,100%{transform:translate(0)}25%{transform:translate(-8px,4px)}50%{transform:translate(8px,-4px)}75%{transform:translate(-4px,8px)}}
-@keyframes bodyGlitch{0%{filter:hue-rotate(0deg) saturate(1);}50%{filter:hue-rotate(90deg) saturate(3) contrast(1.5);transform:translate(3px,0);}100%{filter:hue-rotate(180deg) saturate(1);transform:translate(-3px,0);}}
+@keyframes bodyShake{0%,100%{transform:translate(0)}25%{transform:translate(-6px,3px)}50%{transform:translate(6px,-3px)}75%{transform:translate(-3px,6px)}}
+body.glitch{animation:bodyGlitch 0.3s steps(2) 3;}
+@keyframes bodyGlitch{0%{filter:hue-rotate(0deg);}50%{filter:hue-rotate(90deg) saturate(3) contrast(1.5);transform:translate(3px,0);}100%{filter:hue-rotate(0deg);transform:translate(0);}}
+body.hyper{animation:bodyHyper 0.15s ease infinite;}
 @keyframes bodyHyper{0%,100%{filter:saturate(2) brightness(1.2);}50%{filter:saturate(3) brightness(1.5) hue-rotate(30deg);}}
+body.chaos-active{animation:chaosShake 0.2s ease infinite;}
+@keyframes chaosShake{0%{transform:translate(0,0);}25%{transform:translate(-2px,1px);}50%{transform:translate(2px,-1px);}75%{transform:translate(-1px,2px);}100%{transform:translate(0,0);}}
 
 /* HEADER */
-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(0,0,0,0.7);border-bottom:1px solid var(--border);backdrop-filter:blur(10px);position:sticky;top:0;z-index:200;}
-.logo{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;}
-.status-bar{display:flex;align-items:center;gap:12px;}
-.status-dot{width:10px;height:10px;border-radius:50%;background:#555;transition:all 0.3s;}
-.status-dot.live{background:var(--green);box-shadow:0 0 10px var(--green);animation:pulseDot 2s infinite;}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:rgba(0,0,0,0.8);border-bottom:1px solid var(--border);backdrop-filter:blur(10px);position:sticky;top:0;z-index:200;}
+.logo{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px;}
+.status-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#555;transition:all 0.3s;flex-shrink:0;}
+.status-dot.live{background:var(--green);box-shadow:0 0 8px var(--green);animation:pulseDot 2s infinite;}
 @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:0.4;}}
-.status-text{font-size:13px;color:#aaa;}
+.status-text{font-size:11px;color:#aaa;}
 .status-text.connected{color:var(--green);}
-.btn{padding:10px 20px;border:none;border-radius:8px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:1px;white-space:nowrap;}
+.btn{padding:8px 16px;border:none;border-radius:8px;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:1px;white-space:nowrap;}
 .btn-primary{background:linear-gradient(135deg,var(--gold2),var(--pink));color:#fff;}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,45,120,0.4);}
+.btn-primary:active{transform:scale(0.96);}
 .btn-secondary{background:rgba(255,255,255,0.08);color:#ccc;border:1px solid rgba(255,255,255,0.15);}
-.btn-secondary:hover{background:rgba(255,255,255,0.14);color:#fff;}
-.btn-sm{padding:6px 14px;font-size:11px;}
+.btn-danger{background:rgba(255,51,51,0.2);color:var(--red);border:1px solid var(--red);}
+.btn-shop{background:linear-gradient(135deg,#B44FFF,#FF2D78);color:#fff;}
+.btn-end{background:linear-gradient(135deg,#333,#555);color:#ccc;border:1px solid #444;}
+.btn-fs{background:rgba(0,245,255,0.1);color:var(--cyan);border:1px solid var(--cyan);}
+.btn-sm{padding:5px 12px;font-size:10px;}
 
 /* CONNECT */
-#connect-panel{max-width:480px;margin:80px auto;padding:40px;background:var(--panel);border:1px solid var(--border);border-radius:16px;text-align:center;backdrop-filter:blur(20px);}
-#connect-panel h2{font-family:'Orbitron',monospace;font-size:22px;margin-bottom:8px;color:var(--gold);}
-#connect-panel p{color:#888;font-size:14px;margin-bottom:28px;line-height:1.6;}
-.input-group{display:flex;gap:8px;margin-bottom:16px;}
-.input-group input{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:#fff;padding:12px 16px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:16px;outline:none;transition:border-color 0.2s;}
+#connect-panel{max-width:480px;margin:60px auto;padding:32px;background:var(--panel);border:1px solid var(--border);border-radius:16px;text-align:center;backdrop-filter:blur(20px);}
+#connect-panel h2{font-family:'Orbitron',monospace;font-size:20px;margin-bottom:8px;color:var(--gold);}
+#connect-panel p{color:#888;font-size:13px;margin-bottom:24px;line-height:1.6;}
+.input-group{display:flex;gap:8px;margin-bottom:12px;}
+.input-group input{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:#fff;padding:11px 14px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;}
 .input-group input:focus{border-color:var(--cyan);}
-.server-info{background:rgba(0,245,255,0.06);border:1px solid rgba(0,245,255,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:#7af;margin-top:12px;text-align:left;line-height:1.6;}
+.server-info{background:rgba(0,245,255,0.06);border:1px solid rgba(0,245,255,0.2);border-radius:8px;padding:9px 12px;font-size:11px;color:#7af;margin-top:10px;text-align:left;line-height:1.6;}
+.disclaimer-box{margin-top:14px;padding:10px;background:rgba(255,100,0,0.06);border:1px solid rgba(255,100,0,0.15);border-radius:8px;font-size:10px;color:rgba(255,150,50,0.7);line-height:1.6;text-align:left;}
+.creator-tag{font-size:9px;color:rgba(255,215,0,0.3);font-family:'Orbitron',monospace;letter-spacing:0.5px;margin-top:4px;}
+.disclaimer-sm{font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.3px;}
 
 /* MAIN LAYOUT */
-#game-container{display:none;padding:12px;}
-.main-tabs{display:flex;gap:4px;padding:0 0 12px;overflow-x:auto;scrollbar-width:none;}
+#game-container{display:none;padding:8px;}
+.main-tabs{display:flex;gap:3px;padding:0 0 8px;overflow-x:auto;scrollbar-width:none;}
 .main-tabs::-webkit-scrollbar{display:none;}
-.main-tab{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,0.03);color:#888;transition:all 0.2s;white-space:nowrap;font-family:'Orbitron',monospace;}
+.main-tab{padding:7px 13px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);background:rgba(255,255,255,0.03);color:#888;transition:all 0.2s;white-space:nowrap;font-family:'Orbitron',monospace;}
 .main-tab.active{background:rgba(255,215,0,0.1);color:var(--gold);border-color:var(--gold);}
 .tab-page{display:none;}
 .tab-page.active{display:block;}
 
 /* PANELS */
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;}
-.panel-header{padding:10px 14px;background:rgba(255,215,0,0.05);border-bottom:1px solid var(--border);font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--gold);display:flex;align-items:center;justify-content:space-between;}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.panel-header{padding:9px 13px;background:rgba(255,215,0,0.05);border-bottom:1px solid var(--border);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--gold);display:flex;align-items:center;justify-content:space-between;}
 
 /* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
-.stat-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;}
-.stat-value{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--gold);line-height:1;}
-.stat-label{font-size:10px;color:#555;margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;}
+.stat-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;}
+.stat-value{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--gold);line-height:1;}
+.stat-label{font-size:9px;color:#555;margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;}
 
 /* ENERGY */
-.energy-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;}
-.energy-label{display:flex;justify-content:space-between;font-size:11px;color:#888;margin-bottom:6px;}
-.energy-track{height:16px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;}
-.energy-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink));border-radius:8px;width:0%;transition:width 0.5s ease;}
+.energy-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;}
+.energy-label{display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:5px;}
+.energy-track{height:14px;background:rgba(255,255,255,0.06);border-radius:7px;overflow:hidden;position:relative;}
+.energy-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink));border-radius:7px;width:0%;transition:width 0.4s ease;}
+.energy-label-right{font-size:9px;color:rgba(255,255,255,0.3);}
 
-/* COMBO */
-.combo-display{text-align:center;padding:8px;margin-bottom:12px;}
-.combo-count{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;color:var(--orange);text-shadow:0 0 20px rgba(255,107,53,0.8);display:none;}
-.combo-label{font-size:12px;color:#888;}
+/* BOSS PANEL */
+.boss-panel{background:rgba(255,0,0,0.05);border:1px solid rgba(255,0,0,0.3);border-radius:12px;padding:12px;margin-bottom:10px;display:none;}
+.boss-name{font-family:'Orbitron',monospace;font-size:13px;color:var(--red);text-align:center;margin-bottom:6px;}
+.boss-hp-track{height:18px;background:rgba(255,0,0,0.1);border-radius:9px;overflow:hidden;position:relative;}
+.boss-hp-fill{height:100%;background:linear-gradient(90deg,#ff0000,#ff6600);border-radius:9px;transition:width 0.3s;}
+.boss-hp-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:700;}
+.boss-emoji{font-size:36px;text-align:center;display:block;animation:bossBob 2s ease infinite;}
+@keyframes bossBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
 
-/* BOSS */
-.boss-panel{background:rgba(255,0,0,0.05);border:1px solid rgba(255,0,0,0.3);border-radius:12px;padding:14px;margin-bottom:12px;display:none;}
-.boss-name{font-family:'Orbitron',monospace;font-size:14px;color:var(--red);text-align:center;margin-bottom:8px;}
-.boss-hp-track{height:20px;background:rgba(255,0,0,0.1);border-radius:10px;overflow:hidden;position:relative;}
-.boss-hp-fill{height:100%;background:linear-gradient(90deg,#ff0000,#ff6600);border-radius:10px;transition:width 0.5s;}
-.boss-hp-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;font-weight:700;}
-.boss-emoji{font-size:40px;text-align:center;display:block;animation:bossBob 2s ease infinite;}
-@keyframes bossBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-
-/* SLOTS GRID */
-.slots-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px;}
-.slot-machine{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
-.slot-machine:hover{border-color:var(--gold);transform:translateY(-2px);}
-.slot-machine.active-slot{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,245,255,0.3);}
+/* SLOTS */
+.slots-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
+.slot-machine{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:border-color 0.2s,transform 0.1s;position:relative;overflow:hidden;will-change:transform;}
+.slot-machine:active{transform:scale(0.97);}
 .slot-machine.cursed{border-color:var(--purple);animation:cursedPulse 2s infinite;}
-@keyframes cursedPulse{0%,100%{box-shadow:0 0 10px rgba(180,79,255,0.3);}50%{box-shadow:0 0 30px rgba(180,79,255,0.8);}}
-.slot-type-label{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;color:#888;margin-bottom:6px;text-transform:uppercase;}
-.slot-reels{display:flex;justify-content:center;gap:4px;margin-bottom:8px;}
-.slot-reel{width:52px;height:52px;background:var(--dark3);border:1.5px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:26px;transition:border-color 0.3s;}
-.slot-reel.spinning{animation:reelSpin 0.08s steps(1) infinite;border-color:var(--cyan);}
-.slot-reel.win{border-color:var(--gold);box-shadow:0 0 15px rgba(255,215,0,0.5);}
+@keyframes cursedPulse{0%,100%{box-shadow:0 0 8px rgba(180,79,255,0.3);}50%{box-shadow:0 0 20px rgba(180,79,255,0.7);}}
+.slot-type-label{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;color:#888;margin-bottom:5px;text-transform:uppercase;}
+.slot-reels{display:flex;justify-content:center;gap:3px;margin-bottom:6px;}
+.slot-reel{width:48px;height:48px;background:var(--dark3);border:1.5px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;transition:border-color 0.2s;will-change:transform;}
+.slot-reel.spinning{animation:reelSpin 0.1s steps(1) infinite;border-color:var(--cyan);}
+.slot-reel.win{border-color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,0.5);}
 .slot-reel.cursed-reel{border-color:var(--purple);}
-@keyframes reelSpin{0%{transform:translateY(0);}50%{transform:translateY(-3px);}}
-.slot-info{font-size:11px;color:#666;min-height:16px;}
-.slot-badge{position:absolute;top:8px;right:8px;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;font-family:'Orbitron',monospace;}
+@keyframes reelSpin{0%{transform:translateY(0);}50%{transform:translateY(-2px);}}
+.slot-info{font-size:10px;color:#666;min-height:14px;}
+.slot-badge{position:absolute;top:6px;right:6px;padding:2px 5px;border-radius:4px;font-size:8px;font-weight:700;font-family:'Orbitron',monospace;}
 .badge-risk{background:rgba(255,51,51,0.3);color:var(--red);border:1px solid var(--red);}
 .badge-turbo{background:rgba(0,245,255,0.2);color:var(--cyan);border:1px solid var(--cyan);}
 .badge-cursed{background:rgba(180,79,255,0.2);color:var(--purple);border:1px solid var(--purple);}
@@ -114,94 +111,91 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .badge-boss{background:rgba(255,0,0,0.2);color:var(--red);border:1px solid var(--red);}
 
 /* WHEEL */
-.wheel-wrap{position:relative;width:200px;height:200px;margin:0 auto 12px;}
-#wheel-canvas{width:200px;height:200px;border-radius:50%;}
-.wheel-pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:16px solid var(--gold);filter:drop-shadow(0 0 6px rgba(255,215,0,0.8));}
+.wheel-wrap{position:relative;width:180px;height:180px;margin:0 auto 10px;}
+#wheel-canvas{width:180px;height:180px;border-radius:50%;}
+.wheel-pointer{position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:14px solid var(--gold);filter:drop-shadow(0 0 5px rgba(255,215,0,0.8));}
 
 /* CASES */
-.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.case-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.2s;}
-.case-item:hover{transform:translateY(-3px);}
-.case-emoji{font-size:32px;display:block;margin-bottom:6px;}
-.case-name{font-size:11px;font-weight:700;color:#ccc;margin-bottom:2px;}
-.case-rarity{font-size:10px;}
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.case-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:transform 0.15s;}
+.case-item:active{transform:scale(0.95);}
+.case-emoji{font-size:28px;display:block;margin-bottom:5px;}
+.case-name{font-size:10px;font-weight:700;color:#ccc;margin-bottom:2px;}
+.case-rarity{font-size:9px;}
 .case-common{border-color:rgba(255,255,255,0.2);}.case-common .case-rarity{color:#aaa;}
 .case-risk{border-color:rgba(255,107,53,0.4);}.case-risk .case-rarity{color:var(--orange);}
 .case-epic{border-color:rgba(180,79,255,0.5);}.case-epic .case-rarity{color:var(--purple);}
 .case-cursed{border-color:rgba(255,0,0,0.4);animation:cursedPulse 3s infinite;}.case-cursed .case-rarity{color:var(--red);}
-.case-jackpot{border-color:var(--gold);box-shadow:0 0 15px rgba(255,215,0,0.2);}.case-jackpot .case-rarity{color:var(--gold);}
+.case-jackpot{border-color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,0.2);}.case-jackpot .case-rarity{color:var(--gold);}
 
-/* CASE ANIMATION OVERLAY */
-#case-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;}
-.case-anim-box{text-align:center;}
-.case-anim-emoji{font-size:100px;animation:caseFall 0.5s ease forwards;}
-@keyframes caseFall{0%{transform:translateY(-200px) rotate(-20deg);opacity:0;}100%{transform:translateY(0) rotate(0);opacity:1;}}
+/* CASE OVERLAY */
+#case-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column;}
+.case-anim-emoji{font-size:90px;animation:caseFall 0.5s ease forwards;}
+@keyframes caseFall{0%{transform:translateY(-180px) rotate(-20deg);opacity:0;}100%{transform:translateY(0) rotate(0);opacity:1;}}
 .case-shake{animation:caseShake 0.3s ease infinite;}
-@keyframes caseShake{0%,100%{transform:rotate(0);}25%{transform:rotate(-8deg);}75%{transform:rotate(8deg);}}
-.case-result{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;margin-top:20px;opacity:0;transition:opacity 0.5s;}
+@keyframes caseShake{0%,100%{transform:rotate(0);}25%{transform:rotate(-7deg);}75%{transform:rotate(7deg);}}
+.case-result{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;margin-top:18px;opacity:0;transition:opacity 0.5s;}
 .case-result.show{opacity:1;}
 
-/* TRIGGERS TAB */
-.triggers-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;}
-.trigger-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;}
-.trigger-word{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:2px;}
-.trigger-desc{font-size:11px;color:#666;margin-bottom:6px;}
-.trigger-bar-wrap{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-bottom:3px;}
+/* TRIGGERS */
+.triggers-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:9px;}
+.trigger-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:9px;}
+.trigger-word{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:2px;}
+.trigger-desc{font-size:10px;color:#666;margin-bottom:5px;}
+.trigger-bar-wrap{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-bottom:3px;}
 .trigger-bar{height:100%;border-radius:3px;transition:width 0.3s;}
-.trigger-count{font-size:10px;color:#555;}
-.trigger-item.ready{border-color:var(--green);animation:triggerReady 0.5s ease infinite alternate;}
-@keyframes triggerReady{from{box-shadow:0 0 5px rgba(57,255,20,0.3);}to{box-shadow:0 0 15px rgba(57,255,20,0.8);}}
-.trigger-item.fired{border-color:var(--gold);background:rgba(255,215,0,0.1);}
+.trigger-count{font-size:9px;color:#555;}
+.trigger-item.ready{border-color:var(--green);}
+.trigger-item.fired{border-color:var(--gold);background:rgba(255,215,0,0.08);}
 
 /* LEADERBOARD */
-#leaderboard-list{padding:8px;max-height:350px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.leader-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;margin-bottom:3px;transition:background 0.2s;animation:slideIn 0.4s ease;}
-.leader-item:hover{background:rgba(255,255,255,0.04);}
-.leader-rank{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
-.rank-1{background:var(--gold);color:#000;}.rank-2{background:#C0C0C0;color:#000;}.rank-3{background:#CD7F32;color:#000;}.rank-n{background:rgba(255,255,255,0.1);color:#aaa;font-size:9px;}
-.leader-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:700;background:var(--dark3);border:2px solid transparent;}
+#leaderboard-list{padding:7px;max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.leader-item{display:flex;align-items:center;gap:7px;padding:6px 7px;border-radius:8px;margin-bottom:3px;animation:slideIn 0.4s ease;}
+.leader-rank{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;}
+.rank-1{background:var(--gold);color:#000;}.rank-2{background:#C0C0C0;color:#000;}.rank-3{background:#CD7F32;color:#000;}.rank-n{background:rgba(255,255,255,0.1);color:#aaa;font-size:8px;}
+.leader-avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;font-weight:700;background:var(--dark3);border:2px solid transparent;}
 .leader-info{flex:1;min-width:0;}
-.leader-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.leader-coins{font-size:10px;color:var(--gold);}
-.leader-badges{display:flex;gap:3px;margin-top:2px;}
-.role-badge{font-size:9px;padding:1px 4px;border-radius:3px;font-weight:700;}
+.leader-name{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.leader-coins{font-size:9px;color:var(--gold);}
+.leader-badges{display:flex;gap:3px;margin-top:1px;}
+.role-badge{font-size:8px;padding:1px 4px;border-radius:3px;font-weight:700;}
 .role-vip{background:rgba(0,245,255,0.2);color:var(--cyan);}
 .role-whale{background:rgba(180,79,255,0.2);color:var(--purple);}
 .role-king{background:rgba(255,215,0,0.2);color:var(--gold);}
 
 /* CHAT */
-#chat-feed{height:280px;overflow-y:auto;padding:6px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;display:flex;flex-direction:column;gap:3px;}
-.chat-msg{padding:5px 8px;border-radius:6px;font-size:12px;line-height:1.4;animation:slideIn 0.3s ease;word-break:break-word;}
+#chat-feed{height:260px;overflow-y:auto;padding:5px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;display:flex;flex-direction:column;gap:2px;}
+.chat-msg{padding:4px 7px;border-radius:6px;font-size:11px;line-height:1.4;animation:slideIn 0.3s ease;word-break:break-word;}
 .chat-msg.comment{background:rgba(255,255,255,0.03);}
 .chat-msg.gift{background:rgba(255,215,0,0.07);border-left:3px solid var(--gold);}
 .chat-msg.like{background:rgba(255,45,120,0.07);border-left:3px solid var(--pink);}
 .chat-msg.join{background:rgba(0,245,255,0.04);border-left:3px solid var(--cyan);}
 .chat-msg.system{background:rgba(57,255,20,0.05);border-left:3px solid var(--green);font-style:italic;}
 .chat-msg.trigger{background:rgba(255,107,53,0.1);border-left:3px solid var(--orange);font-weight:700;}
-.msg-user{font-weight:700;margin-right:5px;}
+.msg-user{font-weight:700;margin-right:4px;}
 
-/* BIG EVENT OVERLAY */
+/* BIG EVENTS */
 #event-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;pointer-events:none;}
 .big-event{text-align:center;animation:bigEventAnim 3s ease forwards;pointer-events:none;}
-.big-event-emoji{font-size:80px;display:block;}
-.big-event-text{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,0.8);margin-top:10px;}
-.big-event-sub{font-size:15px;color:#ccc;margin-top:4px;}
+.big-event-emoji{font-size:70px;display:block;}
+.big-event-text{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.8);margin-top:8px;}
+.big-event-sub{font-size:13px;color:#ccc;margin-top:3px;}
 @keyframes bigEventAnim{0%{transform:scale(0.5) translateY(20px);opacity:0;}15%{transform:scale(1.1);opacity:1;}30%{transform:scale(1);}70%{opacity:1;}100%{opacity:0;transform:scale(1) translateY(-30px);}}
 
 /* FULLSCREEN EVENT */
 #fullscreen-event{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:900;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;}
-.fs-emoji{font-size:120px;animation:fsPop 0.5s ease;}
-.fs-title{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;margin-top:16px;}
-.fs-sub{font-size:18px;color:#aaa;margin-top:8px;}
+.fs-emoji{font-size:100px;animation:fsPop 0.5s ease;}
+.fs-title{font-family:'Orbitron',monospace;font-size:30px;font-weight:900;margin-top:14px;}
+.fs-sub{font-size:16px;color:#aaa;margin-top:6px;}
 @keyframes fsPop{0%{transform:scale(0);opacity:0;}80%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
 
 /* PARTICLES */
 .particle{position:fixed;pointer-events:none;z-index:999;animation:particleFly 2s ease forwards;}
 @keyframes particleFly{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0;}}
 
-/* EFFECT BARS */
-.active-effects{display:flex;flex-wrap:wrap;gap:6px;padding:8px;min-height:32px;}
-.effect-pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;font-family:'Orbitron',monospace;animation:effectPop 0.3s ease;}
+/* EFFECTS BAR */
+.active-effects{display:flex;flex-wrap:wrap;gap:5px;padding:6px;min-height:28px;}
+.effect-pill{padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Orbitron',monospace;animation:effectPop 0.3s ease;}
 .effect-chaos{background:rgba(255,107,53,0.3);border:1px solid var(--orange);color:var(--orange);}
 .effect-freeze{background:rgba(0,245,255,0.2);border:1px solid var(--cyan);color:var(--cyan);}
 .effect-boost{background:rgba(57,255,20,0.2);border:1px solid var(--green);color:var(--green);}
@@ -210,80 +204,143 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 @keyframes effectPop{from{transform:scale(0);}to{transform:scale(1);}}
 
 /* NEAR MISS */
-.near-miss{font-family:'Orbitron',monospace;font-size:13px;color:var(--orange);text-align:center;animation:nearMissAnim 2s ease forwards;display:none;}
+.near-miss{font-family:'Orbitron',monospace;font-size:12px;color:var(--orange);text-align:center;animation:nearMissAnim 2s ease forwards;display:none;}
 @keyframes nearMissAnim{0%{opacity:0;transform:scale(0.8);}20%{opacity:1;transform:scale(1.1);}80%{opacity:1;}100%{opacity:0;}}
 
-/* MULTIPLIER */
-.multiplier-display{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--pink);text-align:center;display:none;}
-
-/* ANIMATIONS */
-@keyframes slideIn{from{transform:translateX(-10px);opacity:0;}to{transform:translateX(0);opacity:1;}}
-@keyframes bounceIn{0%{transform:scale(0.8);opacity:0;}60%{transform:scale(1.05);}100%{transform:scale(1);opacity:1;}}
-@keyframes coinPop{0%{transform:scale(1);}50%{transform:scale(1.4);color:var(--pink);}100%{transform:scale(1);}}
-.coin-pop{animation:coinPop 0.4s ease;}
-
 /* LEVEL */
-.level-section{padding:12px;border-top:1px solid var(--border);}
-.level-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.level-num{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--gold);}
-.level-bar-track{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
+.level-section{padding:10px;border-top:1px solid var(--border);}
+.level-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.level-num{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--gold);}
+.level-bar-track{height:7px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
 .level-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:4px;transition:width 0.5s;}
 
 /* SCROLLBARS */
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px;}
 
-/* CHAOS ENHANCED */
-body.chaos-active{animation:chaosShake 0.18s ease infinite;}
-@keyframes chaosShake{0%{transform:translate(0,0) rotate(0deg);}20%{transform:translate(-3px,2px) rotate(-0.4deg);}40%{transform:translate(3px,-2px) rotate(0.4deg);}60%{transform:translate(-2px,3px) rotate(-0.2deg);}80%{transform:translate(2px,-1px) rotate(0.2deg);}100%{transform:translate(0,0) rotate(0deg);}}
-body.chaos-active::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;animation:chaosMelt 0.6s steps(1) infinite;}
-@keyframes chaosMelt{0%{background:rgba(255,107,53,0.04);}16%{background:rgba(180,79,255,0.05);}33%{background:rgba(0,245,255,0.04);}50%{background:rgba(255,45,120,0.05);}66%{background:rgba(57,255,20,0.03);}83%{background:rgba(255,215,0,0.04);}100%{background:rgba(255,107,53,0.04);}}
-.chaos-color-flash{position:fixed;inset:0;pointer-events:none;z-index:9997;animation:colorFlash 0.4s steps(1) infinite;mix-blend-mode:screen;}
-@keyframes colorFlash{0%{background:rgba(255,0,100,0.08);}25%{background:rgba(0,255,200,0.06);}50%{background:rgba(255,200,0,0.07);}75%{background:rgba(100,0,255,0.06);}100%{background:rgba(255,0,100,0.08);}}
+/* ANIMATIONS */
+@keyframes slideIn{from{transform:translateX(-8px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes coinPop{0%{transform:scale(1);}50%{transform:scale(1.4);color:var(--pink);}100%{transform:scale(1);}}
+.coin-pop{animation:coinPop 0.4s ease;}
 
-/* MELT EFFECT */
-.melt-overlay{position:fixed;inset:0;pointer-events:none;z-index:9996;opacity:0;transition:opacity 1s ease;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,107,53,0.03) 2px,rgba(255,107,53,0.03) 4px);animation:meltDrip 1s ease infinite;}
+/* CHAOS OVERLAY */
+.melt-overlay{position:fixed;inset:0;pointer-events:none;z-index:9996;opacity:0;transition:opacity 1s ease;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,107,53,0.02) 3px,rgba(255,107,53,0.02) 6px);animation:meltDrip 0.8s ease infinite;}
 .melt-overlay.active{opacity:1;}
-@keyframes meltDrip{0%{transform:translateY(0);}100%{transform:translateY(4px);}}
+@keyframes meltDrip{0%{transform:translateY(0);}100%{transform:translateY(6px);}}
+.chaos-color-flash{position:fixed;inset:0;pointer-events:none;z-index:9995;animation:colorFlash 0.5s steps(1) infinite;mix-blend-mode:screen;}
+@keyframes colorFlash{0%{background:rgba(255,0,100,0.06);}25%{background:rgba(0,255,200,0.05);}50%{background:rgba(255,200,0,0.05);}75%{background:rgba(100,0,255,0.05);}100%{background:rgba(255,0,100,0.06);}}
 
 /* COIN RAIN */
-.coin-rain-coin{position:fixed;top:-40px;pointer-events:none;z-index:9990;font-size:22px;animation:coinFall linear forwards;}
+.coin-rain-coin{position:fixed;top:-40px;pointer-events:none;z-index:9990;animation:coinFall linear forwards;}
 @keyframes coinFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
 
-/* GIFT NOTIFICATION (bottom right) */
-#gift-notif-stack{position:fixed;bottom:16px;right:16px;z-index:8000;display:flex;flex-direction:column-reverse;gap:6px;pointer-events:none;max-width:220px;}
-.gift-notif{background:rgba(10,10,20,0.92);border:1px solid var(--border);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;animation:notifSlide 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;backdrop-filter:blur(10px);}
-@keyframes notifSlide{from{transform:translateX(120%);opacity:0;}to{transform:translateX(0);opacity:1;}}
-.gift-notif.fade-out{animation:notifFade 0.4s ease forwards;}
-@keyframes notifFade{to{transform:translateX(120%);opacity:0;}}
-.gift-notif-emoji{font-size:20px;flex-shrink:0;}
-.gift-notif-info{min-width:0;}
-.gift-notif-user{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.gift-notif-desc{font-size:10px;color:#888;}
+/* GIFT NOTIF */
+#gift-notif-stack{position:fixed;bottom:14px;right:14px;z-index:8000;display:flex;flex-direction:column-reverse;gap:5px;pointer-events:none;max-width:200px;}
+.gift-notif{background:rgba(10,10,20,0.93);border:1px solid var(--border);border-radius:10px;padding:7px 11px;display:flex;align-items:center;gap:7px;animation:notifSlide 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;backdrop-filter:blur(8px);}
+@keyframes notifSlide{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.gift-notif.fade-out{animation:notifFade 0.35s ease forwards;}
+@keyframes notifFade{to{transform:translateX(110%);opacity:0;}}
+.gift-notif-emoji{font-size:18px;flex-shrink:0;}
+.gift-notif-user{font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gift-notif-desc{font-size:9px;color:#888;}
 
-/* 500+ BIG DONOR ANIMATION */
-#donor-overlay{position:fixed;inset:0;z-index:9500;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0;transition:background 1.5s ease;}
+/* DONOR OVERLAY */
+#donor-overlay{position:fixed;inset:0;z-index:9500;display:none;flex-direction:column;align-items:center;justify-content:center;transition:background 1.5s ease;}
 #donor-overlay.active{display:flex;}
-#donor-overlay.grey{background:rgba(20,20,20,0.97);}
-.donor-nick{font-family:'Orbitron',monospace;font-size:48px;font-weight:900;text-align:center;opacity:0;transform:scale(0.3);transition:all 0.8s cubic-bezier(0.34,1.56,0.64,1);color:var(--gold);text-shadow:0 0 60px rgba(255,215,0,0.8),0 0 120px rgba(255,215,0,0.4);}
+.donor-nick{font-family:'Orbitron',monospace;font-size:42px;font-weight:900;text-align:center;opacity:0;transform:scale(0.3);transition:all 0.8s cubic-bezier(0.34,1.56,0.64,1);color:var(--gold);text-shadow:0 0 50px rgba(255,215,0,0.8),0 0 100px rgba(255,215,0,0.4);}
 .donor-nick.show{opacity:1;transform:scale(1);}
 .donor-nick.dance{animation:nickDance 0.4s ease infinite alternate;}
-@keyframes nickDance{0%{transform:scale(1) rotate(-3deg) translateY(0);}50%{transform:scale(1.08) rotate(3deg) translateY(-8px);}100%{transform:scale(1) rotate(-1deg) translateY(4px);}}
-.donor-nick-mini{position:fixed;top:12px;left:12px;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--gold);opacity:0;z-index:9600;transition:opacity 0.8s ease;animation:nickMiniDance 0.5s ease infinite alternate;}
+@keyframes nickDance{0%{transform:scale(1) rotate(-3deg) translateY(0);}100%{transform:scale(1.07) rotate(3deg) translateY(-7px);}}
+.donor-nick-mini{position:fixed;top:10px;left:10px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--gold);opacity:0;z-index:9600;transition:opacity 0.8s ease;animation:nickMiniDance 0.5s ease infinite alternate;}
 .donor-nick-mini.show{opacity:1;}
 @keyframes nickMiniDance{0%{transform:rotate(-2deg) translateY(0);}100%{transform:rotate(2deg) translateY(-3px);}}
 .donor-nick-mini.fly-away{animation:nickFly 0.8s cubic-bezier(0.4,0,1,1) forwards;}
-@keyframes nickFly{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(calc(50vw - 12px - 30px), calc(50vh)) scale(0.1);opacity:0;}}
-
-/* QUEUE BURST */
+@keyframes nickFly{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(40vw,40vh) scale(0.05);opacity:0;}}
 .queue-burst{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:9400;pointer-events:none;}
-.queue-nick{position:absolute;font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.8);opacity:0;animation:queuePop 1.2s cubic-bezier(0.34,1.56,0.64,1) forwards;}
+.queue-nick{position:absolute;font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--gold);text-shadow:0 0 25px rgba(255,215,0,0.8);opacity:0;animation:queuePop 1.2s cubic-bezier(0.34,1.56,0.64,1) forwards;}
 @keyframes queuePop{0%{opacity:0;transform:scale(0) translateY(40px);}60%{opacity:1;transform:scale(1.1) translateY(-10px);}80%{opacity:1;transform:scale(1) translateY(0);}100%{opacity:0;transform:scale(0.8) translateY(-30px);}}
 
-/* DISCLAIMER */
-.disclaimer{font-size:9px;color:rgba(255,255,255,0.2);text-align:center;padding:2px 8px;letter-spacing:0.5px;}
-.disclaimer-inline{font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.3px;display:inline;}
-.creator-tag{font-size:9px;color:rgba(255,215,0,0.25);font-family:'Orbitron',monospace;letter-spacing:0.5px;}
+/* SHOP OVERLAY */
+#shop-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:7000;display:none;flex-direction:column;backdrop-filter:blur(12px);}
+#shop-overlay.active{display:flex;}
+.shop-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.shop-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:var(--gold);}
+.shop-balance{font-family:'Orbitron',monospace;font-size:13px;color:var(--cyan);}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;overflow-y:auto;flex:1;}
+.shop-item{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;}
+.shop-item:active{transform:scale(0.96);}
+.shop-item.affordable{border-color:var(--gold);}
+.shop-item.locked{opacity:0.4;cursor:not-allowed;}
+.shop-item-emoji{font-size:36px;display:block;margin-bottom:6px;}
+.shop-item-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;color:#ccc;margin-bottom:4px;}
+.shop-item-desc{font-size:9px;color:#666;margin-bottom:8px;line-height:1.4;}
+.shop-item-price{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--gold);}
+
+/* BOSS SCENE */
+#boss-scene{position:fixed;inset:0;z-index:8500;display:none;flex-direction:column;align-items:center;justify-content:center;background:#000;overflow:hidden;}
+#boss-scene.active{display:flex;}
+.boss-scene-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(150,0,0,0.3) 0%,#000 70%);transition:filter 1.5s ease;}
+.boss-scene-bg.dim{filter:brightness(0.3);}
+.boss-scene-img{width:180px;height:180px;object-fit:contain;position:relative;z-index:2;transition:filter 0.1s;image-rendering:crisp-edges;}
+.boss-scene-img.spark{animation:bossSparkle 0.15s steps(1) infinite;}
+@keyframes bossSparkle{0%{filter:brightness(1) drop-shadow(0 0 0 transparent);}50%{filter:brightness(3) drop-shadow(0 0 20px #ff0) saturate(3);}100%{filter:brightness(1);}}
+.boss-scene-img.hit{animation:bossHit 0.2s ease;}
+@keyframes bossHit{0%{transform:scale(1);}30%{transform:scale(1.15) rotate(-5deg);}60%{transform:scale(0.95) rotate(3deg);}100%{transform:scale(1) rotate(0);}}
+.boss-hp-bar-big{width:80%;max-width:400px;height:24px;background:rgba(255,0,0,0.15);border:1px solid rgba(255,0,0,0.4);border-radius:12px;overflow:hidden;position:relative;z-index:2;margin-top:20px;}
+.boss-hp-bar-fill{height:100%;background:linear-gradient(90deg,#ff0000,#ff6600);border-radius:12px;transition:width 0.2s;}
+.boss-hp-bar-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Orbitron',monospace;font-size:11px;font-weight:700;}
+.boss-scene-name{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--red);text-align:center;position:relative;z-index:2;margin-bottom:8px;text-shadow:0 0 20px rgba(255,0,0,0.8);}
+.boss-scene-instruction{font-size:12px;color:rgba(255,255,255,0.4);position:relative;z-index:2;margin-top:10px;}
+.boss-stop-btn{position:absolute;top:14px;right:14px;z-index:10;}
+.like-projectile{position:fixed;pointer-events:none;z-index:9000;font-size:22px;animation:likeShoot linear forwards;}
+@keyframes likeShoot{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.4);}}
+.boss-beat-shake{animation:bossBeatShake 0.08s ease infinite alternate;}
+@keyframes bossBeatShake{0%{transform:translateX(-3px);}100%{transform:translateX(3px);}}
+
+/* BOSS CUSTOMIZER */
+#boss-customizer{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:7500;display:none;flex-direction:column;backdrop-filter:blur(12px);}
+#boss-customizer.active{display:flex;}
+.customizer-inner{padding:16px;overflow-y:auto;flex:1;}
+.customizer-field{margin-bottom:14px;}
+.customizer-label{font-size:11px;color:#888;margin-bottom:5px;font-family:'Orbitron',monospace;letter-spacing:0.5px;}
+.customizer-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid var(--border);color:#fff;padding:10px 12px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;}
+.customizer-input:focus{border-color:var(--cyan);}
+.customizer-preview{background:rgba(255,0,0,0.06);border:1px solid rgba(255,0,0,0.2);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px;}
+.boss-preview-img{width:100px;height:100px;object-fit:contain;}
+
+/* END STREAM / CREDITS */
+#credits-scene{position:fixed;inset:0;background:#000;z-index:10000;display:none;flex-direction:column;overflow:hidden;}
+#credits-scene.active{display:flex;}
+.credits-scroll-wrap{flex:1;overflow:hidden;position:relative;}
+.credits-scroll{position:absolute;bottom:-100%;width:100%;text-align:center;animation:creditsRoll linear forwards;}
+@keyframes creditsRoll{0%{bottom:-100%;}100%{bottom:110%;}}
+.credits-title{font-family:'Orbitron',monospace;font-size:13px;color:rgba(255,215,0,0.5);letter-spacing:3px;margin-bottom:30px;margin-top:60px;}
+.credits-role{font-family:'Orbitron',monospace;font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-top:20px;margin-bottom:6px;}
+.credits-nick{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:#fff;margin:3px 0;}
+.credits-nick.big{font-size:22px;color:var(--gold);}
+.credits-coins{font-size:11px;color:var(--gold);opacity:0.7;}
+.credits-divider{width:60px;height:1px;background:rgba(255,215,0,0.2);margin:20px auto;}
+.credits-final{position:absolute;bottom:0;left:0;right:0;text-align:center;padding:40px;opacity:0;transition:opacity 1.5s ease;pointer-events:none;}
+.credits-final.show{opacity:1;}
+.credits-thanks{font-family:'Orbitron',monospace;font-size:32px;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,0.8);margin-bottom:10px;}
+.credits-streamer{font-family:'Orbitron',monospace;font-size:18px;color:#fff;}
+.credits-tag{font-size:10px;color:rgba(255,215,0,0.3);font-family:'Orbitron',monospace;margin-top:16px;}
+.credits-stats-row{display:flex;justify-content:center;gap:30px;margin:20px 0;flex-wrap:wrap;}
+.credits-stat{text-align:center;}
+.credits-stat-val{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;color:var(--cyan);}
+.credits-stat-lbl{font-size:10px;color:#555;margin-top:2px;}
+
+/* ENERGY EFFECTS INFO */
+.energy-effects-row{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+.energy-effect-tag{font-size:8px;padding:1px 5px;border-radius:3px;border:1px solid;font-family:'Orbitron',monospace;}
+.eet-25{border-color:var(--green);color:var(--green);background:rgba(57,255,20,0.1);}
+.eet-50{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,0.1);}
+.eet-75{border-color:var(--orange);color:var(--orange);background:rgba(255,107,53,0.1);}
+.eet-100{border-color:var(--gold);color:var(--gold);background:rgba(255,215,0,0.1);}
+
+/* COMBO */
+.combo-display{text-align:center;padding:6px;margin-bottom:8px;}
+.combo-count{font-family:'Orbitron',monospace;font-size:32px;font-weight:900;color:var(--orange);text-shadow:0 0 16px rgba(255,107,53,0.8);display:none;}
 </style>
 </head>
 <body>
@@ -292,33 +349,109 @@ body.chaos-active::after{content:'';position:fixed;inset:0;pointer-events:none;z
 <div class="melt-overlay" id="melt-overlay"></div>
 <div id="gift-notif-stack"></div>
 
-<!-- 500+ DONOR OVERLAY -->
-<div id="donor-overlay">
-  <div class="donor-nick" id="donor-nick"></div>
-</div>
+<!-- DONOR OVERLAY -->
+<div id="donor-overlay"><div class="donor-nick" id="donor-nick"></div></div>
 <div class="donor-nick-mini" id="donor-nick-mini"></div>
 
+<!-- FULLSCREEN EVENT -->
 <div id="fullscreen-event">
   <span class="fs-emoji" id="fs-emoji">🔥</span>
   <div class="fs-title" id="fs-title">CHAOS!</div>
   <div class="fs-sub" id="fs-sub"></div>
 </div>
+
+<!-- CASE OVERLAY -->
 <div id="case-overlay">
-  <div class="case-anim-box" id="case-anim-box">
-    <div class="case-anim-emoji" id="case-anim-emoji">📦</div>
-    <div class="case-result" id="case-result"></div>
+  <div id="case-anim-emoji" class="case-anim-emoji">📦</div>
+  <div class="case-result" id="case-result"></div>
+</div>
+
+<!-- SHOP OVERLAY -->
+<div id="shop-overlay">
+  <div class="shop-header">
+    <div class="shop-title">🛒 МАГАЗИН</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="shop-balance">💰 <span id="shop-balance-val">0</span></div>
+      <button class="btn btn-secondary btn-sm" onclick="closeShop()">✕</button>
+    </div>
+  </div>
+  <div class="shop-grid" id="shop-grid"></div>
+  <div style="padding:10px;text-align:center;" class="disclaimer-sm">⚠️ Монеты — игровые очки. Не реальные деньги. creator: @m123news</div>
+</div>
+
+<!-- BOSS CUSTOMIZER -->
+<div id="boss-customizer">
+  <div class="shop-header">
+    <div class="shop-title">⚙️ НАСТРОЙКА БОССА</div>
+    <button class="btn btn-secondary btn-sm" onclick="closeBossCustomizer()">✕</button>
+  </div>
+  <div class="customizer-inner">
+    <div class="customizer-preview">
+      <img class="boss-preview-img" id="boss-preview-img" src="https://image2url.com/r2/default/files/1775304376386-6845205e-832b-4f33-8567-41b0d6b2216b.png" alt="boss">
+      <div style="margin-top:8px;font-family:Orbitron,monospace;font-size:14px;color:var(--red);" id="boss-preview-name">БОСС</div>
+    </div>
+    <div class="customizer-field">
+      <div class="customizer-label">ИМЯ БОССА</div>
+      <input class="customizer-input" id="boss-name-input" placeholder="ТЁМНЫЙ ВЛАСТЕЛИН" oninput="updateBossPreview()">
+    </div>
+    <div class="customizer-field">
+      <div class="customizer-label">HP БОССА</div>
+      <input class="customizer-input" type="number" id="boss-hp-input" placeholder="1000" min="100" max="99999">
+    </div>
+    <div class="customizer-field">
+      <div class="customizer-label">СЛОЖНОСТЬ (регенерация HP/сек)</div>
+      <input class="customizer-input" type="number" id="boss-regen-input" placeholder="0" min="0" max="50">
+    </div>
+    <div class="customizer-field">
+      <div class="customizer-label">НАГРАДА ЗА УБИЙСТВО (монеты)</div>
+      <input class="customizer-input" type="number" id="boss-reward-input" placeholder="5000" min="0">
+    </div>
+    <button class="btn btn-danger" style="width:100%;margin-top:8px;" onclick="launchCustomBoss()">⚔️ ЗАПУСТИТЬ БОЙ</button>
+    <div style="margin-top:8px;" class="disclaimer-sm">Босс — игровой элемент шоу. creator: @m123news</div>
   </div>
 </div>
 
+<!-- BOSS SCENE -->
+<div id="boss-scene">
+  <div class="boss-scene-bg" id="boss-scene-bg"></div>
+  <button class="btn btn-danger btn-sm boss-stop-btn" onclick="stopBossFight()">⛔ СТОП</button>
+  <div class="boss-scene-name" id="boss-scene-name">BOSS</div>
+  <img class="boss-scene-img" id="boss-scene-img" src="https://image2url.com/r2/default/files/1775304376386-6845205e-832b-4f33-8567-41b0d6b2216b.png" alt="boss">
+  <div class="boss-hp-bar-big">
+    <div class="boss-hp-bar-fill" id="boss-scene-hp-fill" style="width:100%"></div>
+    <div class="boss-hp-bar-text" id="boss-scene-hp-text">1000/1000</div>
+  </div>
+  <div class="boss-scene-instruction">👍 Ставьте лайки чтобы атаковать!</div>
+</div>
+
+<!-- CREDITS SCENE -->
+<div id="credits-scene">
+  <div class="credits-scroll-wrap">
+    <div class="credits-scroll" id="credits-scroll">
+      <!-- filled by JS -->
+    </div>
+  </div>
+  <div class="credits-final" id="credits-final">
+    <div class="credits-thanks">СПАСИБО ЗА СТРИМ!</div>
+    <div class="credits-streamer">С ВАМИ БЫЛ <span id="credits-streamer-nick" style="color:var(--gold)"></span></div>
+    <div class="credits-stats-row" id="credits-stats-row"></div>
+    <div class="credits-tag">creator: @m123news &nbsp;|&nbsp; <span class="disclaimer-sm">⚠️ только игра, не казино</span></div>
+  </div>
+</div>
+
+<!-- HEADER -->
 <header>
   <div>
     <div class="logo">🎰 CHAOS CASINO</div>
-    <div class="disclaimer">⚠️ Это игра-шоу для стрима. Не несёт характера реального казино.</div>
+    <div class="disclaimer-sm">⚠️ Игра-шоу, не казино. Монеты — очки.</div>
   </div>
   <div class="status-bar">
-    <div class="creator-tag">creator: @m123news</div>
+    <div style="font-size:9px;color:rgba(255,215,0,0.3);font-family:Orbitron,monospace;">@m123news</div>
     <div class="status-dot" id="status-dot"></div>
     <div class="status-text" id="status-text">Не подключено</div>
+    <button class="btn btn-fs btn-sm" onclick="toggleFullscreen()" title="Полный экран">⛶</button>
+    <button class="btn btn-shop btn-sm" id="shop-btn" style="display:none" onclick="openShop()">🛒</button>
+    <button class="btn btn-end btn-sm" id="end-btn" style="display:none" onclick="startEndStream()">🎬 КОНЕЦ</button>
     <button class="btn btn-secondary btn-sm" id="disconnect-btn" style="display:none" onclick="disconnect()">СТОП</button>
   </div>
 </header>
@@ -326,30 +459,28 @@ body.chaos-active::after{content:'';position:fixed;inset:0;pointer-events:none;z
 <!-- CONNECT -->
 <div id="connect-panel">
   <h2>🎮 CHAOS CASINO</h2>
-  <p>Подключи TikTok стрим — зрители будут влиять на игру через подарки и чат!</p>
+  <p>Подключи TikTok стрим — зрители влияют на игру через подарки и чат!</p>
   <div class="input-group">
     <input type="text" id="username-input" placeholder="@ник_стримера" autocomplete="off"/>
     <button class="btn btn-primary" onclick="connectStream()">GO</button>
   </div>
-  <div class="server-info">⚙️ Просто введи ник стримера (без @) — стрим должен быть активен прямо сейчас.</div>
-  <div style="margin-top:12px;">
+  <div class="server-info">⚙️ Введи ник стримера (без @) — стрим должен быть активен.</div>
+  <div style="margin-top:10px;">
     <button class="btn btn-secondary" style="width:100%" onclick="startDemo()">🎲 ДЕМО-РЕЖИМ</button>
   </div>
-  <div style="margin-top:16px;padding:10px;background:rgba(255,100,0,0.06);border:1px solid rgba(255,100,0,0.15);border-radius:8px;">
-    <div style="font-size:11px;color:rgba(255,150,50,0.7);line-height:1.6;">⚠️ <b style="color:rgba(255,150,50,0.9)">ВАЖНО:</b> Эта игра является развлечением для стримов. Монеты — игровые очки без реальной ценности. Игра не является азартной и не призывает к реальным ставкам.</div>
-    <div style="margin-top:6px;" class="creator-tag">creator: @m123news</div>
+  <div class="disclaimer-box">
+    ⚠️ <b style="color:rgba(255,150,50,0.9)">ВАЖНО:</b> Эта игра — развлечение для стримов. Монеты — игровые очки без реальной ценности. Игра не является азартной и не призывает к реальным ставкам.
+    <div class="creator-tag">creator: @m123news</div>
   </div>
 </div>
 
 <!-- GAME -->
 <div id="game-container">
-  <!-- ACTIVE EFFECTS BAR -->
-  <div style="padding:0 12px 0;">
+  <div style="padding:0 8px 0;">
     <div class="active-effects" id="active-effects"></div>
   </div>
 
-  <!-- MAIN TABS -->
-  <div style="padding:0 12px;">
+  <div style="padding:0 8px;">
     <div class="main-tabs">
       <div class="main-tab active" onclick="switchMain('slots')">🎰 АВТОМАТЫ</div>
       <div class="main-tab" onclick="switchMain('wheel')">🎡 КОЛЕСО</div>
@@ -360,22 +491,32 @@ body.chaos-active::after{content:'';position:fixed;inset:0;pointer-events:none;z
     </div>
   </div>
 
-  <!-- STATS + ENERGY always visible -->
-  <div style="padding:0 12px;">
+  <!-- STATS + ENERGY -->
+  <div style="padding:0 8px;">
     <div class="stats-row">
       <div class="stat-card"><div class="stat-value" id="stat-viewers">0</div><div class="stat-label">Зрители</div></div>
       <div class="stat-card"><div class="stat-value" id="stat-gifts">0</div><div class="stat-label">Подарки</div></div>
-      <div class="stat-card"><div class="stat-value" id="stat-coins">0</div><div class="stat-label">Монеты</div></div>
+      <div class="stat-card"><div class="stat-value" id="stat-coins">0</div><div class="stat-label">Монеты <span class="disclaimer-sm">≠$</span></div></div>
       <div class="stat-card"><div class="stat-value" id="stat-combo">x1</div><div class="stat-label">Комбо</div></div>
     </div>
+    <!-- ENERGY -->
     <div class="energy-wrap">
-      <div class="energy-label"><span>⚡ ЭНЕРГИЯ</span><span id="energy-pct">0%</span></div>
+      <div class="energy-label">
+        <span>⚡ ЭНЕРГИЯ СТРИМА</span>
+        <span id="energy-pct">0%</span>
+      </div>
       <div class="energy-track"><div class="energy-fill" id="energy-fill"></div></div>
+      <div class="energy-effects-row">
+        <span class="energy-effect-tag eet-25">25%→x2 спин</span>
+        <span class="energy-effect-tag eet-50">50%→БУСТ</span>
+        <span class="energy-effect-tag eet-75">75%→все крутят</span>
+        <span class="energy-effect-tag eet-100">100%→ДЖЕКПОТ</span>
+      </div>
     </div>
-    <!-- BOSS -->
+    <!-- BOSS (mini) -->
     <div class="boss-panel" id="boss-panel">
       <span class="boss-emoji" id="boss-emoji">👹</span>
-      <div class="boss-name" id="boss-name">BOSS</div>
+      <div class="boss-name" id="boss-name-display">BOSS</div>
       <div class="boss-hp-track">
         <div class="boss-hp-fill" id="boss-hp-fill" style="width:100%"></div>
         <div class="boss-hp-text" id="boss-hp-text">1000/1000</div>
@@ -384,56 +525,56 @@ body.chaos-active::after{content:'';position:fixed;inset:0;pointer-events:none;z
   </div>
 
   <!-- TAB: SLOTS -->
-  <div class="tab-page active" id="page-slots" style="padding:0 12px;">
+  <div class="tab-page active" id="page-slots" style="padding:0 8px;">
     <div class="near-miss" id="near-miss">😱 ПОЧТИ! ЕЩЁ ОДИН ДОНАТ!</div>
-    <div class="multiplier-display" id="mult-display">✨ МНОЖИТЕЛЬ x2!</div>
     <div class="slots-grid" id="slots-grid"></div>
+    <div style="text-align:center;padding:4px;" class="disclaimer-sm">🎮 Игровые автоматы — только для шоу</div>
   </div>
 
   <!-- TAB: WHEEL -->
-  <div class="tab-page" id="page-wheel" style="padding:0 12px;">
+  <div class="tab-page" id="page-wheel" style="padding:0 8px;">
     <div class="panel">
-      <div class="panel-header">🎡 КОЛЕСО ФОРТУНЫ</div>
-      <div style="padding:16px;text-align:center;">
+      <div class="panel-header">🎡 КОЛЕСО ФОРТУНЫ <span class="disclaimer-sm">игра</span></div>
+      <div style="padding:14px;text-align:center;">
         <div class="wheel-wrap">
           <div class="wheel-pointer"></div>
-          <canvas id="wheel-canvas" width="200" height="200"></canvas>
+          <canvas id="wheel-canvas" width="180" height="180"></canvas>
         </div>
-        <div style="font-family:Orbitron,monospace;font-size:14px;color:var(--cyan);min-height:22px;margin-bottom:12px;" id="wheel-result">Крути!</div>
+        <div style="font-family:Orbitron,monospace;font-size:13px;color:var(--cyan);min-height:20px;margin-bottom:10px;" id="wheel-result">Крути!</div>
         <button class="btn btn-primary" onclick="spinWheel()">🎡 ВРАЩАТЬ</button>
       </div>
     </div>
   </div>
 
   <!-- TAB: CASES -->
-  <div class="tab-page" id="page-cases" style="padding:0 12px;">
+  <div class="tab-page" id="page-cases" style="padding:0 8px;">
     <div class="panel">
-      <div class="panel-header">📦 КЕЙСЫ <span style="font-size:10px;color:#666;">подарки открывают случайный кейс</span></div>
-      <div style="padding:10px;">
+      <div class="panel-header">📦 КЕЙСЫ <span class="disclaimer-sm">подарки открывают кейс</span></div>
+      <div style="padding:9px;">
         <div class="cases-grid" id="cases-grid"></div>
       </div>
     </div>
   </div>
 
   <!-- TAB: TRIGGERS -->
-  <div class="tab-page" id="page-triggers" style="padding:0 12px;">
+  <div class="tab-page" id="page-triggers" style="padding:0 8px;">
     <div class="panel">
-      <div class="panel-header">⚡ ТРИГГЕРЫ ЧАТА <span style="font-size:10px;color:#666;">спамь словами для активации!</span></div>
+      <div class="panel-header">⚡ ТРИГГЕРЫ ЧАТА <span style="font-size:9px;color:#666;">спамь словами!</span></div>
       <div class="triggers-grid" id="triggers-grid"></div>
     </div>
   </div>
 
   <!-- TAB: LEADERBOARD -->
-  <div class="tab-page" id="page-leaderboard" style="padding:0 12px;">
+  <div class="tab-page" id="page-leaderboard" style="padding:0 8px;">
     <div class="panel">
-      <div class="panel-header">🏆 ТОП ДАРИТЕЛИ <span class="disclaimer-inline">игровые очки</span></div>
+      <div class="panel-header">🏆 ТОП ДАРИТЕЛИ <span class="disclaimer-sm">игровые очки</span></div>
       <div id="leaderboard-list"></div>
     </div>
-    <div style="text-align:center;padding:8px;" class="creator-tag">creator: @m123news &nbsp;|&nbsp; <span class="disclaimer-inline">⚠️ только игра, не казино</span></div>
+    <div style="text-align:center;padding:6px;" class="creator-tag">creator: @m123news &nbsp;|&nbsp; <span class="disclaimer-sm">⚠️ только игра</span></div>
   </div>
 
   <!-- TAB: CHAT -->
-  <div class="tab-page" id="page-chat" style="padding:0 12px;">
+  <div class="tab-page" id="page-chat" style="padding:0 8px;">
     <div class="panel">
       <div class="panel-header">💬 ЧАТ</div>
       <div id="chat-feed"></div>
@@ -443,156 +584,79 @@ body.chaos-active::after{content:'';position:fixed;inset:0;pointer-events:none;z
 
 <script>
 // ================================================================
-//  AUDIO SYSTEM
+//  AUDIO
 // ================================================================
-const AUDIO = {
-  chaos: null,
-  big:   null,
-  _chaosVolume: 0,
-  _chaosFading: false,
-  _donorPlaying: false,
-  _donorQueue: [],
+const SND={
+  cheap:'https://image2url.com/r2/default/files/1775271060475-fa1d3203-a701-4d4a-b4a3-af2bb1262830.mp3',
+  mid:'https://image2url.com/r2/default/files/1775271142834-8e3c780e-5d91-4139-bafb-e0aad8c0de49.mp3',
+  big:'https://image2url.com/r2/default/files/1775271243103-fe54d05f-680c-4973-a907-acc639281e2f.mp3',
+  donor:'https://image2url.com/r2/default/files/1775271701415-e5f78460-e5d5-4b11-81da-056e0f64df49.m4a',
+  chaos:'https://image2url.com/r2/default/files/1775270805389-4c62e052-57bf-4499-9f3e-d90a4dbfec34.m4a',
+  boss:'https://image2url.com/r2/default/files/1775303975816-088bf55f-a5ab-411d-a075-47e7e98696e1.m4a',
+  credits:'https://image2url.com/r2/default/files/1775303312915-f35c5529-2baa-4b76-a9eb-02e6ba12db2e.m4a',
 };
 
-const SND = {
-  cheap:  'https://image2url.com/r2/default/files/1775271060475-fa1d3203-a701-4d4a-b4a3-af2bb1262830.mp3',
-  mid:    'https://image2url.com/r2/default/files/1775271142834-8e3c780e-5d91-4139-bafb-e0aad8c0de49.mp3',
-  big:    'https://image2url.com/r2/default/files/1775271243103-fe54d05f-680c-4973-a907-acc639281e2f.mp3',
-  donor:  'https://image2url.com/r2/default/files/1775271701415-e5f78460-e5d5-4b11-81da-056e0f64df49.m4a',
-  chaos:  'https://image2url.com/r2/default/files/1775270805389-4c62e052-57bf-4499-9f3e-d90a4dbfec34.m4a',
-};
+const AUDIO={chaos:null,boss:null,_chaosIn:null,_chaosOut:null,_donorPlaying:false,_donorQueue:[],_bossTimers:[],_savedChaosVol:0};
 
-function initAudio() {
-  if (AUDIO.chaos) return;
-  AUDIO.chaos = new Audio(SND.chaos);
-  AUDIO.chaos.loop = true;
-  AUDIO.chaos.volume = 0;
+function initChaosAudio(){
+  if(AUDIO.chaos)return;
+  AUDIO.chaos=new Audio(SND.chaos);
+  AUDIO.chaos.loop=true;
+  AUDIO.chaos.volume=0;
   AUDIO.chaos.play().catch(()=>{});
 }
 
-function fadeChaosMusicIn(duration) {
-  initAudio();
-  const target = 0.75;
-  const steps = 40;
-  const stepTime = duration / steps;
-  let step = 0;
-  clearInterval(AUDIO._chaosIn);
-  clearInterval(AUDIO._chaosOut);
-  AUDIO._chaosIn = setInterval(() => {
-    step++;
-    AUDIO.chaos.volume = Math.min(target, (step / steps) * target);
-    if (step >= steps) clearInterval(AUDIO._chaosIn);
-  }, stepTime);
+function fadeChaosIn(dur){
+  initChaosAudio();
+  const target=0.7,steps=30,st=dur/steps;
+  let i=0;
+  clearInterval(AUDIO._chaosIn);clearInterval(AUDIO._chaosOut);
+  AUDIO._chaosIn=setInterval(()=>{i++;AUDIO.chaos.volume=Math.min(target,(i/steps)*target);if(i>=steps)clearInterval(AUDIO._chaosIn);},st);
 }
 
-function fadeChaosMusicOut(duration) {
-  if (!AUDIO.chaos) return;
-  const startVol = AUDIO.chaos.volume;
-  const steps = 40;
-  const stepTime = duration / steps;
-  let step = 0;
-  clearInterval(AUDIO._chaosIn);
-  clearInterval(AUDIO._chaosOut);
-  AUDIO._chaosOut = setInterval(() => {
-    step++;
-    AUDIO.chaos.volume = Math.max(0, startVol - (step / steps) * startVol);
-    if (step >= steps) clearInterval(AUDIO._chaosOut);
-  }, stepTime);
+function fadeChaosOut(dur){
+  if(!AUDIO.chaos)return;
+  const sv=AUDIO.chaos.volume,steps=30,st=dur/steps;
+  let i=0;
+  clearInterval(AUDIO._chaosIn);clearInterval(AUDIO._chaosOut);
+  AUDIO._chaosOut=setInterval(()=>{i++;AUDIO.chaos.volume=Math.max(0,sv-(i/steps)*sv);if(i>=steps)clearInterval(AUDIO._chaosOut);},st);
 }
 
-function playGiftSound(coins) {
-  if (AUDIO._donorPlaying) return;
-  let src;
-  if (coins <= 1)       src = SND.cheap;
-  else if (coins <= 10) src = SND.cheap;
-  else if (coins < 100) src = SND.mid;
-  else if (coins < 500) src = SND.big;
-  else return; // 500+ handled separately
-  const a = new Audio(src);
-  a.volume = 0.6;
-  a.play().catch(()=>{});
+function playGiftSound(coins){
+  if(AUDIO._donorPlaying||AUDIO._bossActive)return;
+  const src=coins<=10?SND.cheap:coins<100?SND.mid:SND.big;
+  const a=new Audio(src);a.volume=0.6;a.play().catch(()=>{});
 }
 
 // ================================================================
-//  STATE MANAGER
+//  STATE
 // ================================================================
-const S = {
-  connected:false, demo:false, ws:null, username:'',
-  stats:{viewers:0,gifts:0,coins:0},
-  energy:0, level:1, xp:0,
-  leaderboard:{},
-  combo:0, comboTimer:null, multiplier:1,
-  effects:{}, // name -> {timer, endTime}
-  boss:null,
-  sessionStart:null, timerInterval:null, demoInterval:null,
-  wheelAngle:0, wheelSpinning:false,
-  activeSlot:0,
-  nextGiftMultiplier:1,
-  triggerCounts:{}, // word -> count
-  triggerTimers:{}, // word -> setTimeout
-  _donorActive: false,
+const S={
+  connected:false,demo:false,ws:null,username:'',
+  stats:{viewers:0,gifts:0,coins:0,totalLikes:0},
+  energy:0,level:1,xp:0,leaderboard:{},
+  combo:0,comboTimer:null,multiplier:1,effects:{},
+  boss:null,sessionStart:null,demoInterval:null,
+  wheelAngle:0,wheelSpinning:false,
+  nextGiftMultiplier:1,triggerCounts:{},triggerTimers:{},
+  _donorActive:false,_bossActive:false,
+  customBoss:{name:'ТЁМНЫЙ ВЛАСТЕЛИН',hp:1000,regen:0,reward:5000},
 };
 
 // ================================================================
-//  SLOT MACHINES CONFIG
+//  CONFIG
 // ================================================================
-const SLOT_TYPES = [
-  {
-    id:'classic', name:'CLASSIC', badge:null,
-    symbols:['🍒','🍋','🍊','🔔','💎','⭐','7️⃣','🎰'],
-    spinTime:600, risk:0.3,
-    wins:{'🍒🍒🍒':{label:'ВИШНЯ',coins:50},'7️⃣7️⃣7️⃣':{label:'JACKPOT',coins:777},'💎💎💎':{label:'БРИЛЛИАНТЫ',coins:500},'⭐⭐⭐':{label:'ЗВЁЗДЫ',coins:300}},
-    effect:null
-  },
-  {
-    id:'risk', name:'РИСК', badge:'badge-risk',
-    symbols:['💀','🎯','💣','🃏','👑','🔥','❌','💰'],
-    spinTime:800, risk:0.15,
-    wins:{'👑👑👑':{label:'КОРОНА',coins:2000},'💰💰💰':{label:'МИЛЛИОН',coins:1500},'🎯🎯🎯':{label:'В ЯБЛОЧКО',coins:1000}},
-    effect:null
-  },
-  {
-    id:'turbo', name:'TURBO', badge:'badge-turbo',
-    symbols:['⚡','💨','🚀','⚡','💨','🚀','⚡','💨'],
-    spinTime:200, risk:0.35,
-    wins:{'⚡⚡⚡':{label:'МОЛНИЯ',coins:300},'🚀🚀🚀':{label:'РАКЕТА',coins:400}},
-    effect:'boost'
-  },
-  {
-    id:'cursed', name:'ПРОКЛЯТЫЙ', badge:'badge-cursed',
-    symbols:['👻','🕷️','💀','🌑','🔮','😈','👁️','🕸️'],
-    spinTime:700, risk:0.2,
-    wins:{'😈😈😈':{label:'ДЕМОН',coins:666},'👁️👁️👁️':{label:'ОКО',coins:999}},
-    cursed:true,
-    effect:'curse'
-  },
-  {
-    id:'chaos', name:'ХАОС', badge:'badge-chaos',
-    symbols:['🌀','💥','🎆','🌪️','⚡','🔥','💫','🎇'],
-    spinTime:400, risk:0.4,
-    wins:{'💥💥💥':{label:'ВЗРЫВ',coins:800},'🌀🌀🌀':{label:'ВИХРЬ',coins:600}},
-    effect:'chaos'
-  },
-  {
-    id:'pvp', name:'PVP', badge:'badge-pvp',
-    symbols:['⚔️','🛡️','🏹','🗡️','💪','🎯','👊','🔱'],
-    spinTime:600, risk:0.25,
-    wins:{'⚔️⚔️⚔️':{label:'ВОИН',coins:700},'🔱🔱🔱':{label:'ТРЕЗУБЕЦ',coins:900}},
-    effect:null, pvp:true
-  },
-  {
-    id:'boss', name:'BOSS SLOT', badge:'badge-boss',
-    symbols:['💀','👹','🐉','👾','💀','👹','🐉','👾'],
-    spinTime:900, risk:0.35,
-    wins:{'🐉🐉🐉':{label:'ДРАКОН',coins:3000},'👹👹👹':{label:'ДЕМОН-БОСС',coins:2500}},
-    effect:null, bossSlot:true
-  },
+const SLOT_TYPES=[
+  {id:'classic',name:'CLASSIC',badge:null,symbols:['🍒','🍋','🍊','🔔','💎','⭐','7️⃣','🎰'],spinTime:600,wins:{'🍒🍒🍒':{label:'ВИШНЯ',coins:50},'7️⃣7️⃣7️⃣':{label:'JACKPOT',coins:777},'💎💎💎':{label:'БРИЛЛИАНТЫ',coins:500},'⭐⭐⭐':{label:'ЗВЁЗДЫ',coins:300}},effect:null},
+  {id:'risk',name:'РИСК',badge:'badge-risk',symbols:['💀','🎯','💣','🃏','👑','🔥','❌','💰'],spinTime:800,wins:{'👑👑👑':{label:'КОРОНА',coins:2000},'💰💰💰':{label:'МИЛЛИОН',coins:1500},'🎯🎯🎯':{label:'В ЯБЛОЧКО',coins:1000}},effect:null},
+  {id:'turbo',name:'TURBO',badge:'badge-turbo',symbols:['⚡','💨','🚀','⚡','💨','🚀','⚡','💨'],spinTime:200,wins:{'⚡⚡⚡':{label:'МОЛНИЯ',coins:300},'🚀🚀🚀':{label:'РАКЕТА',coins:400}},effect:'boost'},
+  {id:'cursed',name:'ПРОКЛЯТЫЙ',badge:'badge-cursed',symbols:['👻','🕷️','💀','🌑','🔮','😈','👁️','🕸️'],spinTime:700,wins:{'😈😈😈':{label:'ДЕМОН',coins:666},'👁️👁️👁️':{label:'ОКО',coins:999}},cursed:true,effect:'curse'},
+  {id:'chaos',name:'ХАОС',badge:'badge-chaos',symbols:['🌀','💥','🎆','🌪️','⚡','🔥','💫','🎇'],spinTime:400,wins:{'💥💥💥':{label:'ВЗРЫВ',coins:800},'🌀🌀🌀':{label:'ВИХРЬ',coins:600}},effect:'chaos'},
+  {id:'pvp',name:'PVP',badge:'badge-pvp',symbols:['⚔️','🛡️','🏹','🗡️','💪','🎯','👊','🔱'],spinTime:600,wins:{'⚔️⚔️⚔️':{label:'ВОИН',coins:700},'🔱🔱🔱':{label:'ТРЕЗУБЕЦ',coins:900}},effect:null,pvp:true},
+  {id:'boss',name:'BOSS',badge:'badge-boss',symbols:['💀','👹','🐉','👾','💀','👹','🐉','👾'],spinTime:900,wins:{'🐉🐉🐉':{label:'ДРАКОН',coins:3000},'👹👹👹':{label:'ДЕМОН',coins:2500}},effect:null,bossSlot:true},
 ];
 
-// ================================================================
-//  WHEEL CONFIG
-// ================================================================
-const WHEEL_SEGS = [
+const WHEEL_SEGS=[
   {label:'x2',color:'#FF2D78',type:'mult',val:2,emoji:'💎'},
   {label:'x5',color:'#00F5FF',type:'mult',val:5,emoji:'💰'},
   {label:'+100',color:'#9B59B6',type:'coins',val:100,emoji:'💫'},
@@ -603,66 +667,38 @@ const WHEEL_SEGS = [
   {label:'+500',color:'#C0C0C0',type:'coins',val:500,emoji:'⭐'},
 ];
 
-// ================================================================
-//  CASES CONFIG
-// ================================================================
-const CASES = [
-  {
-    id:'common', name:'Обычный', emoji:'📦', cls:'case-common', rarity:'Обычный',
-    rewards:[
-      {label:'🍒 +50 монет',coins:50,weight:50},{label:'⭐ +100 монет',coins:100,weight:30},
-      {label:'💎 +200 монет',coins:200,weight:15},{label:'👑 +500 монет',coins:500,weight:5},
-    ]
-  },
-  {
-    id:'risk', name:'РИСК', emoji:'🎲', cls:'case-risk', rarity:'50/50',
-    rewards:[
-      {label:'💀 -200 монет',coins:-200,weight:45},{label:'💰 +400 монет',coins:400,weight:45},
-      {label:'👑 +2000 монет',coins:2000,weight:10},
-    ]
-  },
-  {
-    id:'epic', name:'Эпик', emoji:'🌟', cls:'case-epic', rarity:'Эпический',
-    rewards:[
-      {label:'💫 +300 монет',coins:300,weight:40},{label:'💎 +800 монет',coins:800,weight:35},
-      {label:'👑 +2000 монет',coins:2000,weight:20},{label:'🌌 +5000 монет',coins:5000,weight:5},
-    ]
-  },
-  {
-    id:'cursed', name:'ПРОКЛЯТЫЙ', emoji:'💀', cls:'case-cursed', rarity:'ОПАСНО',
-    rewards:[
-      {label:'👻 -500 монет',coins:-500,weight:40},{label:'😈 -100 монет',coins:-100,weight:30},
-      {label:'🔮 +1000 монет',coins:1000,weight:20},{label:'💀 ХАОС МОДА',coins:0,special:'chaos',weight:10},
-    ]
-  },
-  {
-    id:'jackpot', name:'JACKPOT', emoji:'💰', cls:'case-jackpot', rarity:'ЛЕГЕНДА',
-    rewards:[
-      {label:'💎 +1000 монет',coins:1000,weight:40},{label:'👑 +3000 монет',coins:3000,weight:35},
-      {label:'🌟 +7777 монет',coins:7777,weight:20},{label:'💥 JACKPOT +10000',coins:10000,weight:5},
-    ]
-  },
+const CASES=[
+  {id:'common',name:'Обычный',emoji:'📦',cls:'case-common',rarity:'Обычный',rewards:[{label:'🍒 +50',coins:50,weight:50},{label:'⭐ +100',coins:100,weight:30},{label:'💎 +200',coins:200,weight:15},{label:'👑 +500',coins:500,weight:5}]},
+  {id:'risk',name:'РИСК',emoji:'🎲',cls:'case-risk',rarity:'50/50',rewards:[{label:'💀 -200',coins:-200,weight:45},{label:'💰 +400',coins:400,weight:45},{label:'👑 +2000',coins:2000,weight:10}]},
+  {id:'epic',name:'Эпик',emoji:'🌟',cls:'case-epic',rarity:'Эпический',rewards:[{label:'💫 +300',coins:300,weight:40},{label:'💎 +800',coins:800,weight:35},{label:'👑 +2000',coins:2000,weight:20},{label:'🌌 +5000',coins:5000,weight:5}]},
+  {id:'cursed',name:'ПРОКЛЯТЫЙ',emoji:'💀',cls:'case-cursed',rarity:'ОПАСНО',rewards:[{label:'👻 -500',coins:-500,weight:40},{label:'😈 -100',coins:-100,weight:30},{label:'🔮 +1000',coins:1000,weight:20},{label:'💀 ХАОС',coins:0,special:'chaos',weight:10}]},
+  {id:'jackpot',name:'JACKPOT',emoji:'💰',cls:'case-jackpot',rarity:'ЛЕГЕНДА',rewards:[{label:'💎 +1000',coins:1000,weight:40},{label:'👑 +3000',coins:3000,weight:35},{label:'🌟 +7777',coins:7777,weight:20},{label:'💥 +10000',coins:10000,weight:5}]},
 ];
 
-// ================================================================
-//  TRIGGER WORDS
-// ================================================================
-const TRIGGERS = [
-  {word:'ХАОС',  desc:'Chaos Mode 30 сек',   threshold:10, color:'#FF6B35', effect:'chaos',   duration:30000},
-  {word:'РУИН',  desc:'Ломает игру',          threshold:8,  color:'#FF3333', effect:'glitch',  duration:8000},
-  {word:'БУСТ',  desc:'x2 монеты 20 сек',     threshold:5,  color:'#39FF14', effect:'boost',   duration:20000},
-  {word:'СПИН',  desc:'Авто-спин 5 раз',      threshold:7,  color:'#00F5FF', effect:'autospin',duration:0},
-  {word:'СТОП',  desc:'Заморозка 10 сек',     threshold:10, color:'#00F5FF', effect:'freeze',  duration:10000},
-  {word:'БОСС',  desc:'Появляется босс',       threshold:12, color:'#FF3333', effect:'boss',    duration:0},
-  {word:'ЕЩЁ',  desc:'Near Miss эффект',      threshold:5,  color:'#FFD700', effect:'nearmiss',duration:0},
-  {word:'КРУТИ', desc:'Ускорение 15 сек',      threshold:6,  color:'#B44FFF', effect:'hyper',   duration:15000},
+const TRIGGERS=[
+  {word:'ХАОС',desc:'Chaos Mode 30 сек',threshold:10,color:'#FF6B35',effect:'chaos',duration:30000},
+  {word:'РУИН',desc:'Ломает игру',threshold:8,color:'#FF3333',effect:'glitch',duration:8000},
+  {word:'БУСТ',desc:'x2 монеты 20 сек',threshold:5,color:'#39FF14',effect:'boost',duration:20000},
+  {word:'СПИН',desc:'Авто-спин 5 раз',threshold:7,color:'#00F5FF',effect:'autospin',duration:0},
+  {word:'СТОП',desc:'Заморозка 10 сек',threshold:10,color:'#00F5FF',effect:'freeze',duration:10000},
+  {word:'БОСС',desc:'Открыть настройку босса',threshold:12,color:'#FF3333',effect:'boss',duration:0},
+  {word:'ЕЩЁ',desc:'Near Miss эффект',threshold:5,color:'#FFD700',effect:'nearmiss',duration:0},
+  {word:'КРУТИ',desc:'Ускорение 15 сек',threshold:6,color:'#B44FFF',effect:'hyper',duration:15000},
 ];
 
-// ================================================================
-//  GIFT TABLE
-// ================================================================
-const GIFT_TABLE = [
-  {name:'Роза',emoji:'🌹',coins:1},{name:'Палец вверх',emoji:'👍',coins:1},
+const SHOP_ITEMS=[
+  {id:'chaos',emoji:'🌀',name:'ХАОС',desc:'Включить Chaos Mode на 30 сек',price:300,effect:()=>applyEffect('chaos',30000)},
+  {id:'boost',emoji:'⚡',name:'БУСТ x2',desc:'Двойные монеты на 20 сек',price:200,effect:()=>applyEffect('boost',20000)},
+  {id:'autospin',emoji:'🎰',name:'АВТО-СПИН',desc:'Все 7 автоматов крутятся сразу',price:400,effect:()=>{SLOT_TYPES.forEach((_,i)=>setTimeout(()=>spinSlot(i),i*150));}},
+  {id:'jackpot',emoji:'💰',name:'ДЖЕКПОТ СПИН',desc:'Открыть легендарный кейс',price:1000,effect:()=>openCase('jackpot')},
+  {id:'boss',emoji:'⚔️',name:'ВЫЗВАТЬ БОССА',desc:'Открыть кастомизатор босса',price:500,effect:()=>{closeShop();openBossCustomizer();}},
+  {id:'hyper',emoji:'🔥',name:'ГИПЕР РЕЖИМ',desc:'Всё быстрее на 15 сек',price:150,effect:()=>applyEffect('hyper',15000)},
+  {id:'wheel',emoji:'🎡',name:'СУПЕР КОЛЕСО',desc:'Гарантированный x5+ на колесе',price:800,effect:()=>{S.nextGiftMultiplier=5;spinWheel();}},
+  {id:'freeze_off',emoji:'❄️',name:'РАЗМОРОЗКА',desc:'Снять эффект заморозки',price:100,effect:()=>removeEffect('freeze')},
+];
+
+const GIFT_TABLE=[
+  {name:'Роза',emoji:'🌹',coins:1},{name:'Палец',emoji:'👍',coins:1},
   {name:'TikTok',emoji:'🎵',coins:50},{name:'Бабочка',emoji:'🦋',coins:30},
   {name:'Лев',emoji:'🦁',coins:200},{name:'Корона',emoji:'👑',coins:500},
   {name:'Ракета',emoji:'🚀',coins:100},{name:'Универсум',emoji:'🌌',coins:1000},
@@ -670,151 +706,341 @@ const GIFT_TABLE = [
   {name:'Звезда',emoji:'⭐',coins:75},{name:'Диамант',emoji:'💎',coins:600},
 ];
 
-const DEMO_NAMES=['Саша','Маша','Дима','Катя','Вася','Оля','Петя','Аня','Коля','Лена','Макс','Юля'];
+const DEMO_NAMES=['Саша','Маша','Дима','Катя','Вася','Оля','Петя','Аня','Коля','Лена','Макс','Юля','Рома','Вика'];
 
 // ================================================================
 //  INIT UI
 // ================================================================
-function initUI() {
-  buildSlotsGrid();
-  buildCasesGrid();
-  buildTriggersGrid();
-  drawWheel(0);
-}
+function initUI(){buildSlotsGrid();buildCasesGrid();buildTriggersGrid();buildShopGrid();drawWheel(0);}
 
-function buildSlotsGrid() {
-  const grid = document.getElementById('slots-grid');
-  grid.innerHTML = SLOT_TYPES.map((t,i) => `
+function buildSlotsGrid(){
+  document.getElementById('slots-grid').innerHTML=SLOT_TYPES.map((t,i)=>`
     <div class="slot-machine${t.cursed?' cursed':''}" id="slot-${t.id}" onclick="spinSlot(${i})">
-      ${t.badge ? `<div class="slot-badge ${t.badge}">${t.name}</div>` : `<div class="slot-badge" style="background:rgba(255,255,255,0.1);color:#888;border:1px solid rgba(255,255,255,0.1);font-size:9px;font-family:Orbitron,monospace;">${t.name}</div>`}
+      <div class="slot-badge ${t.badge||''}" style="${!t.badge?'background:rgba(255,255,255,0.08);color:#666;border:1px solid rgba(255,255,255,0.1);font-size:8px;font-family:Orbitron,monospace;':''}">${t.name}</div>
       <div class="slot-reels" id="reels-${t.id}">
         ${[0,1,2].map(j=>`<div class="slot-reel${t.cursed?' cursed-reel':''}" id="reel-${t.id}-${j}">${t.symbols[Math.floor(Math.random()*t.symbols.length)]}</div>`).join('')}
       </div>
-      <div class="slot-info" id="info-${t.id}">Нажми для спина!</div>
-    </div>
-  `).join('');
+      <div class="slot-info" id="info-${t.id}">Нажми!</div>
+    </div>`).join('');
 }
 
-function buildCasesGrid() {
-  document.getElementById('cases-grid').innerHTML = CASES.map(c=>`
+function buildCasesGrid(){
+  document.getElementById('cases-grid').innerHTML=CASES.map(c=>`
     <div class="case-item ${c.cls}" onclick="openCase('${c.id}')">
       <span class="case-emoji">${c.emoji}</span>
       <div class="case-name">${c.name}</div>
       <div class="case-rarity">${c.rarity}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function buildTriggersGrid() {
-  document.getElementById('triggers-grid').innerHTML = TRIGGERS.map(t=>`
+function buildTriggersGrid(){
+  document.getElementById('triggers-grid').innerHTML=TRIGGERS.map(t=>`
     <div class="trigger-item" id="trigger-${t.word}">
       <div class="trigger-word" style="color:${t.color}">${t.word}</div>
       <div class="trigger-desc">${t.desc}</div>
       <div class="trigger-bar-wrap"><div class="trigger-bar" id="tbar-${t.word}" style="width:0%;background:${t.color}"></div></div>
       <div class="trigger-count" id="tcount-${t.word}">0/${t.threshold}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
+}
+
+function buildShopGrid(){
+  const grid=document.getElementById('shop-grid');
+  if(!grid)return;
+  grid.innerHTML=SHOP_ITEMS.map(item=>`
+    <div class="shop-item" id="shop-item-${item.id}" onclick="buyShopItem('${item.id}')">
+      <span class="shop-item-emoji">${item.emoji}</span>
+      <div class="shop-item-name">${item.name}</div>
+      <div class="shop-item-desc">${item.desc}</div>
+      <div class="shop-item-price">💰 ${item.price}</div>
+    </div>`).join('');
 }
 
 // ================================================================
-//  SLOT LOGIC
+//  SHOP
 // ================================================================
-const slotBusy = {};
+function openShop(){
+  document.getElementById('shop-balance-val').textContent=fmtNum(S.stats.coins);
+  updateShopAffordability();
+  document.getElementById('shop-overlay').classList.add('active');
+}
+function closeShop(){document.getElementById('shop-overlay').classList.remove('active');}
 
-function spinSlot(idx) {
-  const type = SLOT_TYPES[idx];
-  if (slotBusy[type.id] || S.effects.freeze) return;
-  slotBusy[type.id] = true;
-  const actualType = type;
-
-  const reels = [0,1,2].map(j=>document.getElementById(`reel-${actualType.id}-${j}`));
-  reels.forEach(r=>{r.classList.add('spinning');r.classList.remove('win');});
-  document.getElementById(`info-${actualType.id}`).textContent='Крутим...';
-
-  const results = [];
-  const spinTime = S.effects.hyper ? actualType.spinTime*0.3 : actualType.spinTime;
-
-  // Generate results first to enable near-miss
-  const genSym = (i) => {
-    if(actualType.pvp && S.effects.chaos) return actualType.symbols[0];
-    if(actualType.cursed && Math.random()<0.3) return actualType.symbols[Math.floor(Math.random()*3)];
-    return actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];
-  };
-  results[0] = genSym(0);
-  results[1] = genSym(1);
-  results[2] = genSym(2);
-
-  // Near-miss tweak: if first two match but third doesn't, sometimes make it one off
-  const allMatch = results[0]===results[1]&&results[1]===results[2];
-  const firstTwoMatch = results[0]===results[1] && results[2]!==results[0];
-
-  reels.forEach((reel, i) => {
-    const baseDelay = spinTime + i * 350;
-    // Last reel slows down if near-miss
-    const isNearMiss = firstTwoMatch && i === 2;
-    const tickInterval = setInterval(() => {
-      reel.textContent = actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];
-    }, isNearMiss ? 120 : 50);
-
-    setTimeout(() => {
-      clearInterval(tickInterval);
-      // Slow tick for last reel on near miss
-      if (isNearMiss) {
-        let slowTicks = 4;
-        const slowTick = setInterval(() => {
-          reel.textContent = actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];
-          slowTicks--;
-          if (slowTicks <= 0) {
-            clearInterval(slowTick);
-            reel.textContent = results[i];
-            reel.classList.remove('spinning');
-            resolveSlot(actualType, results, reels, idx);
-          }
-        }, 200);
-      } else {
-        reel.textContent = results[i];
-        reel.classList.remove('spinning');
-        if (i === 2) resolveSlot(actualType, results, reels, idx);
-      }
-    }, baseDelay);
+function updateShopAffordability(){
+  SHOP_ITEMS.forEach(item=>{
+    const el=document.getElementById('shop-item-'+item.id);
+    if(!el)return;
+    el.classList.toggle('affordable',S.stats.coins>=item.price);
+    el.classList.toggle('locked',S.stats.coins<item.price);
   });
 }
 
-function resolveSlot(type, results, reels, idx) {
+function buyShopItem(id){
+  const item=SHOP_ITEMS.find(i=>i.id===id);
+  if(!item||S.stats.coins<item.price)return;
+  S.stats.coins-=item.price;
+  updateStatCoins();
+  document.getElementById('shop-balance-val').textContent=fmtNum(S.stats.coins);
+  updateShopAffordability();
+  addChatMsg('system','🛒',`Куплено: ${item.emoji} ${item.name} (-${item.price} монет)`);
+  item.effect();
+  if(item.id!=='boss')closeShop();
+}
+
+// ================================================================
+//  BOSS CUSTOMIZER
+// ================================================================
+function openBossCustomizer(){document.getElementById('boss-customizer').classList.add('active');}
+function closeBossCustomizer(){document.getElementById('boss-customizer').classList.remove('active');}
+function updateBossPreview(){
+  const name=document.getElementById('boss-name-input').value||'БОСС';
+  document.getElementById('boss-preview-name').textContent=name;
+}
+
+function launchCustomBoss(){
+  const name=document.getElementById('boss-name-input').value||'ТЁМНЫЙ ВЛАСТЕЛИН';
+  const hp=parseInt(document.getElementById('boss-hp-input').value)||1000;
+  const regen=parseInt(document.getElementById('boss-regen-input').value)||0;
+  const reward=parseInt(document.getElementById('boss-reward-input').value)||5000;
+  S.customBoss={name,hp,regen,reward};
+  closeBossCustomizer();
+  startBossFight({name,hp:hp,maxHp:hp,regen,reward});
+}
+
+// ================================================================
+//  BOSS FIGHT SCENE
+// ================================================================
+let _bossRegenInterval=null;
+let _bossBeatInterval=null;
+let _bossData=null;
+
+function startBossFight(boss){
+  if(S._bossActive)return;
+  _bossData={...boss};
+  S._bossActive=true;
+  S._bossLikes=0;
+
+  // Mute chaos
+  if(AUDIO.chaos)AUDIO._savedChaosVol=AUDIO.chaos.volume,AUDIO.chaos.volume=0;
+
+  // Show scene
+  const scene=document.getElementById('boss-scene');
+  scene.classList.add('active');
+  document.getElementById('boss-scene-name').textContent=_bossData.name;
+  document.getElementById('boss-scene-hp-fill').style.width='100%';
+  document.getElementById('boss-scene-hp-text').textContent=`${_bossData.hp}/${_bossData.maxHp}`;
+  document.getElementById('boss-scene-bg').classList.remove('dim');
+
+  // Also update mini boss
+  document.getElementById('boss-panel').style.display='block';
+  document.getElementById('boss-name-display').textContent=_bossData.name;
+  document.getElementById('boss-hp-fill').style.width='100%';
+  document.getElementById('boss-hp-text').textContent=`${_bossData.hp}/${_bossData.maxHp}`;
+
+  // Start boss music from beginning
+  if(AUDIO.boss){AUDIO.boss.pause();AUDIO.boss=null;}
+  AUDIO.boss=new Audio(SND.boss);
+  AUDIO.boss.volume=0.8;
+  AUDIO.boss.loop=true;
+  AUDIO.boss.play().catch(()=>{});
+
+  // Clear old timers
+  AUDIO._bossTimers.forEach(t=>clearTimeout(t));
+  AUDIO._bossTimers=[];
+
+  // 25.5s — dim background
+  AUDIO._bossTimers.push(setTimeout(()=>{
+    document.getElementById('boss-scene-bg').classList.add('dim');
+  },25500));
+
+  // 41s — beat shake
+  AUDIO._bossTimers.push(setTimeout(()=>{
+    const img=document.getElementById('boss-scene-img');
+    _bossBeatInterval=setInterval(()=>{
+      img.classList.add('boss-beat-shake');
+      setTimeout(()=>img.classList.remove('boss-beat-shake'),80);
+    },400);
+  },41000));
+
+  // Regen
+  if(_bossData.regen>0){
+    _bossRegenInterval=setInterval(()=>{
+      if(!S._bossActive)return;
+      _bossData.hp=Math.min(_bossData.maxHp,_bossData.hp+_bossData.regen);
+      updateBossSceneHP();
+    },1000);
+  }
+}
+
+function damageBossScene(dmg){
+  if(!S._bossActive||!_bossData)return;
+  _bossData.hp=Math.max(0,_bossData.hp-dmg);
+  updateBossSceneHP();
+  // Hit animation
+  const img=document.getElementById('boss-scene-img');
+  img.classList.remove('hit');void img.offsetWidth;img.classList.add('hit');
+  setTimeout(()=>img.classList.remove('hit'),200);
+  if(_bossData.hp<=0)bossDefeated();
+}
+
+function updateBossSceneHP(){
+  const pct=_bossData.hp/_bossData.maxHp*100;
+  document.getElementById('boss-scene-hp-fill').style.width=pct+'%';
+  document.getElementById('boss-scene-hp-text').textContent=`${Math.round(_bossData.hp)}/${_bossData.maxHp}`;
+  document.getElementById('boss-hp-fill').style.width=pct+'%';
+  document.getElementById('boss-hp-text').textContent=`${Math.round(_bossData.hp)}/${_bossData.maxHp}`;
+}
+
+function shootLike(fromLeft){
+  if(!S._bossActive)return;
+  const proj=document.createElement('div');
+  proj.className='like-projectile';
+  proj.textContent='👍';
+  const startX=fromLeft?Math.random()*30:window.innerWidth-Math.random()*30-30;
+  const startY=window.innerHeight-80;
+  const bossEl=document.getElementById('boss-scene-img');
+  const rect=bossEl.getBoundingClientRect();
+  const tx=(rect.left+rect.width/2)-startX;
+  const ty=(rect.top+rect.height/2)-startY;
+  proj.style.left=startX+'px';
+  proj.style.top=startY+'px';
+  proj.style.setProperty('--tx',tx+'px');
+  proj.style.setProperty('--ty',ty+'px');
+  proj.style.animationDuration=(0.4+Math.random()*0.2)+'s';
+  document.body.appendChild(proj);
+  setTimeout(()=>{
+    proj.remove();
+    damageBossScene(1);
+  },500);
+}
+
+function spawnLikeAttack(count){
+  for(let i=0;i<Math.min(count,8);i++){
+    setTimeout(()=>shootLike(i%2===0),i*60);
+  }
+  // Sparkle if big burst
+  if(count>=5){
+    const img=document.getElementById('boss-scene-img');
+    img.classList.add('spark');
+    setTimeout(()=>img.classList.remove('spark'),400);
+  }
+}
+
+function stopBossFight(){
+  S._bossActive=false;
+  clearInterval(_bossRegenInterval);
+  clearInterval(_bossBeatInterval);
+  AUDIO._bossTimers.forEach(t=>clearTimeout(t));
+  AUDIO._bossTimers=[];
+  if(AUDIO.boss){
+    // Fade out boss music
+    let v=AUDIO.boss.volume;
+    const fi=setInterval(()=>{v=Math.max(0,v-0.05);AUDIO.boss.volume=v;if(v<=0){clearInterval(fi);AUDIO.boss.pause();AUDIO.boss=null;}},60);
+  }
+  // Restore chaos if was active
+  if(AUDIO.chaos&&S.effects.chaos)AUDIO.chaos.volume=AUDIO._savedChaosVol;
+
+  // Fade scene out and back to game
+  const scene=document.getElementById('boss-scene');
+  scene.style.transition='opacity 0.8s ease';
+  scene.style.opacity='0';
+  setTimeout(()=>{
+    scene.classList.remove('active');
+    scene.style.opacity='';
+    scene.style.transition='';
+    document.getElementById('boss-panel').style.display='none';
+    S.boss=null;
+    _bossData=null;
+  },800);
+}
+
+function bossDefeated(){
+  const reward=_bossData.reward||5000;
+  addCoins(reward);
+  showFullscreenEvent('💥','БОСС ПОВЕРЖЕН!',`+${reward} монет!`);
+  spawnParticles('💥',20);spawnCoinRain('💰',40);
+  addChatMsg('system','🏆',`БОСС ${_bossData.name} УБИТ! +${reward} монет!`);
+  setTimeout(()=>stopBossFight(),3000);
+}
+
+// ================================================================
+//  FULLSCREEN
+// ================================================================
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(()=>{});
+  } else {
+    document.exitFullscreen().catch(()=>{});
+  }
+}
+
+// ================================================================
+//  SLOT MACHINES
+// ================================================================
+const slotBusy={};
+
+function spinSlot(idx){
+  const type=SLOT_TYPES[idx];
+  if(slotBusy[type.id]||S.effects.freeze||S._bossActive)return;
+  slotBusy[type.id]=true;
+  const reels=[0,1,2].map(j=>document.getElementById(`reel-${type.id}-${j}`));
+  reels.forEach(r=>{r.classList.add('spinning');r.classList.remove('win');});
+  document.getElementById(`info-${type.id}`).textContent='Крутим...';
+
+  const spinTime=S.effects.hyper?type.spinTime*0.3:type.spinTime;
+  const syms=type.symbols;
+  const results=syms.map(()=>syms[Math.floor(Math.random()*syms.length)]);
+  results[0]=syms[Math.floor(Math.random()*syms.length)];
+  results[1]=syms[Math.floor(Math.random()*syms.length)];
+  results[2]=syms[Math.floor(Math.random()*syms.length)];
+  if(type.cursed&&Math.random()<0.3)results[Math.floor(Math.random()*3)]=syms[Math.floor(Math.random()*3)];
+
+  const firstTwoMatch=results[0]===results[1]&&results[2]!==results[0];
+
+  reels.forEach((reel,i)=>{
+    const delay=spinTime+i*320;
+    const isNear=firstTwoMatch&&i===2;
+    const tick=setInterval(()=>{reel.textContent=syms[Math.floor(Math.random()*syms.length)];},isNear?130:55);
+    setTimeout(()=>{
+      clearInterval(tick);
+      if(isNear){
+        let st=5;
+        const slow=setInterval(()=>{
+          reel.textContent=syms[Math.floor(Math.random()*syms.length)];
+          st--;
+          if(st<=0){clearInterval(slow);reel.textContent=results[i];reel.classList.remove('spinning');resolveSlot(type,results,reels,idx);}
+        },220);
+      } else {
+        reel.textContent=results[i];reel.classList.remove('spinning');
+        if(i===2)resolveSlot(type,results,reels,idx);
+      }
+    },delay);
+  });
+}
+
+function resolveSlot(type,results,reels,idx){
   slotBusy[type.id]=false;
   const key=results.join('');
   const win=type.wins[key];
-  const mult = S.multiplier * S.nextGiftMultiplier;
+  const mult=S.multiplier*S.nextGiftMultiplier;
   S.nextGiftMultiplier=1;
-
   if(win){
     reels.forEach(r=>r.classList.add('win'));
     const earned=Math.round(win.coins*mult);
     addCoins(earned);
     document.getElementById(`info-${type.id}`).textContent=`🎉 ${win.label}! +${earned}`;
     showBigEvent('🎰',win.label,`+${earned} монет${mult>1?' x'+mult:''}`);
-    spawnParticles('🎰',10);
-    addEventLog(`🎰 [${type.name}] ${win.label} +${earned}`);
+    spawnParticles('🎰',8);
     addCombo();
-    if(type.bossSlot&&S.boss) damageBoss(earned/10);
+    if(type.bossSlot&&S.boss)damageBoss(earned/10);
   } else if(results[0]===results[1]||results[1]===results[2]){
-    addCoins(30);
-    document.getElementById(`info-${type.id}`).textContent='✨ Пара! +30';
-    addCombo();
+    addCoins(30);document.getElementById(`info-${type.id}`).textContent='✨ Пара! +30';addCombo();
   } else {
     document.getElementById(`info-${type.id}`).textContent='Не повезло...';
-    // Near miss?
-    if(results[0]===results[2]&&Math.random()<0.4) showNearMiss();
+    if(results[0]===results[2]&&Math.random()<0.4)showNearMiss();
     breakCombo();
   }
-
-  // Cursed effect
-  if(type.cursed&&Math.random()<0.3){
-    addChatMsg('system','💀','ПРОКЛЯТЫЙ АВТОМАТ СРАБОТАЛ!');
-    S.energy=Math.max(0,S.energy-20);
-    updateEnergy();
-  }
-  if(type.effect) applyEffect(type.effect,10000);
+  if(type.cursed&&Math.random()<0.3){addChatMsg('system','💀','ПРОКЛЯТЫЙ АВТОМАТ!');S.energy=Math.max(0,S.energy-15);updateEnergy();}
+  if(type.effect)applyEffect(type.effect,10000);
 }
 
 // ================================================================
@@ -822,33 +1048,32 @@ function resolveSlot(type, results, reels, idx) {
 // ================================================================
 function drawWheel(angle){
   const c=document.getElementById('wheel-canvas'),ctx=c.getContext('2d');
-  const cx=100,cy=100,r=95,seg=(Math.PI*2)/WHEEL_SEGS.length;
-  ctx.clearRect(0,0,200,200);
+  const cx=90,cy=90,r=86,seg=(Math.PI*2)/WHEEL_SEGS.length;
+  ctx.clearRect(0,0,180,180);
   WHEEL_SEGS.forEach((s,i)=>{
     const start=angle+i*seg,end=start+seg;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
     ctx.fillStyle=s.color;ctx.fill();
-    ctx.strokeStyle='rgba(0,0,0,0.4)';ctx.lineWidth=2;ctx.stroke();
+    ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=1.5;ctx.stroke();
     ctx.save();ctx.translate(cx,cy);ctx.rotate(start+seg/2);
-    ctx.textAlign='right';ctx.font='bold 11px Rajdhani,sans-serif';
-    ctx.fillStyle='#fff';ctx.shadowColor='rgba(0,0,0,0.8)';ctx.shadowBlur=4;
-    ctx.fillText(s.label,r-6,4);ctx.restore();
+    ctx.textAlign='right';ctx.font='bold 10px Rajdhani,sans-serif';
+    ctx.fillStyle='#fff';ctx.shadowColor='rgba(0,0,0,0.8)';ctx.shadowBlur=3;
+    ctx.fillText(s.label,r-5,4);ctx.restore();
   });
-  ctx.beginPath();ctx.arc(cx,cy,16,0,Math.PI*2);
-  ctx.fillStyle='#0A0A14';ctx.fill();ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,14,0,Math.PI*2);
+  ctx.fillStyle='#0A0A14';ctx.fill();ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.stroke();
 }
 
 function spinWheel(){
-  if(S.wheelSpinning)return;
+  if(S.wheelSpinning||S._bossActive)return;
   S.wheelSpinning=true;
   document.getElementById('wheel-result').textContent='...';
-  const extra=5+Math.random()*5;
-  const target=S.wheelAngle+extra*Math.PI*2+Math.random()*Math.PI*2;
-  const dur=S.effects.hyper?1500:3500;
+  const target=S.wheelAngle+(5+Math.random()*5)*Math.PI*2+Math.random()*Math.PI*2;
+  const dur=S.effects.hyper?1400:3200;
   const start=S.wheelAngle,t0=performance.now();
   (function anim(now){
     const t=Math.min((now-t0)/dur,1);
-    const e=t<1?1-Math.pow(1-t,4):1;
+    const e=1-Math.pow(1-t,4);
     S.wheelAngle=start+(target-start)*e;
     drawWheel(S.wheelAngle);
     if(t<1)requestAnimationFrame(anim);
@@ -864,47 +1089,35 @@ function resolveWheel(){
   document.getElementById('wheel-result').textContent='🎉 '+w.label;
   if(w.type==='coins'){addCoins(w.val);showBigEvent(w.emoji,w.label,'+'+w.val+' монет');}
   else if(w.type==='mult'){S.nextGiftMultiplier=w.val;showBigEvent(w.emoji,'МНОЖИТЕЛЬ x'+w.val,'На следующий подарок!');}
-  else{showBigEvent('❌','МИМО!','Не повезло...');}
-  spawnParticles(w.emoji,8);
+  else showBigEvent('❌','МИМО!','Не повезло...');
+  spawnParticles(w.emoji,6);
 }
 
 // ================================================================
 //  CASES
 // ================================================================
 function openCase(id){
-  const cas=CASES.find(c=>c.id===id);
-  if(!cas)return;
+  if(S._bossActive)return;
+  const cas=CASES.find(c=>c.id===id);if(!cas)return;
   const overlay=document.getElementById('case-overlay');
-  const box=document.getElementById('case-anim-box');
   const emojiEl=document.getElementById('case-anim-emoji');
   const resultEl=document.getElementById('case-result');
-
   overlay.style.display='flex';
   emojiEl.textContent=cas.emoji;
-  emojiEl.style.animation='caseFall 0.5s ease forwards';
-  resultEl.className='case-result';
-  resultEl.textContent='';
-
-  // Shake after 1s
-  setTimeout(()=>{emojiEl.classList.add('case-shake');},1000);
-
-  // Open after 2s
+  emojiEl.style.animation='none';void emojiEl.offsetWidth;emojiEl.style.animation='caseFall 0.5s ease forwards';
+  resultEl.className='case-result';resultEl.textContent='';
+  setTimeout(()=>emojiEl.classList.add('case-shake'),900);
   setTimeout(()=>{
     emojiEl.classList.remove('case-shake');
     const reward=weightedRandom(cas.rewards);
-    emojiEl.textContent='💥';
-    spawnParticles('💥',15);
-
+    emojiEl.textContent='💥';spawnParticles('💥',12);
     if(reward.special==='chaos'){applyEffect('chaos',30000);resultEl.textContent='💀 CHAOS MODE!';}
-    else if(reward.coins>0){addCoins(reward.coins);resultEl.textContent=reward.label;}
+    else if(reward.coins>0){addCoins(reward.coins);resultEl.textContent=reward.label;if(reward.coins>=1000)spawnCoinRain('💰',20);}
     else{S.stats.coins=Math.max(0,S.stats.coins+reward.coins);updateStatCoins();resultEl.textContent=reward.label;}
     resultEl.className='case-result show';
-
     if(Math.abs(reward.coins)>=1000)shakeScreen();
-    addEventLog(`📦 [${cas.name}] ${reward.label}`);
-
-    setTimeout(()=>{overlay.style.display='none';},2000);
-  },2500);
+    setTimeout(()=>overlay.style.display='none',1800);
+  },2200);
 }
 
 function weightedRandom(items){
@@ -915,29 +1128,17 @@ function weightedRandom(items){
 }
 
 // ================================================================
-//  TRIGGER SYSTEM
+//  TRIGGERS
 // ================================================================
 function processTriggerWord(word){
   const upper=word.toUpperCase().trim();
-  const trigger=TRIGGERS.find(t=>t.word===upper);
-  if(!trigger)return;
-
+  const trigger=TRIGGERS.find(t=>t.word===upper);if(!trigger)return;
   if(!S.triggerCounts[upper])S.triggerCounts[upper]=0;
   S.triggerCounts[upper]++;
-
-  // Reset timer
   clearTimeout(S.triggerTimers[upper]);
-  S.triggerTimers[upper]=setTimeout(()=>{
-    S.triggerCounts[upper]=0;
-    updateTriggerUI(upper,trigger);
-  },6000);
-
+  S.triggerTimers[upper]=setTimeout(()=>{S.triggerCounts[upper]=0;updateTriggerUI(upper,trigger);},6000);
   updateTriggerUI(upper,trigger);
-
-  if(S.triggerCounts[upper]>=trigger.threshold){
-    S.triggerCounts[upper]=0;
-    fireTrigger(trigger);
-  }
+  if(S.triggerCounts[upper]>=trigger.threshold){S.triggerCounts[upper]=0;fireTrigger(trigger);}
 }
 
 function updateTriggerUI(word,trigger){
@@ -947,288 +1148,111 @@ function updateTriggerUI(word,trigger){
   const item=document.getElementById('trigger-'+word);
   if(!bar)return;
   const pct=Math.min(100,count/trigger.threshold*100);
-  bar.style.width=pct+'%';
-  countEl.textContent=count+'/'+trigger.threshold;
-  item.classList.toggle('ready',pct>=80&&pct<100);
-  item.classList.toggle('fired',pct>=100);
+  bar.style.width=pct+'%';countEl.textContent=count+'/'+trigger.threshold;
+  item.classList.toggle('ready',pct>=80&&pct<100);item.classList.toggle('fired',pct>=100);
 }
 
 function fireTrigger(trigger){
+  if(S._bossActive&&trigger.effect!=='boss')return;
   const item=document.getElementById('trigger-'+trigger.word);
-  if(item){item.classList.remove('ready');item.classList.add('fired');}
-  updateTriggerUI(trigger.word,trigger);
-
-  addChatMsg('trigger','⚡','ТРИГГЕР АКТИВИРОВАН: '+trigger.word+' → '+trigger.desc);
-  showFullscreenEvent(TRIGGERS.find(t=>t.effect===trigger.effect)?.emoji||'⚡',trigger.word+' АКТИВИРОВАН!',trigger.desc);
-
+  if(item)item.classList.add('fired');
+  addChatMsg('trigger','⚡','ТРИГГЕР: '+trigger.word+' → '+trigger.desc);
   switch(trigger.effect){
-    case 'chaos':   applyEffect('chaos',trigger.duration);shakeScreen();break;
-    case 'glitch':  applyEffect('glitch',trigger.duration);triggerGlitch();break;
-    case 'boost':   applyEffect('boost',trigger.duration);S.multiplier=2;break;
-    case 'autospin': autoSpin(5);break;
-    case 'freeze':  applyEffect('freeze',trigger.duration);break;
-    case 'boss':    spawnBoss();break;
-    case 'nearmiss': showNearMiss();break;
-    case 'hyper':   applyEffect('hyper',trigger.duration);break;
+    case 'chaos':applyEffect('chaos',trigger.duration);shakeScreen();break;
+    case 'glitch':applyEffect('glitch',trigger.duration);triggerGlitch();break;
+    case 'boost':applyEffect('boost',trigger.duration);S.multiplier=2;break;
+    case 'autospin':SLOT_TYPES.forEach((_,i)=>setTimeout(()=>spinSlot(i),i*200));break;
+    case 'freeze':applyEffect('freeze',trigger.duration);break;
+    case 'boss':openBossCustomizer();break;
+    case 'nearmiss':showNearMiss();break;
+    case 'hyper':applyEffect('hyper',trigger.duration);break;
   }
-
-  setTimeout(()=>{
-    if(item)item.classList.remove('fired');
-  },3000);
-}
-
-function autoSpin(times){
-  if(times<=0)return;
-  spinSlot(0);
-  setTimeout(()=>autoSpin(times-1),1200);
+  setTimeout(()=>{if(item)item.classList.remove('fired');},3000);
 }
 
 // ================================================================
 //  EFFECTS
 // ================================================================
-function applyEffect(name, duration){
-  if(S.effects[name]?.timer)clearTimeout(S.effects[name].timer);
-  S.effects[name]={
-    endTime:Date.now()+duration,
-    timer:duration>0?setTimeout(()=>{removeEffect(name);},duration):null
-  };
-  updateEffectsBar();
+let _chaosFlashEl=null;
 
+function applyEffect(name,duration){
+  if(S._bossActive&&(name==='chaos'||name==='glitch'||name==='hyper'))return;
+  if(S.effects[name]?.timer)clearTimeout(S.effects[name].timer);
+  S.effects[name]={endTime:Date.now()+duration,timer:duration>0?setTimeout(()=>removeEffect(name),duration):null};
+  updateEffectsBar();
   switch(name){
     case 'chaos':
-      startChaosVisuals();
-      fadeChaosMusicIn(2000);
-      document.body.classList.add('glitch');
-      setTimeout(()=>document.body.classList.remove('glitch'),600);
+      startChaosVisuals();fadeChaosIn(2000);
+      document.body.classList.add('glitch');setTimeout(()=>document.body.classList.remove('glitch'),600);
       break;
-    case 'glitch': triggerGlitch();break;
-    case 'hyper': document.body.classList.add('hyper');setTimeout(()=>document.body.classList.remove('hyper'),duration);break;
-    case 'boost': S.multiplier=2;break;
+    case 'glitch':triggerGlitch();break;
+    case 'hyper':document.body.classList.add('hyper');setTimeout(()=>document.body.classList.remove('hyper'),duration);break;
+    case 'boost':S.multiplier=2;break;
   }
 }
 
 function removeEffect(name){
   delete S.effects[name];
   if(name==='boost')S.multiplier=1;
-  if(name==='chaos'){
-    stopChaosVisuals();
-    fadeChaosMusicOut(3000);
-  }
+  if(name==='chaos'){stopChaosVisuals();fadeChaosOut(3000);}
   updateEffectsBar();
-  document.body.classList.remove('hyper');
+  if(name==='hyper')document.body.classList.remove('hyper');
 }
 
 function updateEffectsBar(){
-  const bar=document.getElementById('active-effects');
-  bar.innerHTML=Object.keys(S.effects).map(n=>`<div class="effect-pill effect-${n}">${getEffectLabel(n)}</div>`).join('');
+  document.getElementById('active-effects').innerHTML=Object.keys(S.effects).map(n=>`<div class="effect-pill effect-${n}">${getEffectLabel(n)}</div>`).join('');
 }
 
 function getEffectLabel(n){
-  const map={chaos:'🌀 ХАОС',freeze:'❄️ ЗАМОРОЗКА',boost:'⚡ БУСТ x2',curse:'💀 ПРОКЛЯТИЕ',hyper:'🔥 ГИПЕР',glitch:'📺 ГЛИТЧ'};
-  return map[n]||n.toUpperCase();
+  return{chaos:'🌀 ХАОС',freeze:'❄️ ЗАМОРОЗКА',boost:'⚡ БУСТ x2',curse:'💀 ПРОКЛЯТИЕ',hyper:'🔥 ГИПЕР',glitch:'📺 ГЛИТЧ'}[n]||n.toUpperCase();
+}
+
+function startChaosVisuals(){
+  document.body.classList.add('chaos-active');
+  document.getElementById('melt-overlay').classList.add('active');
+  if(!_chaosFlashEl){_chaosFlashEl=document.createElement('div');_chaosFlashEl.className='chaos-color-flash';document.body.appendChild(_chaosFlashEl);}
+}
+
+function stopChaosVisuals(){
+  document.body.classList.remove('chaos-active');
+  document.getElementById('melt-overlay').classList.remove('active');
+  if(_chaosFlashEl){_chaosFlashEl.remove();_chaosFlashEl=null;}
 }
 
 function triggerGlitch(){
+  if(S._bossActive)return;
   document.body.classList.add('glitch');
-  setTimeout(()=>document.body.classList.remove('glitch'),800);
+  setTimeout(()=>document.body.classList.remove('glitch'),600);
 }
 
 function shakeScreen(){
   document.body.classList.add('shake');
-  setTimeout(()=>document.body.classList.remove('shake'),600);
+  setTimeout(()=>document.body.classList.remove('shake'),500);
 }
 
 // ================================================================
-//  BOSS SYSTEM
+//  ENERGY SYSTEM
 // ================================================================
-function spawnBoss(){
-  const bosses=[
-    {name:'ЖАДНЫЙ ТРОЛЛЬ',emoji:'👹',hp:500},
-    {name:'ДРАКОН ХАОСА',emoji:'🐉',hp:1000},
-    {name:'КИБЕР-ДЕМОН',emoji:'👾',hp:750},
-    {name:'ТЕМНЫЙ РЫЦАРЬ',emoji:'🧟',hp:800},
-  ];
-  S.boss=bosses[Math.floor(Math.random()*bosses.length)];
-  S.boss.maxHp=S.boss.hp;
-  document.getElementById('boss-panel').style.display='block';
-  document.getElementById('boss-emoji').textContent=S.boss.emoji;
-  document.getElementById('boss-name').textContent=S.boss.name;
-  updateBossHP();
-  showFullscreenEvent(S.boss.emoji,'БОСС ПОЯВИЛСЯ!',S.boss.name+' — дари подарки для урона!');
-  addChatMsg('system','👹','БОСС '+S.boss.name+' появился! Дари подарки для урона!');
-}
-
-function damageBoss(dmg){
-  if(!S.boss)return;
-  S.boss.hp=Math.max(0,S.boss.hp-dmg);
-  updateBossHP();
-  shakeScreen();
-  if(S.boss.hp<=0) killBoss();
-}
-
-function updateBossHP(){
-  if(!S.boss)return;
-  const pct=S.boss.hp/S.boss.maxHp*100;
-  document.getElementById('boss-hp-fill').style.width=pct+'%';
-  document.getElementById('boss-hp-text').textContent=Math.round(S.boss.hp)+'/'+S.boss.maxHp;
-}
-
-function killBoss(){
-  const reward=S.boss.maxHp*2;
-  showFullscreenEvent('💥','БОСС ПОВЕРЖЕН!','+'+reward+' монет!');
-  addCoins(reward);
-  spawnParticles('💥',20);spawnParticles('💰',20);
-  shakeScreen();
-  addChatMsg('system','🏆','БОСС '+S.boss.name+' УБИТ! +'+reward+' монет всем!');
-  setTimeout(()=>{
-    document.getElementById('boss-panel').style.display='none';
-    S.boss=null;
-  },3000);
-}
-
-// ================================================================
-//  GIFT / CHAT HANDLERS
-// ================================================================
-function handleGift(user,giftName,emoji,coins,count){
-  count=count||1;
-  const total=coins*count*(S.effects.boost?2:1)*S.nextGiftMultiplier;
-  S.nextGiftMultiplier=1;
-
-  if(!S.leaderboard[user])S.leaderboard[user]={coins:0,role:'normal'};
-  S.leaderboard[user].coins+=total;
-  assignRole(user);
-  renderLeaderboard();
-
-  S.stats.gifts++;
-  document.getElementById('stat-gifts').textContent=S.stats.gifts;
-  addCoins(total);
-  addEnergy(Math.min(25,total/15));
-  addCombo();
-
-  // Gift notification bottom right (always)
-  showGiftNotif(user, emoji, giftName, coins, count);
-
-  // 500+ donor animation
-  if (coins >= 500) {
-    triggerDonorAnimation(user, total);
-  } else {
-    // Play gift sound (only when donor not playing)
-    if (!AUDIO._donorPlaying) playGiftSound(coins);
-
-    // Gift events
-    if(total>=2000){
-      showFullscreenEvent(emoji,escHTML(user),'+'+total+' МОНЕТ!');
-      spawnParticles(emoji,20);
-      spawnCoinRain('💰', 40);
-      shakeScreen();
-      shakeScreen();
-    } else if(total>=500){
-      showBigEvent(emoji,escHTML(user),'+'+total+' монет');
-      spawnParticles(emoji,12);
-      spawnCoinRain('💰', 20);
-    } else if(total>=100){
-      showBigEvent(emoji,escHTML(user),'+'+total+' монет');
-      spawnParticles(emoji,6);
-      spawnCoinRain(emoji, 10);
-    } else if(total>=10){
-      spawnParticles(emoji,3);
-    }
-  }
-
-  // Sabotage from cheap gifts
-  if(coins<=1&&Math.random()<0.3&&S.stats.gifts>5){
-    const sab=['Дешёвый подарок сломал барабан! 💀','Символы перемешались! 🌀','Шанс выигрыша снижен! ⬇️'];
-    addChatMsg('system','💀',sab[Math.floor(Math.random()*sab.length)]);
-    triggerGlitch();
-  }
-
-  addChatMsg('gift',user,`подарил ${emoji} ${giftName}${count>1?' ×'+count:''} (+${total})`);
-  addEventLog(`🎁 ${user}: ${emoji} ${giftName} (+${total})`);
-
-  // Boss damage
-  if(S.boss) damageBoss(Math.round(total/5));
-
-  // Auto spin on gift (skip during donor animation phase 1)
-  if (!S._donorActive) {
-    setTimeout(()=>spinSlot(Math.floor(Math.random()*SLOT_TYPES.length)),200);
-  }
-}
-
-function handleComment(user,text){
-  addChatMsg('comment',user,text);
-  // Check triggers
-  const words=text.toUpperCase().split(/\s+/);
-  words.forEach(w=>processTriggerWord(w));
-  // Chat heals boss
-  if(S.boss&&Math.random()<0.1){S.boss.hp=Math.min(S.boss.maxHp,S.boss.hp+10);updateBossHP();}
-}
-
-function handleLike(user,count){
-  S.stats.viewers=Math.max(S.stats.viewers,1);
-  addEnergy(count*0.08);
-}
-
-function handleJoin(user){
-  S.stats.viewers++;
-  document.getElementById('stat-viewers').textContent=S.stats.viewers;
-  if(Math.random()<0.25)addChatMsg('join','👋',user+' зашёл в эфир');
-}
-
-function handleShare(user){
-  addChatMsg('system','📤',user+' поделился!');
-  addCoins(50);
-}
-
-// ================================================================
-//  COMBO SYSTEM
-// ================================================================
-function addCombo(){
-  S.combo++;
-  clearTimeout(S.comboTimer);
-  S.comboTimer=setTimeout(breakCombo,8000);
-  document.getElementById('stat-combo').textContent='x'+S.combo;
-  if(S.combo>=3){
-    S.multiplier=S.combo>=10?3:S.combo>=5?2:1;
-    if(S.combo%5===0)showBigEvent('🔥','КОМБО x'+S.combo,'Множитель x'+S.multiplier+'!');
-  }
-}
-
-function breakCombo(){
-  S.combo=0;S.multiplier=1;
-  document.getElementById('stat-combo').textContent='x1';
-}
-
-// ================================================================
-//  COINS / XP / ENERGY
-// ================================================================
-function addCoins(n){
-  const mult=S.effects.boost?2:1;
-  S.stats.coins+=Math.round(n*mult);
-  updateStatCoins();
-  addXP(Math.ceil(n/10));
-}
-
-function updateStatCoins(){
-  const el=document.getElementById('stat-coins');
-  el.textContent=fmtNum(S.stats.coins);
-  el.classList.remove('coin-pop');void el.offsetWidth;el.classList.add('coin-pop');
-}
-
-function addXP(n){
-  S.xp+=n;
-  const needed=S.level*100;
-  if(S.xp>=needed){S.xp-=needed;S.level++;showBigEvent('🎖️','УРОВЕНЬ '+S.level,'Новый уровень!');}
-}
+const ENERGY_MILESTONES=[
+  {pct:25,triggered:false,action:()=>{spinSlot(0);spinSlot(1);addChatMsg('system','⚡','Энергия 25%! Двойной спин!');}},
+  {pct:50,triggered:false,action:()=>{applyEffect('boost',15000);addChatMsg('system','⚡','Энергия 50%! БУСТ активирован!');}},
+  {pct:75,triggered:false,action:()=>{SLOT_TYPES.forEach((_,i)=>setTimeout(()=>spinSlot(i),i*100));showBigEvent('⚡','ЭНЕРГИЯ 75%!','Все автоматы крутятся!');addChatMsg('system','⚡','Энергия 75%! Все автоматы!');}},
+  {pct:100,triggered:false,action:()=>{
+    addCoins(1000);showFullscreenEvent('⚡','ЭНЕРГИЯ MAX!','+1000 монет + ДЖЕКПОТ!');
+    spawnParticles('⚡',20);spawnCoinRain('💰',50);shakeScreen();
+    openCase('jackpot');
+    ENERGY_MILESTONES.forEach(m=>m.triggered=false);
+  }},
+];
 
 function addEnergy(n){
+  const prev=S.energy;
   S.energy=Math.min(100,S.energy+n);
   updateEnergy();
-  if(S.energy>=100){
-    S.energy=0;updateEnergy();
-    addCoins(500);
-    showFullscreenEvent('⚡','ЭНЕРГИЯ MAX!','БОНУС +500 монет!');
-    spawnParticles('⚡',15);
-  }
+  ENERGY_MILESTONES.forEach(m=>{
+    if(!m.triggered&&S.energy>=m.pct&&prev<m.pct){m.triggered=true;m.action();}
+  });
+  if(S.energy>=100)S.energy=0;
 }
 
 function updateEnergy(){
@@ -1236,11 +1260,103 @@ function updateEnergy(){
   document.getElementById('energy-pct').textContent=Math.round(S.energy)+'%';
 }
 
-function showNearMiss(){
-  const el=document.getElementById('near-miss');
-  el.style.display='block';
-  el.style.animation='none';void el.offsetWidth;el.style.animation='nearMissAnim 2s ease forwards';
-  setTimeout(()=>el.style.display='none',2000);
+// ================================================================
+//  BOSS (mini, in main game)
+// ================================================================
+function damageBoss(dmg){
+  if(!S.boss)return;
+  S.boss.hp=Math.max(0,S.boss.hp-dmg);
+  const pct=S.boss.hp/S.boss.maxHp*100;
+  document.getElementById('boss-hp-fill').style.width=pct+'%';
+  document.getElementById('boss-hp-text').textContent=Math.round(S.boss.hp)+'/'+S.boss.maxHp;
+  if(S.boss.hp<=0){addCoins(S.boss.reward||2000);showFullscreenEvent('💥','БОСС УБИТ!','+'+S.boss.reward+' монет!');document.getElementById('boss-panel').style.display='none';S.boss=null;}
+}
+
+// ================================================================
+//  GIFT HANDLER
+// ================================================================
+function handleGift(user,giftName,emoji,coins,count){
+  count=count||1;
+  if(S._bossActive){
+    // In boss fight, gifts damage boss
+    const dmg=Math.round(coins*count*0.5);
+    damageBossScene(dmg);
+    showGiftNotif(user,emoji,giftName,coins,count);
+    addChatMsg('gift',user,`подарил ${emoji} ${giftName}${count>1?' ×'+count:''} → -${dmg} HP боссу`);
+    return;
+  }
+
+  const total=coins*count*(S.effects.boost?2:1)*S.nextGiftMultiplier;
+  S.nextGiftMultiplier=1;
+  if(!S.leaderboard[user])S.leaderboard[user]={coins:0,gifts:0,role:'normal'};
+  S.leaderboard[user].coins+=total;S.leaderboard[user].gifts++;
+  assignRole(user);renderLeaderboard();
+  S.stats.gifts++;document.getElementById('stat-gifts').textContent=S.stats.gifts;
+  addCoins(total);addEnergy(Math.min(20,total/20));addCombo();
+  showGiftNotif(user,emoji,giftName,coins,count);
+
+  if(coins>=500){
+    triggerDonorAnimation(user,total);
+  } else {
+    playGiftSound(coins);
+    if(total>=2000){showFullscreenEvent(emoji,escHTML(user),'+'+total+' МОНЕТ!');spawnParticles(emoji,20);spawnCoinRain('💰',40);shakeScreen();}
+    else if(total>=200){showBigEvent(emoji,escHTML(user),'+'+total+' монет');spawnParticles(emoji,10);spawnCoinRain(emoji,12);}
+    else if(total>=50){spawnParticles(emoji,4);}
+  }
+
+  if(coins<=1&&Math.random()<0.3&&S.stats.gifts>3){triggerGlitch();addChatMsg('system','💀','Дешёвый подарок!');}
+  addChatMsg('gift',user,`подарил ${emoji} ${giftName}${count>1?' ×'+count:''} (+${total})`);
+  if(S.boss)damageBoss(Math.round(total/5));
+  if(!S._donorActive)setTimeout(()=>spinSlot(Math.floor(Math.random()*SLOT_TYPES.length)),200);
+}
+
+function handleComment(user,text){
+  addChatMsg('comment',user,text);
+  const words=text.toUpperCase().split(/\s+/);
+  words.forEach(w=>processTriggerWord(w));
+  if(S.boss&&Math.random()<0.08){S.boss.hp=Math.min(S.boss.maxHp,S.boss.hp+8);damageBoss(0);}
+}
+
+function handleLike(user,count){
+  S.stats.totalLikes+=(count||1);
+  addEnergy((count||1)*0.15);
+  if(S._bossActive)spawnLikeAttack(Math.min(count||1,6));
+}
+
+function handleJoin(user){
+  S.stats.viewers++;
+  document.getElementById('stat-viewers').textContent=S.stats.viewers;
+  if(Math.random()<0.2)addChatMsg('join','👋',user+' зашёл в эфир');
+}
+
+function handleShare(user){addChatMsg('system','📤',user+' поделился!');addCoins(50);}
+
+// ================================================================
+//  COMBO
+// ================================================================
+function addCombo(){
+  S.combo++;clearTimeout(S.comboTimer);
+  S.comboTimer=setTimeout(breakCombo,8000);
+  document.getElementById('stat-combo').textContent='x'+S.combo;
+  if(S.combo>=3){S.multiplier=S.combo>=10?3:S.combo>=5?2:1;if(S.combo%5===0)showBigEvent('🔥','КОМБО x'+S.combo,'Множитель x'+S.multiplier+'!');}
+}
+function breakCombo(){S.combo=0;S.multiplier=1;document.getElementById('stat-combo').textContent='x1';}
+
+// ================================================================
+//  COINS / XP
+// ================================================================
+function addCoins(n){
+  S.stats.coins+=Math.round(n*(S.effects.boost?2:1));
+  updateStatCoins();addXP(Math.ceil(n/10));
+}
+function updateStatCoins(){
+  const el=document.getElementById('stat-coins');
+  el.textContent=fmtNum(S.stats.coins);
+  el.classList.remove('coin-pop');void el.offsetWidth;el.classList.add('coin-pop');
+}
+function addXP(n){
+  S.xp+=n;const needed=S.level*100;
+  if(S.xp>=needed){S.xp-=needed;S.level++;showBigEvent('🎖️','УРОВЕНЬ '+S.level,'Новый уровень!');}
 }
 
 // ================================================================
@@ -1248,18 +1364,17 @@ function showNearMiss(){
 // ================================================================
 function assignRole(user){
   const coins=S.leaderboard[user].coins;
-  const entries=Object.values(S.leaderboard).sort((a,b)=>b.coins-a.coins);
-  if(entries[0]?.coins===coins)S.leaderboard[user].role='king';
+  const top=Object.values(S.leaderboard).sort((a,b)=>b.coins-a.coins);
+  if(top[0]?.coins===coins)S.leaderboard[user].role='king';
   else if(coins>=1000)S.leaderboard[user].role='whale';
   else if(coins>=300)S.leaderboard[user].role='vip';
   else S.leaderboard[user].role='normal';
 }
-
 function getRoleBadge(role){
-  if(role==='king')return '<span class="role-badge role-king">👑 KING</span>';
-  if(role==='whale')return '<span class="role-badge role-whale">🐋 WHALE</span>';
-  if(role==='vip')return '<span class="role-badge role-vip">⭐ VIP</span>';
-  return '';
+  if(role==='king')return'<span class="role-badge role-king">👑 KING</span>';
+  if(role==='whale')return'<span class="role-badge role-whale">🐋 WHALE</span>';
+  if(role==='vip')return'<span class="role-badge role-vip">⭐ VIP</span>';
+  return'';
 }
 
 // ================================================================
@@ -1267,12 +1382,11 @@ function getRoleBadge(role){
 // ================================================================
 function renderLeaderboard(){
   const sorted=Object.entries(S.leaderboard).sort((a,b)=>b[1].coins-a[1].coins).slice(0,10);
-  const max=sorted[0]?.[1].coins||1;
   document.getElementById('leaderboard-list').innerHTML=sorted.map(([user,data],i)=>{
     const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
-    return `<div class="leader-item">
+    return`<div class="leader-item">
       <div class="leader-rank ${rc}">${i+1}</div>
-      <div class="leader-avatar" style="border-color:${userColor(user)};color:${userColor(user)}">${user[0].toUpperCase()}</div>
+      <div class="leader-avatar" style="border-color:${userColor(user)};color:${userColor(user)}">${user[0]?.toUpperCase()||'?'}</div>
       <div class="leader-info">
         <div class="leader-name">${escHTML(user)}</div>
         <div class="leader-coins">💰 ${fmtNum(data.coins)}</div>
@@ -1291,26 +1405,19 @@ function addChatMsg(type,user,text){
   m.className=`chat-msg ${type}`;
   m.innerHTML=`<span class="msg-user" style="color:${userColor(user)}">${escHTML(user)}</span><span style="color:#bbb">${escHTML(text)}</span>`;
   feed.appendChild(m);
-  if(feed.children.length>80)feed.firstChild.remove();
+  if(feed.children.length>60)feed.firstChild.remove();
   feed.scrollTop=feed.scrollHeight;
 }
 
-function addEventLog(text){
-  // Just console for now, not shown in separate panel
-  console.log(text);
-}
-
 // ================================================================
-//  BIG EVENTS / FULLSCREEN
+//  BIG EVENTS
 // ================================================================
 function showBigEvent(emoji,title,sub){
   const ov=document.getElementById('event-overlay');
   ov.innerHTML='';
-  const el=document.createElement('div');
-  el.className='big-event';
+  const el=document.createElement('div');el.className='big-event';
   el.innerHTML=`<span class="big-event-emoji">${emoji}</span><div class="big-event-text">${escHTML(title)}</div><div class="big-event-sub">${escHTML(sub)}</div>`;
-  ov.appendChild(el);
-  setTimeout(()=>{if(ov.contains(el))el.remove();},3000);
+  ov.appendChild(el);setTimeout(()=>{if(ov.contains(el))el.remove();},3000);
 }
 
 function showFullscreenEvent(emoji,title,sub){
@@ -1318,235 +1425,199 @@ function showFullscreenEvent(emoji,title,sub){
   document.getElementById('fs-emoji').textContent=emoji;
   document.getElementById('fs-title').textContent=title;
   document.getElementById('fs-sub').textContent=sub;
-  fs.style.display='flex';
-  setTimeout(()=>fs.style.display='none',3000);
+  fs.style.display='flex';setTimeout(()=>fs.style.display='none',3000);
+}
+
+function showNearMiss(){
+  const el=document.getElementById('near-miss');
+  el.style.display='block';el.style.animation='none';void el.offsetWidth;
+  el.style.animation='nearMissAnim 2s ease forwards';
+  setTimeout(()=>el.style.display='none',2000);
 }
 
 // ================================================================
 //  PARTICLES
 // ================================================================
 function spawnParticles(emoji,count){
-  count=count||8;
+  count=Math.min(count||8,12);
   const cx=window.innerWidth/2,cy=window.innerHeight/2;
+  const frag=document.createDocumentFragment();
   for(let i=0;i<count;i++){
-    const p=document.createElement('div');
-    p.className='particle';p.textContent=emoji;
-    p.style.fontSize=(14+Math.random()*16)+'px';
-    const angle=(i/count)*Math.PI*2;
-    const dist=100+Math.random()*200;
+    const p=document.createElement('div');p.className='particle';p.textContent=emoji;
+    p.style.fontSize=(12+Math.random()*14)+'px';
+    const angle=(i/count)*Math.PI*2,dist=80+Math.random()*160;
     p.style.left=cx+'px';p.style.top=cy+'px';
     p.style.setProperty('--dx',Math.cos(angle)*dist+'px');
-    p.style.setProperty('--dy',Math.sin(angle)*dist-80+'px');
-    p.style.animationDelay=(Math.random()*0.3)+'s';
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(),2500);
+    p.style.setProperty('--dy',Math.sin(angle)*dist-60+'px');
+    p.style.animationDuration=(1.5+Math.random()*0.5)+'s';
+    p.style.animationDelay=(Math.random()*0.2)+'s';
+    frag.appendChild(p);
+    setTimeout(()=>p.remove(),2200);
+  }
+  document.body.appendChild(frag);
+}
+
+function spawnCoinRain(emoji,count){
+  emoji=emoji||'💰';count=Math.min(count||15,25);
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const c=document.createElement('div');c.className='coin-rain-coin';c.textContent=emoji;
+      c.style.left=(Math.random()*100)+'vw';
+      const dur=1.0+Math.random()*1.5;
+      c.style.animationDuration=dur+'s';c.style.fontSize=(14+Math.random()*12)+'px';
+      document.body.appendChild(c);setTimeout(()=>c.remove(),(dur+0.1)*1000);
+    },i*55);
   }
 }
 
-// ================================================================
-//  COIN RAIN
-// ================================================================
-function spawnCoinRain(count, emoji) {
-  emoji = emoji || '💰';
-  count = count || 20;
-  for (let i = 0; i < count; i++) {
-    setTimeout(() => {
-      const c = document.createElement('div');
-      c.className = 'coin-rain-coin';
-      c.textContent = emoji;
-      c.style.left = (Math.random() * 100) + 'vw';
-      const dur = 1.2 + Math.random() * 1.8;
-      c.style.animationDuration = dur + 's';
-      c.style.animationDelay = '0s';
-      c.style.fontSize = (16 + Math.random() * 14) + 'px';
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), dur * 1000 + 100);
-    }, i * 60);
-  }
+function showGiftNotif(user,emoji,giftName,coins,count){
+  const stack=document.getElementById('gift-notif-stack');if(!stack)return;
+  while(stack.children.length>=4)stack.lastChild?.remove();
+  const el=document.createElement('div');el.className='gift-notif';
+  const total=coins*(count||1);
+  const col=total>=500?'#FFD700':total>=100?'#00F5FF':total>=10?'#39FF14':'#888';
+  el.innerHTML=`<div class="gift-notif-emoji">${emoji}</div><div><div class="gift-notif-user" style="color:${userColor(user)}">${escHTML(user)}</div><div class="gift-notif-desc">${escHTML(giftName)}${count>1?' ×'+count:''} <span style="color:${col};font-weight:700">+${total}🪙</span></div></div>`;
+  stack.insertBefore(el,stack.firstChild);
+  setTimeout(()=>{el.classList.add('fade-out');setTimeout(()=>el.remove(),380);},3200);
 }
 
 // ================================================================
-//  GIFT NOTIFICATION (bottom right)
+//  DONOR ANIMATION (500+)
 // ================================================================
-function showGiftNotif(user, emoji, giftName, coins, count) {
-  const stack = document.getElementById('gift-notif-stack');
-  if (!stack) return;
-  // Limit stack to 4
-  while (stack.children.length >= 4) stack.lastChild?.remove();
-
-  const el = document.createElement('div');
-  el.className = 'gift-notif';
-  const total = coins * (count || 1);
-  const coinColor = total >= 500 ? '#FFD700' : total >= 100 ? '#00F5FF' : total >= 10 ? '#39FF14' : '#888';
-  el.innerHTML = `
-    <div class="gift-notif-emoji">${emoji}</div>
-    <div class="gift-notif-info">
-      <div class="gift-notif-user" style="color:${userColor(user)}">${escHTML(user)}</div>
-      <div class="gift-notif-desc">${escHTML(giftName)}${count>1?' ×'+count:''} <span style="color:${coinColor};font-weight:700">+${total}🪙</span></div>
-    </div>
-  `;
-  stack.insertBefore(el, stack.firstChild);
-  setTimeout(() => {
-    el.classList.add('fade-out');
-    setTimeout(() => el.remove(), 400);
-  }, 3500);
+function triggerDonorAnimation(user,coins){
+  if(AUDIO._donorPlaying){AUDIO._donorQueue.push({user,coins});return;}
+  _runDonorAnimation(user,coins);
 }
 
-// ================================================================
-//  CHAOS VISUAL ENHANCEMENT
-// ================================================================
-let _chaosFlashEl = null;
-function startChaosVisuals() {
-  document.body.classList.add('chaos-active');
-  document.getElementById('melt-overlay').classList.add('active');
-  if (!_chaosFlashEl) {
-    _chaosFlashEl = document.createElement('div');
-    _chaosFlashEl.className = 'chaos-color-flash';
-    document.body.appendChild(_chaosFlashEl);
-  }
-}
-function stopChaosVisuals() {
-  document.body.classList.remove('chaos-active');
-  document.getElementById('melt-overlay').classList.remove('active');
-  if (_chaosFlashEl) { _chaosFlashEl.remove(); _chaosFlashEl = null; }
-}
-
-// ================================================================
-//  500+ DONOR ANIMATION
-// ================================================================
-function triggerDonorAnimation(user, coins) {
-  // If already playing, queue
-  if (AUDIO._donorPlaying) {
-    AUDIO._donorQueue.push({ user, coins });
-    return;
-  }
-  _runDonorAnimation(user, coins);
-}
-
-function _runDonorAnimation(user, coins) {
-  AUDIO._donorPlaying = true;
-
-  // Mute chaos music during donor
-  if (AUDIO.chaos) {
-    AUDIO._savedChaosVol = AUDIO.chaos.volume;
-    AUDIO.chaos.volume = 0;
-  }
-
-  // Play donor track
-  const track = new Audio(SND.donor);
-  track.volume = 0.85;
-  track.play().catch(()=>{});
-
-  // Phase 1 (0–10.5s): grey screen, all effects suspended
-  const overlay = document.getElementById('donor-overlay');
-  const nickEl  = document.getElementById('donor-nick');
-  const miniEl  = document.getElementById('donor-nick-mini');
-
-  overlay.style.background = 'rgba(20,20,20,0)';
-  overlay.style.display = 'flex';
-  overlay.classList.add('active');
-  miniEl.style.display = 'none';
-  nickEl.textContent = '';
-  nickEl.className = 'donor-nick';
-
-  S._donorActive = true;
-
-  // Fade to grey
-  requestAnimationFrame(() => {
-    overlay.style.transition = 'background 1.5s ease';
-    overlay.style.background = 'rgba(18,18,18,0.97)';
-  });
-
-  // Phase 2 (10.5s): nick bursts in and dances
-  setTimeout(() => {
-    nickEl.textContent = user;
-    nickEl.classList.add('show');
-    setTimeout(() => nickEl.classList.add('dance'), 100);
-    spawnParticles('✨', 20);
-    spawnCoinRain('💰', 30);
-  }, 10500);
-
-  // Phase 3 (30s): nick shrinks to top-left mini
-  setTimeout(() => {
-    nickEl.classList.remove('show', 'dance');
-    nickEl.style.opacity = '0';
-
-    miniEl.textContent = user;
-    miniEl.style.display = 'block';
-    miniEl.style.transition = 'opacity 0.8s ease';
-    requestAnimationFrame(() => miniEl.classList.add('show'));
-  }, 30000);
-
-  // Phase 4: track ends — nick flies to leaderboard tab
-  track.addEventListener('ended', () => {
-    // Restore chaos volume
-    if (AUDIO.chaos && AUDIO._savedChaosVol > 0) {
-      AUDIO.chaos.volume = AUDIO._savedChaosVol;
-    }
-
-    // Mini nick flies to top tab
-    miniEl.classList.remove('show');
-    miniEl.classList.add('fly-away');
-
-    setTimeout(() => {
-      // Flash leaderboard tab
-      const topTab = document.querySelector('.main-tab[onclick*="leaderboard"]');
-      if (topTab) {
-        topTab.style.transition = 'all 0.3s';
-        topTab.style.background = 'rgba(255,215,0,0.4)';
-        topTab.style.boxShadow = '0 0 20px rgba(255,215,0,0.6)';
-        setTimeout(() => {
-          topTab.style.background = '';
-          topTab.style.boxShadow = '';
-        }, 800);
-      }
-
-      // Hide overlay
-      overlay.style.transition = 'background 1s ease';
-      overlay.style.background = 'rgba(20,20,20,0)';
-      setTimeout(() => {
-        overlay.style.display = 'none';
-        overlay.classList.remove('active');
-        nickEl.className = 'donor-nick';
-        nickEl.style.opacity = '';
-        miniEl.className = 'donor-nick-mini';
-        miniEl.style.display = 'none';
-        S._donorActive = false;
-        AUDIO._donorPlaying = false;
-
-        // Process queue
-        if (AUDIO._donorQueue.length > 0) {
-          // Show queue burst
-          const queued = [...AUDIO._donorQueue];
-          AUDIO._donorQueue = [];
-          _showQueueBurst(queued, () => {
-            if (queued.length > 0) _runDonorAnimation(queued[queued.length-1].user, queued[queued.length-1].coins);
-          });
+function _runDonorAnimation(user,coins){
+  AUDIO._donorPlaying=true;
+  if(AUDIO.chaos)AUDIO._savedChaosVol=AUDIO.chaos.volume,AUDIO.chaos.volume=0;
+  const track=new Audio(SND.donor);track.volume=0.85;track.play().catch(()=>{});
+  const overlay=document.getElementById('donor-overlay');
+  const nickEl=document.getElementById('donor-nick');
+  const miniEl=document.getElementById('donor-nick-mini');
+  overlay.style.background='rgba(20,20,20,0)';overlay.style.display='flex';overlay.classList.add('active');
+  miniEl.style.display='none';nickEl.textContent='';nickEl.className='donor-nick';S._donorActive=true;
+  requestAnimationFrame(()=>{overlay.style.transition='background 1.5s ease';overlay.style.background='rgba(18,18,18,0.97)';});
+  setTimeout(()=>{nickEl.textContent=user;nickEl.classList.add('show');setTimeout(()=>nickEl.classList.add('dance'),80);spawnParticles('✨',16);spawnCoinRain('💰',25);},10500);
+  setTimeout(()=>{nickEl.classList.remove('show','dance');nickEl.style.opacity='0';miniEl.textContent=user;miniEl.style.display='block';miniEl.style.transition='opacity 0.8s ease';requestAnimationFrame(()=>miniEl.classList.add('show'));},30000);
+  track.addEventListener('ended',()=>{
+    if(AUDIO.chaos&&AUDIO._savedChaosVol>0)AUDIO.chaos.volume=AUDIO._savedChaosVol;
+    miniEl.classList.remove('show');miniEl.classList.add('fly-away');
+    setTimeout(()=>{
+      const topTab=document.querySelector('.main-tab[onclick*="leaderboard"]');
+      if(topTab){topTab.style.background='rgba(255,215,0,0.3)';topTab.style.boxShadow='0 0 18px rgba(255,215,0,0.5)';setTimeout(()=>{topTab.style.background='';topTab.style.boxShadow='';},700);}
+      overlay.style.transition='background 1s ease';overlay.style.background='rgba(20,20,20,0)';
+      setTimeout(()=>{
+        overlay.style.display='none';overlay.classList.remove('active');
+        nickEl.className='donor-nick';nickEl.style.opacity='';
+        miniEl.className='donor-nick-mini';miniEl.style.display='none';
+        S._donorActive=false;AUDIO._donorPlaying=false;
+        if(AUDIO._donorQueue.length>0){
+          const q=[...AUDIO._donorQueue];AUDIO._donorQueue=[];
+          _showQueueBurst(q,()=>{if(q.length>0)_runDonorAnimation(q[q.length-1].user,q[q.length-1].coins);});
         }
-      }, 1200);
-    }, 800);
+      },1100);
+    },750);
   });
 }
 
-function _showQueueBurst(items, cb) {
-  const container = document.createElement('div');
-  container.className = 'queue-burst';
-  document.body.appendChild(container);
-
-  items.forEach((item, i) => {
-    const el = document.createElement('div');
-    el.className = 'queue-nick';
-    el.textContent = item.user;
-    el.style.animationDelay = (i * 0.3) + 's';
-    el.style.top = (30 + Math.random() * 40) + '%';
-    el.style.left = (10 + Math.random() * 70) + '%';
+function _showQueueBurst(items,cb){
+  const container=document.createElement('div');container.className='queue-burst';document.body.appendChild(container);
+  items.forEach((item,i)=>{
+    const el=document.createElement('div');el.className='queue-nick';el.textContent=item.user;
+    el.style.animationDelay=(i*0.28)+'s';el.style.top=(25+Math.random()*45)+'%';el.style.left=(8+Math.random()*70)+'%';
     container.appendChild(el);
   });
+  setTimeout(()=>{container.remove();if(cb)cb();},items.length*280+1300);
+}
 
-  setTimeout(() => {
-    container.remove();
-    if (cb) cb();
-  }, items.length * 300 + 1400);
+// ================================================================
+//  END STREAM / CREDITS
+// ================================================================
+function startEndStream(){
+  if(!confirm('Завершить стрим и показать титры?'))return;
+  const scene=document.getElementById('credits-scene');
+  const scroll=document.getElementById('credits-scroll');
+  const final=document.getElementById('credits-final');
+  const statsRow=document.getElementById('credits-stats-row');
+  document.getElementById('credits-streamer-nick').textContent=S.username||'СТРИМЕР';
+
+  // Build stats
+  statsRow.innerHTML=`
+    <div class="credits-stat"><div class="credits-stat-val">${fmtNum(S.stats.gifts)}</div><div class="credits-stat-lbl">Подарков</div></div>
+    <div class="credits-stat"><div class="credits-stat-val">${fmtNum(S.stats.coins)}</div><div class="credits-stat-lbl">Монет игровых</div></div>
+    <div class="credits-stat"><div class="credits-stat-val">${fmtNum(S.stats.viewers)}</div><div class="credits-stat-lbl">Зрителей</div></div>
+    <div class="credits-stat"><div class="credits-stat-val">${fmtNum(S.stats.totalLikes||0)}</div><div class="credits-stat-lbl">Лайков</div></div>
+  `;
+
+  // Build credits scroll content
+  const sorted=Object.entries(S.leaderboard).sort((a,b)=>b[1].coins-a[1].coins);
+  const king=sorted[0];const top3=sorted.slice(0,3);const rest=sorted.slice(3);
+  let html='<div style="height:60vh"></div>';
+  html+=`<div class="credits-title">✨ СПАСИБО ЗА ПОДДЕРЖКУ ✨</div>`;
+  html+=`<div class="credits-divider"></div>`;
+  if(king){
+    html+=`<div class="credits-role">👑 КОРОЛЬ СТРИМА</div>`;
+    html+=`<div class="credits-nick big">${escHTML(king[0])}</div>`;
+    html+=`<div class="credits-coins">💰 ${fmtNum(king[1].coins)} монет</div>`;
+  }
+  if(top3.length>1){
+    html+=`<div class="credits-divider"></div>`;
+    html+=`<div class="credits-role">🏆 ТОП ДАРИТЕЛИ</div>`;
+    top3.forEach(([user,data],i)=>{
+      const medals=['🥇','🥈','🥉'];
+      html+=`<div class="credits-nick">${medals[i]||''} ${escHTML(user)}</div>`;
+      html+=`<div class="credits-coins">${fmtNum(data.coins)} монет</div>`;
+    });
+  }
+  if(rest.length>0){
+    html+=`<div class="credits-divider"></div>`;
+    html+=`<div class="credits-role">💙 УЧАСТНИКИ</div>`;
+    rest.forEach(([user])=>{html+=`<div class="credits-nick" style="font-size:13px;color:#ccc;">${escHTML(user)}</div>`;});
+  }
+  html+=`<div class="credits-divider"></div>`;
+  html+=`<div class="credits-role" style="color:rgba(255,215,0,0.3)">creator: @m123news</div>`;
+  html+=`<div class="disclaimer-sm" style="margin-top:4px;">⚠️ Игра-шоу. Монеты — игровые очки.</div>`;
+  html+=`<div style="height:40vh"></div>`;
+  scroll.innerHTML=html;
+
+  // Start credits music
+  const creditsAudio=new Audio(SND.credits);creditsAudio.volume=0.85;
+  creditsAudio.play().catch(()=>{});
+
+  // Calculate duration from audio
+  creditsAudio.addEventListener('loadedmetadata',()=>{
+    const totalDur=creditsAudio.duration*1000||60000;
+    // Sync scroll to music duration minus 8s for final card
+    const scrollDur=Math.max(totalDur-8000,20000);
+    scroll.style.animationDuration=scrollDur+'ms';
+    scroll.style.animationTimingFunction='linear';
+    // Show final at end of music
+    setTimeout(()=>{
+      final.classList.add('show');
+      spawnParticles('✨',20);spawnCoinRain('⭐',20);
+    },totalDur-4000);
+  });
+
+  // Show scene with fade
+  scene.style.opacity='0';scene.classList.add('active');
+  requestAnimationFrame(()=>{scene.style.transition='opacity 1.5s ease';scene.style.opacity='1';});
+
+  // Stop all other audio
+  if(AUDIO.chaos)AUDIO.chaos.volume=0;
+  if(AUDIO.boss){AUDIO.boss.pause();AUDIO.boss=null;}
+  stopChaosVisuals();
+  Object.keys(S.effects).forEach(k=>clearTimeout(S.effects[k]?.timer));
+  S.effects={};updateEffectsBar();
+
+  // Tap to close after music
+  creditsAudio.addEventListener('ended',()=>{
+    setTimeout(()=>{
+      scene.style.transition='opacity 1.5s ease';scene.style.opacity='0';
+      setTimeout(()=>{scene.classList.remove('active');final.classList.remove('false');scene.style.opacity='';},1500);
+    },5000);
+  });
 }
 
 // ================================================================
@@ -1564,28 +1635,36 @@ function switchMain(name){
 // ================================================================
 //  WEBSOCKET
 // ================================================================
-function connectStream(){
-  const username=document.getElementById('username-input').value.trim().replace('@','');
+function connectStream(isReconnect){
+  const username=isReconnect?S.username:document.getElementById('username-input').value.trim().replace('@','');
   if(!username){alert('Введи ник!');return;}
   S.username=username;
-  showGame();
+  if(!isReconnect)showGame();
   const proto=location.protocol==='https:'?'wss:':'ws:';
   const ws=new WebSocket(`${proto}//${location.host}?username=${encodeURIComponent(username)}`);
   S.ws=ws;
-  ws.onopen=()=>{setConnected(true);addChatMsg('system','✅','Подключено к @'+username);};
+  S._reconnectDelay=S._reconnectDelay||1000;
+  ws.onopen=()=>{S._reconnectDelay=1000;setConnected(true);addChatMsg('system','✅',isReconnect?'♻️ Переподключено':'Подключено к @'+username);};
   ws.onmessage=e=>{try{routeEvent(JSON.parse(e.data));}catch{}};
-  ws.onerror=()=>{setConnected(false);addChatMsg('system','❌','Ошибка подключения');};
-  ws.onclose=()=>{setConnected(false);addChatMsg('system','🔌','Соединение закрыто');};
+  ws.onerror=()=>setConnected(false);
+  ws.onclose=()=>{
+    setConnected(false);
+    if(S.username&&!S.demo){
+      addChatMsg('system','🔌',`Обрыв! Реконнект через ${S._reconnectDelay/1000}с...`);
+      setTimeout(()=>connectStream(true),S._reconnectDelay);
+      S._reconnectDelay=Math.min(S._reconnectDelay*2,30000);
+    }
+  };
 }
 
 function routeEvent(msg){
   switch(msg.type){
-    case 'gift':    handleGift(msg.user,msg.giftName,msg.emoji,msg.coins,msg.count);break;
-    case 'comment': handleComment(msg.user,msg.text);break;
-    case 'like':    handleLike(msg.user,msg.count||1);break;
-    case 'join':    handleJoin(msg.user);break;
-    case 'share':   handleShare(msg.user);break;
-    case 'viewers': S.stats.viewers=msg.count;document.getElementById('stat-viewers').textContent=fmtNum(msg.count);break;
+    case 'gift':handleGift(msg.user,msg.giftName,msg.emoji,msg.coins,msg.count);break;
+    case 'comment':handleComment(msg.user,msg.text);break;
+    case 'like':handleLike(msg.user,msg.count||1);break;
+    case 'join':handleJoin(msg.user);break;
+    case 'share':handleShare(msg.user);break;
+    case 'viewers':S.stats.viewers=msg.count;document.getElementById('stat-viewers').textContent=fmtNum(msg.count);break;
   }
 }
 
@@ -1593,32 +1672,27 @@ function routeEvent(msg){
 //  DEMO
 // ================================================================
 function startDemo(){
-  S.demo=true;S.username='demo';showGame();setConnected(true,true);
-  addChatMsg('system','🎮','ДЕМО АКТИВЕН — события симулируются');
+  S.demo=true;S.username='Стример';showGame();setConnected(true,true);
+  addChatMsg('system','🎮','ДЕМО АКТИВЕН');
   S.stats.viewers=Math.floor(Math.random()*200)+50;
   document.getElementById('stat-viewers').textContent=S.stats.viewers;
-
-  const demoComments=['ХАОС','ХАОС','хаос','БУСТ','БУСТ','СПИН','КРУТИ','КРУТИ','КРУТИ','БОСС',
-    'Привет!','Огонь стрим!','Крутяк','gg','🔥🔥','ещё','ЕЩЁ','ещё','РУИН','стоп'];
-
+  const demoComments=['ХАОС','ХАОС','хаос','БУСТ','СПИН','КРУТИ','КРУТИ','КРУТИ','БОСС','Привет!','🔥🔥','ЕЩЁ','РУИН','стоп'];
   S.demoInterval=setInterval(()=>{
     const r=Math.random();
-    if(r<0.3){
+    if(r<0.28){
       const gift=GIFT_TABLE[Math.floor(Math.random()*GIFT_TABLE.length)];
       const user=DEMO_NAMES[Math.floor(Math.random()*DEMO_NAMES.length)];
-      handleGift(user,gift.name,gift.emoji,gift.coins,Math.random()>0.7?Math.floor(Math.random()*5)+1:1);
-    } else if(r<0.7){
-      const user=DEMO_NAMES[Math.floor(Math.random()*DEMO_NAMES.length)];
-      const text=demoComments[Math.floor(Math.random()*demoComments.length)];
-      handleComment(user,text);
+      handleGift(user,gift.name,gift.emoji,gift.coins,Math.random()>0.7?Math.floor(Math.random()*4)+1:1);
+    } else if(r<0.65){
+      handleComment(DEMO_NAMES[Math.floor(Math.random()*DEMO_NAMES.length)],demoComments[Math.floor(Math.random()*demoComments.length)]);
     } else if(r<0.85){
-      handleLike('demo',Math.floor(Math.random()*30)+5);
+      handleLike('demo',Math.floor(Math.random()*20)+3);
     } else {
       handleJoin(DEMO_NAMES[Math.floor(Math.random()*DEMO_NAMES.length)]);
     }
     S.stats.viewers=Math.max(1,S.stats.viewers+Math.floor(Math.random()*3)-1);
     document.getElementById('stat-viewers').textContent=S.stats.viewers;
-  },1500);
+  },1800);
 }
 
 // ================================================================
@@ -1628,7 +1702,11 @@ function showGame(){
   document.getElementById('connect-panel').style.display='none';
   document.getElementById('game-container').style.display='block';
   document.getElementById('disconnect-btn').style.display='';
+  document.getElementById('shop-btn').style.display='';
+  document.getElementById('end-btn').style.display='';
+  S.sessionStart=Date.now();
   initUI();
+  initChaosAudio();
 }
 
 function setConnected(v,demo){
@@ -1642,25 +1720,25 @@ function setConnected(v,demo){
 function disconnect(){
   if(S.ws){S.ws.close();S.ws=null;}
   if(S.demoInterval){clearInterval(S.demoInterval);S.demoInterval=null;}
-  stopChaosVisuals();
-  fadeChaosMusicOut(500);
-  AUDIO._donorPlaying = false;
-  AUDIO._donorQueue = [];
-  S._donorActive = false;
-  Object.assign(S,{connected:false,demo:false,username:'',stats:{viewers:0,gifts:0,coins:0},
-    energy:0,level:1,xp:0,leaderboard:{},combo:0,multiplier:1,effects:{},boss:null,_donorActive:false});
+  stopChaosVisuals();fadeChaosOut(300);
+  stopBossFight();
+  AUDIO._donorPlaying=false;AUDIO._donorQueue=[];S._donorActive=false;
+  Object.assign(S,{connected:false,demo:false,username:'',stats:{viewers:0,gifts:0,coins:0,totalLikes:0},energy:0,level:1,xp:0,leaderboard:{},combo:0,multiplier:1,effects:{},boss:null,_donorActive:false,_bossActive:false});
+  ENERGY_MILESTONES.forEach(m=>m.triggered=false);
   document.getElementById('connect-panel').style.display='';
   document.getElementById('game-container').style.display='none';
   document.getElementById('disconnect-btn').style.display='none';
+  document.getElementById('shop-btn').style.display='none';
+  document.getElementById('end-btn').style.display='none';
   setConnected(false);
 }
 
 // ================================================================
 //  HELPERS
 // ================================================================
-function fmtNum(n){if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return String(n);}
+function fmtNum(n){if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return String(Math.round(n));}
 function escHTML(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function userColor(n){const c=['#FF2D78','#00F5FF','#39FF14','#FFD700','#FF6B35','#B44FFF','#1ABC9C','#E67E22'];let h=0;for(const ch of n)h=(h*31+ch.charCodeAt(0))&0xFFFFFF;return c[Math.abs(h)%c.length];}
+function userColor(n){const c=['#FF2D78','#00F5FF','#39FF14','#FFD700','#FF6B35','#B44FFF','#1ABC9C','#E67E22'];let h=0;for(const ch of String(n))h=(h*31+ch.charCodeAt(0))&0xFFFFFF;return c[Math.abs(h)%c.length];}
 </script>
 </body>
 </html>
