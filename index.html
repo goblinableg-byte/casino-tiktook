@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TikTok Stream Casino 🎰</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFD700;
+    --gold2: #FFA500;
+    --neon-pink: #FF2D78;
+    --neon-cyan: #00F5FF;
+    --neon-green: #39FF14;
+    --dark: #0A0A14;
+    --dark2: #12121F;
+    --dark3: #1A1A2E;
+    --panel: rgba(255,255,255,0.04);
+    --border: rgba(255,215,0,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--dark);
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app { position: relative; z-index: 1; }
+
+  /* === HEADER === */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(0,0,0,0.6);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 20px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #555;
+    transition: all 0.3s;
+  }
+
+  .status-dot.live {
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+    animation: pulse-dot 2s infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .status-text {
+    font-size: 13px;
+    color: #aaa;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  .status-text.connected { color: var(--neon-green); }
+
+  /* === CONNECT PANEL === */
+  #connect-panel {
+    max-width: 480px;
+    margin: 80px auto;
+    padding: 40px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-align: center;
+    backdrop-filter: blur(20px);
+  }
+
+  #connect-panel h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: var(--gold);
+  }
+
+  #connect-panel p {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .input-group input {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-group input::placeholder { color: #555; }
+  .input-group input:focus { border-color: var(--neon-cyan); }
+
+  .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold2), var(--neon-pink));
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255,45,120,0.4);
+  }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.08);
+    color: #ccc;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+  }
+
+  .demo-note {
+    font-size: 12px;
+    color: #555;
+    margin-top: 12px;
+  }
+
+  /* === MAIN GAME === */
+  #game-container {
+    display: none;
+    padding: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .game-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 16px;
+    align-items: start;
+  }
+
+  /* === PANELS === */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    padding: 12px 16px;
+    background: rgba(255,215,0,0.06);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .panel-icon {
+    font-size: 14px;
+  }
+
+  /* === LEADERBOARD === */
+  #leaderboard-list {
+    padding: 8px;
+    max-height: 380px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .leader-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background 0.2s;
+    animation: slideIn 0.4s ease;
+  }
+
+  .leader-item:hover { background: rgba(255,255,255,0.05); }
+
+  .leader-rank {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .rank-1 { background: var(--gold); color: #000; }
+  .rank-2 { background: #C0C0C0; color: #000; }
+  .rank-3 { background: #CD7F32; color: #000; }
+  .rank-n { background: rgba(255,255,255,0.1); color: #aaa; font-size: 10px; }
+
+  .leader-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    font-weight: 700;
+    background: var(--dark3);
+    border: 2px solid transparent;
+  }
+
+  .leader-info { flex: 1; min-width: 0; }
+
+  .leader-name {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .leader-coins {
+    font-size: 11px;
+    color: var(--gold);
+  }
+
+  .leader-bar-wrap {
+    width: 60px;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .leader-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold2), var(--neon-pink));
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+
+  /* === CENTER - MAIN GAME === */
+  .center-col { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'Orbitron', monospace;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Energy bar */
+  .energy-wrap {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .energy-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+
+  .energy-track {
+    height: 20px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .energy-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.5s ease;
+    position: relative;
+  }
+
+  .energy-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; width: 20px;
+    background: rgba(255,255,255,0.3);
+    filter: blur(4px);
+  }
+
+  /* === SLOT MACHINE === */
+  .slot-machine {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .slot-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .slots-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .slot-reel {
+    width: 80px;
+    height: 80px;
+    background: var(--dark3);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .slot-reel.spinning {
+    animation: reel-spin 0.1s steps(1) infinite;
+    border-color: var(--neon-cyan);
+  }
+
+  .slot-reel.win { border-color: var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.5); }
+
+  @keyframes reel-spin {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+  }
+
+  .slot-info {
+    font-size: 12px;
+    color: #666;
+    margin-top: 8px;
+  }
+
+  /* === WHEEL === */
+  .wheel-container {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .wheel-wrap {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 16px;
+  }
+
+  #wheel-canvas {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    transition: transform 0.05s;
+  }
+
+  .wheel-pointer {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 20px solid var(--gold);
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.8));
+  }
+
+  .wheel-result {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    color: var(--neon-cyan);
+    min-height: 24px;
+  }
+
+  /* === CHAT FEED === */
+  #chat-feed {
+    height: 320px;
+    overflow-y: auto;
+    padding: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .chat-msg {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    animation: slideIn 0.3s ease;
+    word-break: break-word;
+  }
+
+  .chat-msg.comment {
+    background: rgba(255,255,255,0.04);
+  }
+
+  .chat-msg.gift {
+    background: rgba(255,215,0,0.08);
+    border-left: 3px solid var(--gold);
+  }
+
+  .chat-msg.like {
+    background: rgba(255,45,120,0.08);
+    border-left: 3px solid var(--neon-pink);
+  }
+
+  .chat-msg.join {
+    background: rgba(0,245,255,0.05);
+    border-left: 3px solid var(--neon-cyan);
+  }
+
+  .chat-msg.system {
+    background: rgba(57,255,20,0.06);
+    border-left: 3px solid var(--neon-green);
+    font-style: italic;
+  }
+
+  .msg-user {
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  .msg-text { color: #ccc; }
+
+  /* === GIFT EVENTS === */
+  #gift-events {
+    padding: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .gift-event {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    background: rgba(255,215,0,0.05);
+    border: 1px solid rgba(255,215,0,0.12);
+    animation: bounceIn 0.5s ease;
+  }
+
+  .gift-emoji { font-size: 22px; flex-shrink: 0; }
+
+  .gift-info { flex: 1; }
+  .gift-sender { font-size: 13px; font-weight: 700; color: var(--gold); }
+  .gift-name { font-size: 11px; color: #888; }
+
+  .gift-value {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--neon-pink);
+  }
+
+  /* === BIG EVENT OVERLAY === */
+  #event-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  .big-event {
+    text-align: center;
+    animation: bigEventAnim 3s ease forwards;
+    pointer-events: none;
+  }
+
+  .big-event-emoji { font-size: 80px; display: block; }
+
+  .big-event-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,215,0,0.4);
+    margin-top: 12px;
+  }
+
+  .big-event-sub {
+    font-size: 16px;
+    color: #ccc;
+    margin-top: 4px;
+  }
+
+  @keyframes bigEventAnim {
+    0% { transform: scale(0.5) translateY(20px); opacity: 0; }
+    15% { transform: scale(1.1) translateY(0); opacity: 1; }
+    30% { transform: scale(1); }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1) translateY(-30px); }
+  }
+
+  /* === PARTICLES === */
+  .particle {
+    position: fixed;
+    pointer-events: none;
+    font-size: 20px;
+    z-index: 999;
+    animation: particle-fly 2s ease forwards;
+  }
+
+  @keyframes particle-fly {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+  }
+
+  /* === COIN COUNTER ANIM === */
+  @keyframes coinPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); color: var(--neon-pink); }
+    100% { transform: scale(1); }
+  }
+
+  .coin-pop { animation: coinPop 0.4s ease; }
+
+  /* === ANIMATIONS === */
+  @keyframes slideIn {
+    from { transform: translateX(-10px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 1100px) {
+    .game-grid {
+      grid-template-columns: 260px 1fr;
+    }
+    .right-col { display: none; }
+  }
+
+  @media (max-width: 720px) {
+    .game-grid {
+      grid-template-columns: 1fr;
+    }
+    .left-col { display: none; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* === SCROLLBAR === */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,215,0,0.2); border-radius: 2px; }
+
+  /* === USER COLOR BADGES === */
+  .badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .badge-vip { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #000; }
+  .badge-whale { background: linear-gradient(135deg, var(--neon-pink), #900); color: #fff; }
+
+  /* Connection error */
+  .error-note {
+    background: rgba(255,50,50,0.1);
+    border: 1px solid rgba(255,50,50,0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #ff8888;
+    margin-top: 12px;
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .error-note a { color: var(--neon-cyan); }
+
+  .server-info {
+    background: rgba(0,245,255,0.06);
+    border: 1px solid rgba(0,245,255,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #7af;
+    margin-top: 12px;
+    text-align: left;
+    line-height: 1.6;
+  }
+
+  .tab-row {
+    display: flex;
+    gap: 6px;
+    padding: 8px 8px 0;
+  }
+
+  .tab {
+    padding: 6px 12px;
+    border-radius: 6px 6px 0 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    background: rgba(255,255,255,0.03);
+    color: #888;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: rgba(255,215,0,0.08);
+    color: var(--gold);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="event-overlay"></div>
+
+  <header>
+    <div class="logo">🎰 STREAM CASINO</div>
+    <div class="status-bar">
+      <div class="status-dot" id="status-dot"></div>
+      <div class="status-text" id="status-text">Не подключено</div>
+      <button class="btn btn-secondary" id="disconnect-btn" style="display:none;padding:6px 14px;font-size:11px;" onclick="disconnect()">ОТКЛЮЧИТЬ</button>
+    </div>
+  </header>
+
+  <!-- CONNECT PANEL -->
+  <div id="connect-panel">
+    <h2>🎮 ПОДКЛЮЧИТЬ СТРИМ</h2>
+    <p>Введи TikTok ник стримера и нажми ПОДКЛЮЧИТЬ.<br>Игра будет реагировать на подарки и события.</p>
+
+    <div class="input-group">
+      <input type="text" id="username-input" placeholder="@ник_стримера" autocomplete="off" />
+      <button class="btn btn-primary" onclick="connectStream()">CONNECT</button>
+    </div>
+
+    <div class="server-info">
+      <strong>⚙️ Как работает:</strong><br>
+      Просто введи ник стримера (без @) и нажми CONNECT.<br>
+      Стрим должен быть <strong>активен</strong> прямо сейчас — игра подключается к живой трансляции.
+    </div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-secondary" style="width:100%" onclick="startDemo()">🎲 ДЕМО-РЕЖИМ (без стрима)</button>
+    </div>
+    <p class="demo-note">Демо-режим симулирует события для тестирования игры</p>
+  </div>
+
+  <!-- GAME CONTAINER -->
+  <div id="game-container">
+    <div class="game-grid">
+
+      <!-- LEFT: LEADERBOARD + GIFTS -->
+      <div class="left-col" style="display:flex;flex-direction:column;gap:16px;">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-icon">🏆</span> ТОП ДАРИТЕЛИ</div>
+          <div id="leaderboard-list"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-icon">🎁</span> ПОСЛЕДНИЕ ПОДАРКИ</div>
+          <div id="gift-events"></div>
+        </div>
+      </div>
+
+      <!-- CENTER: MAIN GAME -->
+      <div class="center-col">
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-viewers">0</div>
+            <div class="stat-label">Зрители</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-gifts">0</div>
+            <div class="stat-label">Подарки</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-coins">0</div>
+            <div class="stat-label">Монеты</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-likes">0</div>
+            <div class="stat-label">Лайки</div>
+          </div>
+        </div>
+
+        <!-- Energy bar -->
+        <div class="energy-wrap">
+          <div class="energy-label">
+            <span>⚡ ЭНЕРГИЯ СТРИМА</span>
+            <span id="energy-pct">0%</span>
+          </div>
+          <div class="energy-track">
+            <div class="energy-fill" id="energy-fill"></div>
+          </div>
+        </div>
+
+        <!-- Slot machine -->
+        <div class="slot-machine">
+          <div class="slot-title">⚡ СЛОТ-МАШИНА</div>
+          <div class="slots-wrapper">
+            <div class="slot-reel" id="reel-0">🍒</div>
+            <div class="slot-reel" id="reel-1">🍋</div>
+            <div class="slot-reel" id="reel-2">🎰</div>
+          </div>
+          <div class="slot-info" id="slot-info">Отправь подарок для запуска!</div>
+          <button class="btn btn-secondary" style="margin-top:10px;font-size:11px;" onclick="spinSlots()">🎲 ТЕСТ СПИН</button>
+        </div>
+
+        <!-- Wheel of fortune -->
+        <div class="wheel-container">
+          <div class="slot-title">🎡 КОЛЕСО ФОРТУНЫ</div>
+          <div class="wheel-wrap">
+            <div class="wheel-pointer"></div>
+            <canvas id="wheel-canvas" width="220" height="220"></canvas>
+          </div>
+          <div class="wheel-result" id="wheel-result">Нажми для вращения!</div>
+          <button class="btn btn-primary" style="margin-top:12px;font-size:11px;" onclick="spinWheel()">🎡 ВРАЩАТЬ</button>
+        </div>
+
+        <!-- Chat + events -->
+        <div class="panel">
+          <div class="tab-row">
+            <div class="tab active" onclick="switchTab('chat')">💬 ЧАТ</div>
+            <div class="tab" onclick="switchTab('events')">⚡ СОБЫТИЯ</div>
+          </div>
+          <div class="tab-content active" id="tab-chat">
+            <div id="chat-feed"></div>
+          </div>
+          <div class="tab-content" id="tab-events">
+            <div id="event-log" style="padding:8px;max-height:280px;overflow-y:auto;font-size:12px;color:#888;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: QUICK STATS -->
+      <div class="right-col" style="display:flex;flex-direction:column;gap:16px;">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-icon">🎯</span> СЕССИЯ</div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.5px;">Стример</div>
+              <div style="font-size:16px;font-weight:700;color:var(--neon-cyan);margin-top:2px;" id="info-streamer">—</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.5px;">Статус</div>
+              <div style="font-size:14px;font-weight:600;margin-top:2px;" id="info-status">Ожидание</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:0.5px;">Время сессии</div>
+              <div style="font-family:Orbitron,monospace;font-size:18px;font-weight:700;color:var(--gold);margin-top:2px;" id="info-time">00:00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-icon">🎖️</span> УРОВЕНЬ СТРИМА</div>
+          <div style="padding:16px;">
+            <div style="font-family:Orbitron,monospace;font-size:32px;font-weight:900;color:var(--gold);text-align:center;" id="stream-level">1</div>
+            <div style="font-size:12px;color:#666;text-align:center;margin-bottom:12px;">УРОВЕНЬ</div>
+            <div style="height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;">
+              <div id="level-bar" style="height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:4px;width:0%;transition:width 0.5s;"></div>
+            </div>
+            <div style="font-size:11px;color:#555;margin-top:4px;text-align:center;" id="level-xp">0 / 100 XP</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><span class="panel-icon">🔥</span> ПОСЛЕДНИЕ СОБЫТИЯ</div>
+          <div id="recent-events" style="padding:8px;max-height:260px;overflow-y:auto;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  STATE
+// ============================================================
+const STATE = {
+  connected: false,
+  demo: false,
+  ws: null,
+  username: '',
+  stats: { viewers: 0, gifts: 0, coins: 0, likes: 0 },
+  energy: 0,
+  level: 1, xp: 0,
+  leaderboard: {},
+  sessionStart: null,
+  timerInterval: null,
+  demoInterval: null,
+  wheelAngle: 0,
+  wheelSpinning: false,
+  slotsSpinning: false,
+};
+
+const WHEEL_SEGMENTS = [
+  { label: '🎁 x2',   color: '#FF2D78', multiplier: 2, emoji: '🎁' },
+  { label: '💎 x5',   color: '#00F5FF', multiplier: 5, emoji: '💎' },
+  { label: '🌙 +50',  color: '#9B59B6', value: 50,    emoji: '🌙' },
+  { label: '⚡ x1.5', color: '#FFD700', multiplier: 1.5, emoji: '⚡' },
+  { label: '❌ Miss', color: '#444',    multiplier: 0, emoji: '❌' },
+  { label: '🍀 x3',   color: '#39FF14', multiplier: 3, emoji: '🍀' },
+  { label: '💥 x10',  color: '#FF6B35', multiplier: 10, emoji: '💥' },
+  { label: '⭐ +200', color: '#C0C0C0', value: 200,   emoji: '⭐' },
+];
+
+const SLOT_SYMBOLS = ['🍒','🍋','🍊','🔔','💎','⭐','7️⃣','🎰'];
+const SLOT_WINS = {
+  '🍒🍒🍒': { label: 'ВИШНЯ', coins: 50 },
+  '7️⃣7️⃣7️⃣': { label: 'ДЖЕКПОТ!!!', coins: 777 },
+  '💎💎💎': { label: 'БРИЛЛИАНТЫ', coins: 500 },
+  '⭐⭐⭐': { label: 'ТРИ ЗВЕЗДЫ', coins: 300 },
+};
+
+const GIFT_TABLE = [
+  { name: 'Роза',       emoji: '🌹', coins: 10 },
+  { name: 'TikTok',     emoji: '🎵', coins: 50 },
+  { name: 'Лев',        emoji: '🦁', coins: 200 },
+  { name: 'Корона',     emoji: '👑', coins: 500 },
+  { name: 'Ракета',     emoji: '🚀', coins: 100 },
+  { name: 'Космос',     emoji: '🌌', coins: 1000 },
+  { name: 'Бриллиант',  emoji: '💎', coins: 2000 },
+  { name: 'Универсум',  emoji: '🌟', coins: 5000 },
+];
+
+const DEMO_NAMES = ['Саша','Маша','Дима','Кати','Вася','Оля','Петя','Аня','Коля','Лена'];
+
+// ============================================================
+//  WHEEL
+// ============================================================
+function drawWheel(angle) {
+  const canvas = document.getElementById('wheel-canvas');
+  const ctx = canvas.getContext('2d');
+  const cx = 110, cy = 110, r = 100;
+  const seg = (Math.PI * 2) / WHEEL_SEGMENTS.length;
+  ctx.clearRect(0, 0, 220, 220);
+
+  WHEEL_SEGMENTS.forEach((s, i) => {
+    const start = angle + i * seg;
+    const end = start + seg;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.closePath();
+    ctx.fillStyle = s.color;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.4)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(start + seg / 2);
+    ctx.textAlign = 'right';
+    ctx.font = 'bold 11px Rajdhani, sans-serif';
+    ctx.fillStyle = '#fff';
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 4;
+    ctx.fillText(s.label, r - 8, 4);
+    ctx.restore();
+  });
+
+  // Center circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+  ctx.fillStyle = '#0A0A14';
+  ctx.fill();
+  ctx.strokeStyle = '#FFD700';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.font = 'bold 14px Arial';
+  ctx.fillStyle = '#FFD700';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🎡', cx, cy);
+}
+
+function spinWheel() {
+  if (STATE.wheelSpinning) return;
+  STATE.wheelSpinning = true;
+  document.getElementById('wheel-result').textContent = '...';
+
+  const extraSpins = 5 + Math.random() * 5;
+  const targetAngle = STATE.wheelAngle + extraSpins * Math.PI * 2 + Math.random() * Math.PI * 2;
+  const duration = 3500;
+  const startAngle = STATE.wheelAngle;
+  const startTime = performance.now();
+
+  function animate(now) {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    const ease = t < 1 ? 1 - Math.pow(1 - t, 4) : 1;
+    STATE.wheelAngle = startAngle + (targetAngle - startAngle) * ease;
+    drawWheel(STATE.wheelAngle);
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      STATE.wheelSpinning = false;
+      resolveWheel();
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+function resolveWheel() {
+  const seg = (Math.PI * 2) / WHEEL_SEGMENTS.length;
+  const normalized = ((-STATE.wheelAngle - Math.PI / 2) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+  const idx = Math.floor(normalized / seg) % WHEEL_SEGMENTS.length;
+  const winner = WHEEL_SEGMENTS[idx];
+
+  document.getElementById('wheel-result').textContent = '🎉 ' + winner.label;
+
+  if (winner.value) {
+    addCoins(winner.value);
+    showBigEvent(winner.emoji, winner.label, '+' + winner.value + ' монет');
+  } else if (winner.multiplier > 1) {
+    showBigEvent(winner.emoji, winner.label, 'Следующий подарок x' + winner.multiplier);
+    addEventLog('🎡 Колесо: ' + winner.label);
+  } else if (winner.multiplier === 0) {
+    showBigEvent('❌', 'Мимо!', 'Не повезло...');
+  }
+  spawnParticles(winner.emoji);
+}
+
+// ============================================================
+//  SLOTS
+// ============================================================
+function spinSlots() {
+  if (STATE.slotsSpinning) return;
+  STATE.slotsSpinning = true;
+  document.getElementById('slot-info').textContent = 'Вращаем...';
+
+  const results = [];
+  const reels = [0, 1, 2].map(i => document.getElementById('reel-' + i));
+
+  reels.forEach(r => { r.classList.add('spinning'); r.classList.remove('win'); });
+
+  reels.forEach((reel, i) => {
+    const delay = 600 + i * 400;
+    const sym = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+    results[i] = sym;
+
+    let tick = 0;
+    const tickInterval = setInterval(() => {
+      reel.textContent = SLOT_SYMBOLS[Math.floor(Math.random() * SLOT_SYMBOLS.length)];
+      tick++;
+    }, 80);
+
+    setTimeout(() => {
+      clearInterval(tickInterval);
+      reel.textContent = sym;
+      reel.classList.remove('spinning');
+      if (i === 2) {
+        checkSlotWin(results, reels);
+      }
+    }, delay);
+  });
+}
+
+function checkSlotWin(results, reels) {
+  STATE.slotsSpinning = false;
+  const key = results.join('');
+  const win = SLOT_WINS[key];
+
+  if (win) {
+    reels.forEach(r => r.classList.add('win'));
+    addCoins(win.coins);
+    document.getElementById('slot-info').textContent = '🎉 ' + win.label + '! +' + win.coins + ' монет';
+    showBigEvent('🎰', win.label, '+' + win.coins + ' монет');
+    spawnParticles('🎰');
+    addEventLog('🎰 Слот-победа: ' + win.label + ' (+' + win.coins + ')');
+  } else if (results[0] === results[1] || results[1] === results[2]) {
+    addCoins(25);
+    document.getElementById('slot-info').textContent = '✨ Пара! +25 монет';
+    addEventLog('🎰 Пара в слотах +25');
+  } else {
+    document.getElementById('slot-info').textContent = 'Не повезло... Попробуй ещё!';
+  }
+}
+
+// ============================================================
+//  COINS / XP / ENERGY
+// ============================================================
+function addCoins(amount) {
+  STATE.stats.coins += amount;
+  const el = document.getElementById('stat-coins');
+  el.textContent = formatNumber(STATE.stats.coins);
+  el.classList.remove('coin-pop');
+  void el.offsetWidth;
+  el.classList.add('coin-pop');
+  addXP(Math.ceil(amount / 10));
+}
+
+function addXP(amount) {
+  STATE.xp += amount;
+  const needed = STATE.level * 100;
+  if (STATE.xp >= needed) {
+    STATE.xp -= needed;
+    STATE.level++;
+    document.getElementById('stream-level').textContent = STATE.level;
+    showBigEvent('🎖️', 'УРОВЕНЬ ' + STATE.level, 'Новый уровень!');
+    addEventLog('🎖️ Уровень повышен до ' + STATE.level);
+  }
+  document.getElementById('level-xp').textContent = STATE.xp + ' / ' + (STATE.level * 100) + ' XP';
+  document.getElementById('level-bar').style.width = (STATE.xp / (STATE.level * 100) * 100) + '%';
+}
+
+function addEnergy(amount) {
+  STATE.energy = Math.min(100, STATE.energy + amount);
+  document.getElementById('energy-fill').style.width = STATE.energy + '%';
+  document.getElementById('energy-pct').textContent = Math.round(STATE.energy) + '%';
+
+  if (STATE.energy >= 100) {
+    STATE.energy = 0;
+    showBigEvent('⚡', 'ЭНЕРГИЯ МАКСИМУМ!', 'СУПЕР-БОНУС АКТИВИРОВАН!');
+    addCoins(500);
+    addEventLog('⚡ Энергия заполнена — бонус +500 монет!');
+    setTimeout(() => {
+      document.getElementById('energy-fill').style.width = '0%';
+      document.getElementById('energy-pct').textContent = '0%';
+    }, 300);
+  }
+}
+
+// ============================================================
+//  EVENTS / CHAT
+// ============================================================
+function handleGift(user, giftName, giftEmoji, coins, count) {
+  count = count || 1;
+  const total = coins * count;
+
+  // Leaderboard
+  if (!STATE.leaderboard[user]) STATE.leaderboard[user] = 0;
+  STATE.leaderboard[user] += total;
+  renderLeaderboard();
+
+  // Stats
+  STATE.stats.gifts++;
+  document.getElementById('stat-gifts').textContent = STATE.stats.gifts;
+  addCoins(total);
+  addEnergy(Math.min(30, total / 20));
+
+  // Gift list
+  const gEl = document.getElementById('gift-events');
+  const item = document.createElement('div');
+  item.className = 'gift-event';
+  item.innerHTML = `<div class="gift-emoji">${giftEmoji}</div>
+    <div class="gift-info">
+      <div class="gift-sender">${escapeHTML(user)}</div>
+      <div class="gift-name">${escapeHTML(giftName)}${count > 1 ? ' ×' + count : ''}</div>
+    </div>
+    <div class="gift-value">+${total}</div>`;
+  gEl.insertBefore(item, gEl.firstChild);
+  if (gEl.children.length > 20) gEl.lastChild.remove();
+
+  // Chat message
+  addChatMsg('gift', user, `подарил ${giftEmoji} ${giftName}${count > 1 ? ' ×' + count : ''} (+${total} монет)`);
+
+  // Big event for expensive gifts
+  if (total >= 500) {
+    showBigEvent(giftEmoji, escapeHTML(user), `+${total} монет!`);
+    spawnParticles(giftEmoji);
+  }
+
+  // Spin slots on gift
+  if (!STATE.slotsSpinning) {
+    setTimeout(spinSlots, 300);
+  }
+
+  addEventLog(`🎁 ${user} → ${giftEmoji} ${giftName} (${total} монет)`);
+  addRecentEvent('🎁', `${user} → ${giftEmoji} (+${total})`);
+}
+
+function handleLike(user, count) {
+  STATE.stats.likes += count;
+  document.getElementById('stat-likes').textContent = formatNumber(STATE.stats.likes);
+  addEnergy(count * 0.1);
+  if (STATE.stats.likes % 100 === 0) {
+    addChatMsg('like', '💗', `${STATE.stats.likes} лайков — спасибо всем!`);
+  }
+}
+
+function handleComment(user, text) {
+  addChatMsg('comment', user, text);
+}
+
+function handleJoin(user) {
+  if (Math.random() < 0.3) {
+    addChatMsg('join', '👋', `${user} зашёл в эфир`);
+  }
+  STATE.stats.viewers++;
+  document.getElementById('stat-viewers').textContent = STATE.stats.viewers;
+}
+
+function handleShare(user) {
+  addChatMsg('system', '📤', `${user} поделился трансляцией!`);
+  addEnergy(5);
+  addCoins(25);
+}
+
+// ============================================================
+//  UI HELPERS
+// ============================================================
+function addChatMsg(type, user, text) {
+  const feed = document.getElementById('chat-feed');
+  const msg = document.createElement('div');
+  msg.className = `chat-msg ${type}`;
+  msg.innerHTML = `<span class="msg-user" style="color:${userColor(user)}">${escapeHTML(user)}</span><span class="msg-text">${escapeHTML(text)}</span>`;
+  feed.appendChild(msg);
+  if (feed.children.length > 80) feed.firstChild.remove();
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function addEventLog(text) {
+  const log = document.getElementById('event-log');
+  const t = new Date().toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const line = document.createElement('div');
+  line.style.cssText = 'padding:3px 4px;border-bottom:1px solid rgba(255,255,255,0.04);';
+  line.innerHTML = `<span style="color:#444">[${t}]</span> ${escapeHTML(text)}`;
+  log.insertBefore(line, log.firstChild);
+  if (log.children.length > 100) log.lastChild.remove();
+}
+
+function addRecentEvent(icon, text) {
+  const el = document.getElementById('recent-events');
+  const item = document.createElement('div');
+  item.style.cssText = 'padding:6px 10px;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.04);animation:slideIn 0.3s ease;';
+  item.innerHTML = `<span style="margin-right:6px">${icon}</span>${escapeHTML(text)}`;
+  el.insertBefore(item, el.firstChild);
+  if (el.children.length > 15) el.lastChild.remove();
+}
+
+function renderLeaderboard() {
+  const sorted = Object.entries(STATE.leaderboard).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const max = sorted[0]?.[1] || 1;
+  const el = document.getElementById('leaderboard-list');
+  el.innerHTML = sorted.map(([user, coins], i) => {
+    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n';
+    const pct = Math.round(coins / max * 100);
+    return `<div class="leader-item">
+      <div class="leader-rank ${rankClass}">${i + 1}</div>
+      <div class="leader-avatar" style="border-color:${userColor(user)};color:${userColor(user)}">${user[0].toUpperCase()}</div>
+      <div class="leader-info">
+        <div class="leader-name">${escapeHTML(user)}</div>
+        <div class="leader-coins">💰 ${formatNumber(coins)}</div>
+      </div>
+      <div class="leader-bar-wrap"><div class="leader-bar" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function showBigEvent(emoji, title, sub) {
+  const overlay = document.getElementById('event-overlay');
+  overlay.innerHTML = '';
+  const el = document.createElement('div');
+  el.className = 'big-event';
+  el.innerHTML = `<span class="big-event-emoji">${emoji}</span>
+    <div class="big-event-text">${escapeHTML(title)}</div>
+    <div class="big-event-sub">${escapeHTML(sub)}</div>`;
+  overlay.appendChild(el);
+  setTimeout(() => { if (overlay.contains(el)) el.remove(); }, 3000);
+}
+
+function spawnParticles(emoji) {
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.textContent = emoji;
+    const angle = (i / 12) * Math.PI * 2;
+    const dist = 150 + Math.random() * 150;
+    p.style.cssText = `left:${cx}px;top:${cy}px;--dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist - 100}px;animation-delay:${Math.random()*0.3}s`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 2500);
+  }
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === (name === 'chat' ? 0 : 1));
+  });
+  document.getElementById('tab-chat').classList.toggle('active', name === 'chat');
+  document.getElementById('tab-events').classList.toggle('active', name === 'events');
+}
+
+function userColor(name) {
+  const colors = ['#FF2D78','#00F5FF','#39FF14','#FFD700','#FF6B35','#9B59B6','#1ABC9C','#E67E22'];
+  let hash = 0;
+  for (let c of name) hash = (hash * 31 + c.charCodeAt(0)) & 0xFFFFFF;
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function formatNumber(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return String(n);
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ============================================================
+//  TIMER
+// ============================================================
+function startTimer() {
+  STATE.sessionStart = Date.now();
+  STATE.timerInterval = setInterval(() => {
+    const sec = Math.floor((Date.now() - STATE.sessionStart) / 1000);
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    document.getElementById('info-time').textContent = m + ':' + s;
+  }, 1000);
+}
+
+// ============================================================
+//  WEBSOCKET CONNECTION
+// ============================================================
+function connectStream() {
+  const username = document.getElementById('username-input').value.trim().replace('@', '');
+  if (!username) { alert('Введи ник стримера!'); return; }
+  STATE.username = username;
+
+  document.getElementById('info-streamer').textContent = '@' + username;
+  document.getElementById('info-status').textContent = 'Подключение...';
+
+  showGame();
+
+  // Автоматически определяем адрес — работает и локально и на Railway
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${proto}//${location.host}?username=${encodeURIComponent(username)}`;
+  const ws = new WebSocket(wsUrl);
+  STATE.ws = ws;
+
+  ws.onopen = () => {
+    setConnected(true);
+    addChatMsg('system', '✅', `Подключено к @${username}`);
+    addEventLog('WebSocket подключён к серверу');
+  };
+
+  ws.onmessage = (e) => {
+    try {
+      const msg = JSON.parse(e.data);
+      routeEvent(msg);
+    } catch {}
+  };
+
+  ws.onerror = () => {
+    setConnected(false);
+    addChatMsg('system', '❌', 'Ошибка подключения. Сервер не запущен?');
+    document.getElementById('info-status').textContent = 'Ошибка';
+  };
+
+  ws.onclose = () => {
+    setConnected(false);
+    document.getElementById('info-status').textContent = 'Отключено';
+    addChatMsg('system', '🔌', 'Соединение закрыто');
+  };
+}
+
+function routeEvent(msg) {
+  switch (msg.type) {
+    case 'gift':    handleGift(msg.user, msg.giftName, msg.emoji, msg.coins, msg.count); break;
+    case 'comment': handleComment(msg.user, msg.text); break;
+    case 'like':    handleLike(msg.user, msg.count || 1); break;
+    case 'join':    handleJoin(msg.user); break;
+    case 'share':   handleShare(msg.user); break;
+    case 'viewers': STATE.stats.viewers = msg.count; document.getElementById('stat-viewers').textContent = formatNumber(msg.count); break;
+  }
+}
+
+// ============================================================
+//  DEMO MODE
+// ============================================================
+function startDemo() {
+  STATE.demo = true;
+  STATE.username = 'demo_streamer';
+  document.getElementById('info-streamer').textContent = '@demo_streamer';
+  document.getElementById('info-status').textContent = 'ДЕМО';
+  showGame();
+  setConnected(true, true);
+  addChatMsg('system', '🎮', 'Демо-режим активен — события симулируются');
+
+  // Initial fake viewers
+  STATE.stats.viewers = Math.floor(Math.random() * 200) + 50;
+  document.getElementById('stat-viewers').textContent = STATE.stats.viewers;
+
+  const events = [
+    () => {
+      const user = DEMO_NAMES[Math.floor(Math.random() * DEMO_NAMES.length)];
+      const gift = GIFT_TABLE[Math.floor(Math.random() * GIFT_TABLE.length)];
+      handleGift(user, gift.name, gift.emoji, gift.coins, Math.random() > 0.7 ? Math.floor(Math.random() * 5) + 1 : 1);
+    },
+    () => {
+      const user = DEMO_NAMES[Math.floor(Math.random() * DEMO_NAMES.length)];
+      const comments = ['Привет всем! 👋','Огонь стрим! 🔥','Красавчик!','Топ! ⭐','Лайк поставил','Удачи! 💪','🎉🎉🎉','gg wp','Давай ещё!'];
+      handleComment(user, comments[Math.floor(Math.random() * comments.length)]);
+    },
+    () => handleLike('DEMO', Math.floor(Math.random() * 50) + 5),
+    () => handleJoin(DEMO_NAMES[Math.floor(Math.random() * DEMO_NAMES.length)]),
+  ];
+
+  STATE.demoInterval = setInterval(() => {
+    const weights = [0.35, 0.45, 0.15, 0.05];
+    const r = Math.random();
+    let acc = 0;
+    for (let i = 0; i < weights.length; i++) {
+      acc += weights[i];
+      if (r < acc) { events[i](); break; }
+    }
+    STATE.stats.viewers += Math.floor(Math.random() * 3) - 1;
+    STATE.stats.viewers = Math.max(1, STATE.stats.viewers);
+    document.getElementById('stat-viewers').textContent = formatNumber(STATE.stats.viewers);
+  }, 1800);
+}
+
+// ============================================================
+//  UI CONTROL
+// ============================================================
+function showGame() {
+  document.getElementById('connect-panel').style.display = 'none';
+  document.getElementById('game-container').style.display = 'block';
+  document.getElementById('disconnect-btn').style.display = '';
+  startTimer();
+  drawWheel(0);
+}
+
+function setConnected(v, demo) {
+  STATE.connected = v;
+  document.getElementById('status-dot').className = 'status-dot' + (v ? ' live' : '');
+  const txt = document.getElementById('status-text');
+  txt.className = 'status-text' + (v ? ' connected' : '');
+  txt.textContent = demo ? '🎮 ДЕМО' : (v ? '🔴 LIVE' : 'Не подключено');
+  document.getElementById('info-status').textContent = demo ? 'Демо-режим' : (v ? '🔴 В ЭФИРЕ' : 'Офлайн');
+}
+
+function disconnect() {
+  if (STATE.ws) { STATE.ws.close(); STATE.ws = null; }
+  if (STATE.demoInterval) { clearInterval(STATE.demoInterval); STATE.demoInterval = null; }
+  if (STATE.timerInterval) { clearInterval(STATE.timerInterval); STATE.timerInterval = null; }
+  Object.assign(STATE, { connected: false, demo: false, username: '',
+    stats: { viewers:0, gifts:0, coins:0, likes:0 },
+    energy:0, level:1, xp:0, leaderboard:{}, sessionStart:null });
+  document.getElementById('connect-panel').style.display = '';
+  document.getElementById('game-container').style.display = 'none';
+  document.getElementById('disconnect-btn').style.display = 'none';
+  document.getElementById('username-input').value = '';
+  setConnected(false);
+}
+
+// Init
+drawWheel(0);
+</script>
+</body>
+</html>
