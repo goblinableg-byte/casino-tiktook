@@ -1220,7 +1220,7 @@ function stopChaosVisuals(){
 }
 
 function triggerGlitch(){
-  if(S._bossActive)return;
+  if(S._bossActive||S._creditsActive)return;
   document.body.classList.add('glitch');
   setTimeout(()=>document.body.classList.remove('glitch'),600);
 }
@@ -1278,6 +1278,7 @@ function damageBoss(dmg){
 // ================================================================
 function handleGift(user,giftName,emoji,coins,count){
   count=count||1;
+  if(S._creditsActive)return; // во время титров — полная тишина
   if(S._bossActive){
     // In boss fight, gifts damage boss
     const dmg=Math.round(coins*count*0.5);
@@ -1312,6 +1313,7 @@ function handleGift(user,giftName,emoji,coins,count){
 }
 
 function handleComment(user,text){
+  if(S._creditsActive)return;
   addChatMsg('comment',user,text);
   const words=text.toUpperCase().split(/\s+/);
   words.forEach(w=>processTriggerWord(w));
@@ -1319,6 +1321,7 @@ function handleComment(user,text){
 }
 
 function handleLike(user,count){
+  if(S._creditsActive)return;
   S.stats.totalLikes+=(count||1);
   addEnergy((count||1)*0.15);
   if(S._bossActive)spawnLikeAttack(Math.min(count||1,6));
@@ -1490,6 +1493,7 @@ function showGiftNotif(user,emoji,giftName,coins,count){
 //  DONOR ANIMATION (500+)
 // ================================================================
 function triggerDonorAnimation(user,coins){
+  if(S._creditsActive)return;
   if(AUDIO._donorPlaying){AUDIO._donorQueue.push({user,coins});return;}
   _runDonorAnimation(user,coins);
 }
@@ -1504,7 +1508,7 @@ function _runDonorAnimation(user,coins){
   overlay.style.background='rgba(20,20,20,0)';overlay.style.display='flex';overlay.classList.add('active');
   miniEl.style.display='none';nickEl.textContent='';nickEl.className='donor-nick';S._donorActive=true;
   requestAnimationFrame(()=>{overlay.style.transition='background 1.5s ease';overlay.style.background='rgba(18,18,18,0.97)';});
-  setTimeout(()=>{nickEl.textContent=user;nickEl.classList.add('show');setTimeout(()=>nickEl.classList.add('dance'),80);spawnParticles('✨',16);spawnCoinRain('💰',25);},10500);
+  setTimeout(()=>{nickEl.textContent=user;nickEl.classList.add('show');setTimeout(()=>nickEl.classList.add('dance'),80);},10500);
   setTimeout(()=>{
     nickEl.classList.remove('show','dance');nickEl.style.opacity='0';
     miniEl.textContent=user;miniEl.style.display='block';miniEl.style.transition='opacity 0.8s ease';
@@ -1551,7 +1555,9 @@ function _showQueueBurst(items,cb){
 // ================================================================
 function startEndStream(){
   if(!confirm('Завершить стрим и показать титры?'))return;
-  S._creditsActive=true; // блокирует все эффекты/звуки
+  S._creditsActive=true;
+  // Включить полный экран
+  if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(()=>{});}
   const scene=document.getElementById('credits-scene');
   const scroll=document.getElementById('credits-scroll');
   const final=document.getElementById('credits-final');
@@ -1618,9 +1624,18 @@ function startEndStream(){
   scene.style.opacity='0';scene.classList.add('active');
   requestAnimationFrame(()=>{scene.style.transition='opacity 1.5s ease';scene.style.opacity='1';});
 
-  // Stop all other audio
-  if(AUDIO.chaos)AUDIO.chaos.volume=0;
-  if(AUDIO.boss){AUDIO.boss.pause();AUDIO.boss=null;}
+  // === УБИТЬ ВСЕ ЗВУКИ ===
+  // chaos
+  clearInterval(AUDIO._chaosIn);clearInterval(AUDIO._chaosOut);
+  if(AUDIO.chaos){AUDIO.chaos.pause();AUDIO.chaos.currentTime=0;AUDIO.chaos.volume=0;}
+  // boss
+  if(AUDIO.boss){AUDIO.boss.pause();AUDIO.boss.currentTime=0;AUDIO.boss=null;}
+  // donor - убить очередь, запретить новые
+  AUDIO._donorPlaying=false;AUDIO._donorQueue=[];
+  AUDIO._bossTimers.forEach(t=>clearTimeout(t));AUDIO._bossTimers=[];
+  // demo interval - перестать генерировать события
+  if(S.demoInterval){clearInterval(S.demoInterval);S.demoInterval=null;}
+  // все эффекты
   stopChaosVisuals();
   Object.keys(S.effects).forEach(k=>clearTimeout(S.effects[k]?.timer));
   S.effects={};updateEffectsBar();
@@ -1629,7 +1644,7 @@ function startEndStream(){
   creditsAudio.addEventListener('ended',()=>{
     setTimeout(()=>{
       scene.style.transition='opacity 1.5s ease';scene.style.opacity='0';
-      setTimeout(()=>{scene.classList.remove('active');final.classList.remove('false');scene.style.opacity='';S._creditsActive=false;},1500);
+      setTimeout(()=>{scene.classList.remove('active');final.classList.remove('false');scene.style.opacity='';S._creditsActive=false;if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});},1500);
     },5000);
   });
 }
