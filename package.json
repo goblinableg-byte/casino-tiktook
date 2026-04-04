@@ -1,0 +1,16 @@
+{
+  "name": "tiktok-casino",
+  "version": "1.0.0",
+  "description": "TikTok Stream Casino Game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "tiktok-live-connector": "^1.1.10",
+    "ws": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
