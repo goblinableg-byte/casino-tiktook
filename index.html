@@ -141,6 +141,13 @@ input[type=range]{flex:1;height:4px;accent-color:var(--gold);}
 .notif-emoji{font-size:18px;flex-shrink:0;}
 .notif-user{font-size:10px;font-weight:700;}
 .notif-desc{font-size:9px;color:#888;}
+.gift-pick-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 4px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.gift-pick-item:active{transform:scale(0.95);}
+.gift-pick-item.selected{border-color:var(--gold);background:rgba(255,215,0,0.1);}
+.gift-pick-item:hover{border-color:rgba(255,255,255,0.2);}
+.gpi-emoji{font-size:22px;display:block;margin-bottom:3px;}
+.gpi-name{font-size:9px;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gpi-cost{font-size:8px;color:#555;}
 </style>
 </head>
 <body>
@@ -281,22 +288,26 @@ input[type=range]{flex:1;height:4px;accent-color:var(--gold);}
 
       <!-- ADD SOUND FORM -->
       <div class="add-gift-form" id="add-sound-form" style="display:none;border-radius:0;border-top:none;">
-        <div class="form-row">
-          <div class="form-group">
-            <div class="form-label">НАЗВАНИЕ ПОДАРКА (из Tikfinity)</div>
-            <input class="form-input" id="ns-gift" placeholder="Rose, TikTok, Lion...">
-          </div>
-          <div class="form-group" style="max-width:90px;">
-            <div class="form-label">ГРОМКОСТЬ</div>
-            <input type="range" min="0" max="100" value="80" id="ns-vol" style="margin-top:10px;">
+        <div class="form-label" style="margin-bottom:6px;">ВЫБЕРИ ПОДАРОК</div>
+        <input class="form-input" id="gift-search" placeholder="🔍 Поиск подарка..." oninput="filterGifts()" style="margin-bottom:8px;width:100%;">
+        <div id="gift-picker" style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-height:200px;overflow-y:auto;margin-bottom:10px;scrollbar-width:thin;"></div>
+        <div id="selected-gift-preview" style="display:none;background:rgba(255,215,0,0.07);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+          <span id="sel-gift-emoji" style="font-size:22px;"></span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--gold);" id="sel-gift-name"></div>
+            <div style="font-size:10px;color:#666;" id="sel-gift-cost"></div>
           </div>
         </div>
         <div style="margin-bottom:8px;">
           <div class="form-label">ЗВУКОВОЙ ФАЙЛ</div>
-          <div class="sc-file">
+          <div class="sc-file" style="margin-top:4px;">
             <span class="sc-filename empty" id="ns-fname">Файл не выбран</span>
             <label class="file-label">📁 ВЫБРАТЬ<input type="file" class="file-input" id="ns-file" accept="audio/*" onchange="previewSoundFile(this)"></label>
           </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span style="font-size:10px;color:#888;white-space:nowrap;">Громкость</span>
+          <input type="range" min="0" max="100" value="80" id="ns-vol" style="flex:1;">
         </div>
         <div style="display:flex;gap:6px;">
           <button class="btn btn-primary btn-xs" onclick="addGiftSound()">✓ СОХРАНИТЬ</button>
@@ -631,9 +642,12 @@ function renderGiftSounds(){
   el.innerHTML = sounds.map(s=>`
     <div class="sound-card">
       <div class="sc-top">
-        <div>
-          <div class="sc-name">${esc(s.giftName)}</div>
-          <div class="sc-gift">${esc(s.fileName||'')}</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:24px;">${s.emoji||'🎁'}</span>
+          <div>
+            <div class="sc-name">${esc(s.giftName)}</div>
+            <div class="sc-gift">${esc(s.fileName||'')}</div>
+          </div>
         </div>
         <button class="btn btn-danger btn-xs" onclick="deleteGiftSound('${s.id}')">✕</button>
       </div>
@@ -706,20 +720,84 @@ function testTrigger(id){
   if(t) fireTrigger(t);
 }
 
-function addGiftSound(){
-  const giftName = document.getElementById('ns-gift').value.trim();
-  const vol = parseInt(document.getElementById('ns-vol').value)||80;
-  if(!giftName){ alert('Введи название подарка!'); return; }
-  if(!_nsFileData){ alert('Выбери звуковой файл!'); return; }
+// ================================================================
+//  TIKTOK GIFTS LIST
+// ================================================================
+const TIKTOK_GIFTS = [
+  {name:'Rose',emoji:'🌹',coins:1},{name:'TikTok',emoji:'🎵',coins:1},
+  {name:'Finger Heart',emoji:'🤟',coins:5},{name:'Thumbs Up',emoji:'👍',coins:1},
+  {name:'Heart',emoji:'❤️',coins:1},{name:'Butterfly',emoji:'🦋',coins:88},
+  {name:'Sunglasses',emoji:'😎',coins:1},{name:'Mic',emoji:'🎤',coins:1},
+  {name:'GG',emoji:'🎮',coins:1},{name:'Doughnut',emoji:'🍩',coins:30},
+  {name:'Ice Cream',emoji:'🍦',coins:30},{name:'Perfume',emoji:'🌸',coins:20},
+  {name:'Lollipop',emoji:'🍭',coins:10},{name:'Football',emoji:'⚽',coins:29},
+  {name:'Hand Heart',emoji:'🫶',coins:5},{name:'Paper Crane',emoji:'🕊️',coins:99},
+  {name:'Confetti',emoji:'🎊',coins:100},{name:'Hat and Mustache',emoji:'🎩',coins:99},
+  {name:'Wishing Bottle',emoji:'🍾',coins:198},{name:'Mirror',emoji:'🪞',coins:300},
+  {name:'Planet',emoji:'🪐',coins:500},{name:'Lion',emoji:'🦁',coins:500},
+  {name:'Crown',emoji:'👑',coins:500},{name:'Rocket',emoji:'🚀',coins:500},
+  {name:'Star Shower',emoji:'🌠',coins:500},{name:'Drama Queen',emoji:'💅',coins:500},
+  {name:'Eye',emoji:'👁️',coins:299},{name:'Galaxy',emoji:'🌌',coins:1000},
+  {name:'Universe',emoji:'🌍',coins:1000},{name:'Castle',emoji:'🏰',coins:500},
+  {name:'Sports Car',emoji:'🏎️',coins:500},{name:'Yacht',emoji:'⛵',coins:1000},
+  {name:'Piano',emoji:'🎹',coins:500},{name:'Diamond',emoji:'💎',coins:200},
+  {name:'Boxing Gloves',emoji:'🥊',coins:200},{name:'Cheer',emoji:'🥂',coins:198},
+  {name:'Dolphin',emoji:'🐬',coins:1000},{name:'Falcon',emoji:'🦅',coins:1000},
+  {name:'Phoenix',emoji:'🔥',coins:1500},{name:'Dragon',emoji:'🐉',coins:2000},
+  {name:'Light Show',emoji:'💡',coins:2000},{name:'TikTok Universe',emoji:'🌟',coins:5000},
+  {name:'Train',emoji:'🚂',coins:299},{name:'Concert',emoji:'🎸',coins:500},
+  {name:'Singing Machine',emoji:'🎤',coins:500},{name:'Flower',emoji:'🌸',coins:1},
+  {name:'Lucky Balloon',emoji:'🎈',coins:99},{name:'Love you',emoji:'🥰',coins:1},
+  {name:'Little Crown',emoji:'✨',coins:10},{name:'Money Gun',emoji:'💰',coins:500},
+];
 
+let _selectedGift = null;
+
+function buildGiftPicker(){
+  filterGifts();
+}
+
+function filterGifts(){
+  const q = (document.getElementById('gift-search')?.value||'').toLowerCase();
+  const filtered = q ? TIKTOK_GIFTS.filter(g=>g.name.toLowerCase().includes(q)) : TIKTOK_GIFTS;
+  const picker = document.getElementById('gift-picker');
+  if(!picker) return;
+  picker.innerHTML = filtered.map(g=>`
+    <div class="gift-pick-item${_selectedGift?.name===g.name?' selected':''}" onclick="selectGift('${g.name}')">
+      <span class="gpi-emoji">${g.emoji}</span>
+      <div class="gpi-name">${g.name}</div>
+      <div class="gpi-cost">${g.coins}🪙</div>
+    </div>`).join('');
+}
+
+function selectGift(name){
+  _selectedGift = TIKTOK_GIFTS.find(g=>g.name===name);
+  filterGifts();
+  const prev = document.getElementById('selected-gift-preview');
+  if(_selectedGift && prev){
+    prev.style.display='flex';
+    document.getElementById('sel-gift-emoji').textContent=_selectedGift.emoji;
+    document.getElementById('sel-gift-name').textContent=_selectedGift.name;
+    document.getElementById('sel-gift-cost').textContent=_selectedGift.coins+' монет TikTok';
+  }
+}
+
+function addGiftSound(){
+  if(!_selectedGift){ alert('Выбери подарок из списка!'); return; }
+  if(!_nsFileData){ alert('Выбери звуковой файл!'); return; }
+  const vol = parseInt(document.getElementById('ns-vol').value)||80;
   const sounds = loadGiftSounds();
-  sounds.push({ id:'s_'+Date.now(), giftName, dataUrl:_nsFileData.dataUrl, fileName:_nsFileData.name, vol });
+  const existing = sounds.findIndex(s=>s.giftName===_selectedGift.name);
+  const entry = { id:'s_'+Date.now(), giftName:_selectedGift.name, emoji:_selectedGift.emoji, coins:_selectedGift.coins, dataUrl:_nsFileData.dataUrl, fileName:_nsFileData.name, vol };
+  if(existing>=0) sounds[existing]=entry; else sounds.push(entry);
   saveGiftSounds(sounds);
-  _nsFileData=null;
-  document.getElementById('ns-gift').value='';
+  _nsFileData=null; _selectedGift=null;
   document.getElementById('ns-fname').textContent='Файл не выбран';
   document.getElementById('ns-fname').classList.add('empty');
   document.getElementById('ns-file').value='';
+  document.getElementById('gift-search').value='';
+  const prev=document.getElementById('selected-gift-preview');
+  if(prev) prev.style.display='none';
   toggleAddSoundForm();
   renderGiftSounds();
 }
@@ -750,7 +828,9 @@ function toggleAddForm(){
 
 function toggleAddSoundForm(){
   const f = document.getElementById('add-sound-form');
-  f.style.display = f.style.display==='none'?'block':'none';
+  const open = f.style.display==='none';
+  f.style.display = open?'block':'none';
+  if(open){ _selectedGift=null; buildGiftPicker(); }
 }
 
 document.getElementById('nt-action').addEventListener('change', function(){
