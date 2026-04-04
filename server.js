@@ -8,7 +8,7 @@ const url = require('url');
 const PORT = process.env.PORT || 3000;
 
 // ===================================================================
-//  HTTP — раздаёт index.html
+//  HTTP — раздаёт index.html + /ping для keep-alive
 // ===================================================================
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,6 +20,15 @@ const server = http.createServer((req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       res.end(data);
     });
+    return;
+  }
+
+  // ✅ FIX 1: Health-check endpoint для UptimeRobot / Railway
+  // Зарегистрируй на https://uptimerobot.com → Monitor Type: HTTP(s)
+  // URL: https://твой-сервис.railway.app/ping  Interval: 5 min
+  if (req.url === '/ping') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('ok');
     return;
   }
 
@@ -78,21 +87,58 @@ wss.on('connection', (ws, req) => {
       ws.close();
     });
 
+  // ✅ FIX 2: Подарки — полное логирование в Railway Logs
   tiktok.on('gift', data => {
     if (data.giftType === 1 && !data.repeatEnd) return;
     const resolved = resolveGift(data.giftId, data.giftName, data.diamondCount);
     const count = data.repeatCount || 1;
+    const totalCoins = resolved.coins * count;
+    // Каждый подарок виден в Railway → Logs
+    console.log(`[🎁 GIFT] @${data.uniqueId} → ${resolved.emoji} ${resolved.name} x${count} | coins: ${totalCoins} | diamonds: ${data.diamondCount}`);
     send(ws, { type: 'gift', user: data.uniqueId, giftName: resolved.name, emoji: resolved.emoji, coins: resolved.coins, count, diamonds: data.diamondCount });
   });
 
-  tiktok.on('chat',     data => send(ws, { type: 'comment', user: data.uniqueId, text: data.comment }));
-  tiktok.on('like',     data => send(ws, { type: 'like',    user: data.uniqueId, count: data.likeCount, total: data.totalLikeCount }));
-  tiktok.on('member',   data => send(ws, { type: 'join',    user: data.uniqueId }));
+  tiktok.on('chat', data => {
+    // Логируем сообщения только если содержат триггер-слова
+    const upper = (data.comment || '').toUpperCase();
+    const triggers = ['ХАОС','РУИН','БУСТ','СПИН','СТОП','БОСС','ЕЩЁ','ЕЩЕ','КРУТИ'];
+    if (triggers.some(t => upper.includes(t))) {
+      console.log(`[⚡ TRIGGER] @${data.uniqueId}: "${data.comment}"`);
+    }
+    send(ws, { type: 'comment', user: data.uniqueId, text: data.comment });
+  });
+
+  // ✅ FIX 3: Троттлинг лайков и джоинов — не спамим TikTok API
+  // Лайки: шлём клиенту не чаще раза в 300мс на пользователя
+  const likeThrottle = {};
+  tiktok.on('like', data => {
+    const uid = data.uniqueId;
+    if (likeThrottle[uid]) return;
+    likeThrottle[uid] = setTimeout(() => { delete likeThrottle[uid]; }, 300);
+    send(ws, { type: 'like', user: uid, count: data.likeCount, total: data.totalLikeCount });
+  });
+
+  // Джоины: не чаще 1 раза в 500мс глобально (спам защита)
+  let memberThrottleActive = false;
+  tiktok.on('member', data => {
+    if (!memberThrottleActive) {
+      send(ws, { type: 'join', user: data.uniqueId });
+      memberThrottleActive = true;
+      setTimeout(() => { memberThrottleActive = false; }, 500);
+    }
+  });
+
   tiktok.on('share',    data => send(ws, { type: 'share',   user: data.uniqueId }));
   tiktok.on('follow',   data => send(ws, { type: 'follow',  user: data.uniqueId }));
   tiktok.on('roomUser', data => send(ws, { type: 'viewers', count: data.viewerCount }));
-  tiktok.on('error',    err  => send(ws, { type: 'error',   message: String(err) }));
-  tiktok.on('disconnected', () => send(ws, { type: 'disconnected' }));
+  tiktok.on('error',    err  => {
+    console.error(`[⚠️ TIKTOK ERROR] @${username}:`, String(err));
+    send(ws, { type: 'error', message: String(err) });
+  });
+  tiktok.on('disconnected', () => {
+    console.log(`[~] TikTok отключил @${username}`);
+    send(ws, { type: 'disconnected' });
+  });
 
   ws.on('close', () => {
     console.log(`[-] Клиент ушёл (@${username})`);
@@ -105,5 +151,7 @@ function send(ws, data) {
 }
 
 server.listen(PORT, () => {
-  console.log(`\n🎰 TikTok Casino запущен на порту ${PORT}\n`);
+  console.log(`\n🎰 TikTok Casino запущен на порту ${PORT}`);
+  console.log(`📡 Health-check: GET /ping`);
+  console.log(`💡 Зарегистрируй UptimeRobot на /ping каждые 5 мин чтобы не засыпал\n`);
 });
