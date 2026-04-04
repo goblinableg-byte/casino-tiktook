@@ -232,11 +232,72 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 /* SCROLLBARS */
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:rgba(255,215,0,0.2);border-radius:2px;}
+
+/* CHAOS ENHANCED */
+body.chaos-active{animation:chaosShake 0.18s ease infinite;}
+@keyframes chaosShake{0%{transform:translate(0,0) rotate(0deg);}20%{transform:translate(-3px,2px) rotate(-0.4deg);}40%{transform:translate(3px,-2px) rotate(0.4deg);}60%{transform:translate(-2px,3px) rotate(-0.2deg);}80%{transform:translate(2px,-1px) rotate(0.2deg);}100%{transform:translate(0,0) rotate(0deg);}}
+body.chaos-active::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9998;animation:chaosMelt 0.6s steps(1) infinite;}
+@keyframes chaosMelt{0%{background:rgba(255,107,53,0.04);}16%{background:rgba(180,79,255,0.05);}33%{background:rgba(0,245,255,0.04);}50%{background:rgba(255,45,120,0.05);}66%{background:rgba(57,255,20,0.03);}83%{background:rgba(255,215,0,0.04);}100%{background:rgba(255,107,53,0.04);}}
+.chaos-color-flash{position:fixed;inset:0;pointer-events:none;z-index:9997;animation:colorFlash 0.4s steps(1) infinite;mix-blend-mode:screen;}
+@keyframes colorFlash{0%{background:rgba(255,0,100,0.08);}25%{background:rgba(0,255,200,0.06);}50%{background:rgba(255,200,0,0.07);}75%{background:rgba(100,0,255,0.06);}100%{background:rgba(255,0,100,0.08);}}
+
+/* MELT EFFECT */
+.melt-overlay{position:fixed;inset:0;pointer-events:none;z-index:9996;opacity:0;transition:opacity 1s ease;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,107,53,0.03) 2px,rgba(255,107,53,0.03) 4px);animation:meltDrip 1s ease infinite;}
+.melt-overlay.active{opacity:1;}
+@keyframes meltDrip{0%{transform:translateY(0);}100%{transform:translateY(4px);}}
+
+/* COIN RAIN */
+.coin-rain-coin{position:fixed;top:-40px;pointer-events:none;z-index:9990;font-size:22px;animation:coinFall linear forwards;}
+@keyframes coinFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* GIFT NOTIFICATION (bottom right) */
+#gift-notif-stack{position:fixed;bottom:16px;right:16px;z-index:8000;display:flex;flex-direction:column-reverse;gap:6px;pointer-events:none;max-width:220px;}
+.gift-notif{background:rgba(10,10,20,0.92);border:1px solid var(--border);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;animation:notifSlide 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;backdrop-filter:blur(10px);}
+@keyframes notifSlide{from{transform:translateX(120%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.gift-notif.fade-out{animation:notifFade 0.4s ease forwards;}
+@keyframes notifFade{to{transform:translateX(120%);opacity:0;}}
+.gift-notif-emoji{font-size:20px;flex-shrink:0;}
+.gift-notif-info{min-width:0;}
+.gift-notif-user{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gift-notif-desc{font-size:10px;color:#888;}
+
+/* 500+ BIG DONOR ANIMATION */
+#donor-overlay{position:fixed;inset:0;z-index:9500;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0;transition:background 1.5s ease;}
+#donor-overlay.active{display:flex;}
+#donor-overlay.grey{background:rgba(20,20,20,0.97);}
+.donor-nick{font-family:'Orbitron',monospace;font-size:48px;font-weight:900;text-align:center;opacity:0;transform:scale(0.3);transition:all 0.8s cubic-bezier(0.34,1.56,0.64,1);color:var(--gold);text-shadow:0 0 60px rgba(255,215,0,0.8),0 0 120px rgba(255,215,0,0.4);}
+.donor-nick.show{opacity:1;transform:scale(1);}
+.donor-nick.dance{animation:nickDance 0.4s ease infinite alternate;}
+@keyframes nickDance{0%{transform:scale(1) rotate(-3deg) translateY(0);}50%{transform:scale(1.08) rotate(3deg) translateY(-8px);}100%{transform:scale(1) rotate(-1deg) translateY(4px);}}
+.donor-nick-mini{position:fixed;top:12px;left:12px;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--gold);opacity:0;z-index:9600;transition:opacity 0.8s ease;animation:nickMiniDance 0.5s ease infinite alternate;}
+.donor-nick-mini.show{opacity:1;}
+@keyframes nickMiniDance{0%{transform:rotate(-2deg) translateY(0);}100%{transform:rotate(2deg) translateY(-3px);}}
+.donor-nick-mini.fly-away{animation:nickFly 0.8s cubic-bezier(0.4,0,1,1) forwards;}
+@keyframes nickFly{0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(calc(50vw - 12px - 30px), calc(50vh)) scale(0.1);opacity:0;}}
+
+/* QUEUE BURST */
+.queue-burst{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:9400;pointer-events:none;}
+.queue-nick{position:absolute;font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,0.8);opacity:0;animation:queuePop 1.2s cubic-bezier(0.34,1.56,0.64,1) forwards;}
+@keyframes queuePop{0%{opacity:0;transform:scale(0) translateY(40px);}60%{opacity:1;transform:scale(1.1) translateY(-10px);}80%{opacity:1;transform:scale(1) translateY(0);}100%{opacity:0;transform:scale(0.8) translateY(-30px);}}
+
+/* DISCLAIMER */
+.disclaimer{font-size:9px;color:rgba(255,255,255,0.2);text-align:center;padding:2px 8px;letter-spacing:0.5px;}
+.disclaimer-inline{font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:0.3px;display:inline;}
+.creator-tag{font-size:9px;color:rgba(255,215,0,0.25);font-family:'Orbitron',monospace;letter-spacing:0.5px;}
 </style>
 </head>
 <body>
 <div class="app">
 <div id="event-overlay"></div>
+<div class="melt-overlay" id="melt-overlay"></div>
+<div id="gift-notif-stack"></div>
+
+<!-- 500+ DONOR OVERLAY -->
+<div id="donor-overlay">
+  <div class="donor-nick" id="donor-nick"></div>
+</div>
+<div class="donor-nick-mini" id="donor-nick-mini"></div>
+
 <div id="fullscreen-event">
   <span class="fs-emoji" id="fs-emoji">🔥</span>
   <div class="fs-title" id="fs-title">CHAOS!</div>
@@ -250,8 +311,12 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 </div>
 
 <header>
-  <div class="logo">🎰 CHAOS CASINO</div>
+  <div>
+    <div class="logo">🎰 CHAOS CASINO</div>
+    <div class="disclaimer">⚠️ Это игра-шоу для стрима. Не несёт характера реального казино.</div>
+  </div>
   <div class="status-bar">
+    <div class="creator-tag">creator: @m123news</div>
     <div class="status-dot" id="status-dot"></div>
     <div class="status-text" id="status-text">Не подключено</div>
     <button class="btn btn-secondary btn-sm" id="disconnect-btn" style="display:none" onclick="disconnect()">СТОП</button>
@@ -269,6 +334,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
   <div class="server-info">⚙️ Просто введи ник стримера (без @) — стрим должен быть активен прямо сейчас.</div>
   <div style="margin-top:12px;">
     <button class="btn btn-secondary" style="width:100%" onclick="startDemo()">🎲 ДЕМО-РЕЖИМ</button>
+  </div>
+  <div style="margin-top:16px;padding:10px;background:rgba(255,100,0,0.06);border:1px solid rgba(255,100,0,0.15);border-radius:8px;">
+    <div style="font-size:11px;color:rgba(255,150,50,0.7);line-height:1.6;">⚠️ <b style="color:rgba(255,150,50,0.9)">ВАЖНО:</b> Эта игра является развлечением для стримов. Монеты — игровые очки без реальной ценности. Игра не является азартной и не призывает к реальным ставкам.</div>
+    <div style="margin-top:6px;" class="creator-tag">creator: @m123news</div>
   </div>
 </div>
 
@@ -357,9 +426,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
   <!-- TAB: LEADERBOARD -->
   <div class="tab-page" id="page-leaderboard" style="padding:0 12px;">
     <div class="panel">
-      <div class="panel-header">🏆 ТОП ДАРИТЕЛИ</div>
+      <div class="panel-header">🏆 ТОП ДАРИТЕЛИ <span class="disclaimer-inline">игровые очки</span></div>
       <div id="leaderboard-list"></div>
     </div>
+    <div style="text-align:center;padding:8px;" class="creator-tag">creator: @m123news &nbsp;|&nbsp; <span class="disclaimer-inline">⚠️ только игра, не казино</span></div>
   </div>
 
   <!-- TAB: CHAT -->
@@ -372,6 +442,77 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 </div>
 
 <script>
+// ================================================================
+//  AUDIO SYSTEM
+// ================================================================
+const AUDIO = {
+  chaos: null,
+  big:   null,
+  _chaosVolume: 0,
+  _chaosFading: false,
+  _donorPlaying: false,
+  _donorQueue: [],
+};
+
+const SND = {
+  cheap:  'https://image2url.com/r2/default/files/1775271060475-fa1d3203-a701-4d4a-b4a3-af2bb1262830.mp3',
+  mid:    'https://image2url.com/r2/default/files/1775271142834-8e3c780e-5d91-4139-bafb-e0aad8c0de49.mp3',
+  big:    'https://image2url.com/r2/default/files/1775271243103-fe54d05f-680c-4973-a907-acc639281e2f.mp3',
+  donor:  'https://image2url.com/r2/default/files/1775271701415-e5f78460-e5d5-4b11-81da-056e0f64df49.m4a',
+  chaos:  'https://image2url.com/r2/default/files/1775270805389-4c62e052-57bf-4499-9f3e-d90a4dbfec34.m4a',
+};
+
+function initAudio() {
+  if (AUDIO.chaos) return;
+  AUDIO.chaos = new Audio(SND.chaos);
+  AUDIO.chaos.loop = true;
+  AUDIO.chaos.volume = 0;
+  AUDIO.chaos.play().catch(()=>{});
+}
+
+function fadeChaosMusicIn(duration) {
+  initAudio();
+  const target = 0.75;
+  const steps = 40;
+  const stepTime = duration / steps;
+  let step = 0;
+  clearInterval(AUDIO._chaosIn);
+  clearInterval(AUDIO._chaosOut);
+  AUDIO._chaosIn = setInterval(() => {
+    step++;
+    AUDIO.chaos.volume = Math.min(target, (step / steps) * target);
+    if (step >= steps) clearInterval(AUDIO._chaosIn);
+  }, stepTime);
+}
+
+function fadeChaosMusicOut(duration) {
+  if (!AUDIO.chaos) return;
+  const startVol = AUDIO.chaos.volume;
+  const steps = 40;
+  const stepTime = duration / steps;
+  let step = 0;
+  clearInterval(AUDIO._chaosIn);
+  clearInterval(AUDIO._chaosOut);
+  AUDIO._chaosOut = setInterval(() => {
+    step++;
+    AUDIO.chaos.volume = Math.max(0, startVol - (step / steps) * startVol);
+    if (step >= steps) clearInterval(AUDIO._chaosOut);
+  }, stepTime);
+}
+
+function playGiftSound(coins) {
+  if (AUDIO._donorPlaying) return;
+  let src;
+  if (coins <= 1)       src = SND.cheap;
+  else if (coins <= 10) src = SND.cheap;
+  else if (coins < 100) src = SND.mid;
+  else if (coins < 500) src = SND.big;
+  else return; // 500+ handled separately
+  const a = new Audio(src);
+  a.volume = 0.6;
+  a.play().catch(()=>{});
+}
+
 // ================================================================
 //  STATE MANAGER
 // ================================================================
@@ -389,6 +530,7 @@ const S = {
   nextGiftMultiplier:1,
   triggerCounts:{}, // word -> count
   triggerTimers:{}, // word -> setTimeout
+  _donorActive: false,
 };
 
 // ================================================================
@@ -520,11 +662,12 @@ const TRIGGERS = [
 //  GIFT TABLE
 // ================================================================
 const GIFT_TABLE = [
-  {name:'Роза',emoji:'🌹',coins:10},{name:'TikTok',emoji:'🎵',coins:50},
-  {name:'Бабочка',emoji:'🦋',coins:30},{name:'Лев',emoji:'🦁',coins:200},
-  {name:'Корона',emoji:'👑',coins:500},{name:'Ракета',emoji:'🚀',coins:100},
-  {name:'Универсум',emoji:'🌌',coins:1000},{name:'Дракон',emoji:'🐉',coins:2000},
-  {name:'Любовь',emoji:'💝',coins:25},{name:'Звезда',emoji:'⭐',coins:75},
+  {name:'Роза',emoji:'🌹',coins:1},{name:'Палец вверх',emoji:'👍',coins:1},
+  {name:'TikTok',emoji:'🎵',coins:50},{name:'Бабочка',emoji:'🦋',coins:30},
+  {name:'Лев',emoji:'🦁',coins:200},{name:'Корона',emoji:'👑',coins:500},
+  {name:'Ракета',emoji:'🚀',coins:100},{name:'Универсум',emoji:'🌌',coins:1000},
+  {name:'Дракон',emoji:'🐉',coins:2000},{name:'Любовь',emoji:'💝',coins:25},
+  {name:'Звезда',emoji:'⭐',coins:75},{name:'Диамант',emoji:'💎',coins:600},
 ];
 
 const DEMO_NAMES=['Саша','Маша','Дима','Катя','Вася','Оля','Петя','Аня','Коля','Лена','Макс','Юля'];
@@ -581,11 +724,8 @@ const slotBusy = {};
 function spinSlot(idx) {
   const type = SLOT_TYPES[idx];
   if (slotBusy[type.id] || S.effects.freeze) return;
-  if (S.effects.chaos && Math.random()<0.3) {
-    type = SLOT_TYPES[Math.floor(Math.random()*SLOT_TYPES.length)];
-  }
   slotBusy[type.id] = true;
-  const actualType = SLOT_TYPES[idx];
+  const actualType = type;
 
   const reels = [0,1,2].map(j=>document.getElementById(`reel-${actualType.id}-${j}`));
   reels.forEach(r=>{r.classList.add('spinning');r.classList.remove('win');});
@@ -594,25 +734,49 @@ function spinSlot(idx) {
   const results = [];
   const spinTime = S.effects.hyper ? actualType.spinTime*0.3 : actualType.spinTime;
 
-  reels.forEach((reel,i)=>{
-    const delay = spinTime + i*300;
-    let sym;
-    if(actualType.pvp && S.effects.chaos){sym=actualType.symbols[0];}
-    else {sym=actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];}
+  // Generate results first to enable near-miss
+  const genSym = (i) => {
+    if(actualType.pvp && S.effects.chaos) return actualType.symbols[0];
+    if(actualType.cursed && Math.random()<0.3) return actualType.symbols[Math.floor(Math.random()*3)];
+    return actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];
+  };
+  results[0] = genSym(0);
+  results[1] = genSym(1);
+  results[2] = genSym(2);
 
-    // Cursed slot can cheat
-    if(actualType.cursed && Math.random()<0.3) sym=actualType.symbols[Math.floor(Math.random()*3)];
-    results[i]=sym;
+  // Near-miss tweak: if first two match but third doesn't, sometimes make it one off
+  const allMatch = results[0]===results[1]&&results[1]===results[2];
+  const firstTwoMatch = results[0]===results[1] && results[2]!==results[0];
 
-    const tickInterval=setInterval(()=>{
-      reel.textContent=actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];
-    },50);
-    setTimeout(()=>{
+  reels.forEach((reel, i) => {
+    const baseDelay = spinTime + i * 350;
+    // Last reel slows down if near-miss
+    const isNearMiss = firstTwoMatch && i === 2;
+    const tickInterval = setInterval(() => {
+      reel.textContent = actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];
+    }, isNearMiss ? 120 : 50);
+
+    setTimeout(() => {
       clearInterval(tickInterval);
-      reel.textContent=sym;
-      reel.classList.remove('spinning');
-      if(i===2) resolveSlot(actualType, results, reels, idx);
-    },delay);
+      // Slow tick for last reel on near miss
+      if (isNearMiss) {
+        let slowTicks = 4;
+        const slowTick = setInterval(() => {
+          reel.textContent = actualType.symbols[Math.floor(Math.random()*actualType.symbols.length)];
+          slowTicks--;
+          if (slowTicks <= 0) {
+            clearInterval(slowTick);
+            reel.textContent = results[i];
+            reel.classList.remove('spinning');
+            resolveSlot(actualType, results, reels, idx);
+          }
+        }, 200);
+      } else {
+        reel.textContent = results[i];
+        reel.classList.remove('spinning');
+        if (i === 2) resolveSlot(actualType, results, reels, idx);
+      }
+    }, baseDelay);
   });
 }
 
@@ -831,7 +995,12 @@ function applyEffect(name, duration){
   updateEffectsBar();
 
   switch(name){
-    case 'chaos': document.body.classList.add('glitch');setTimeout(()=>document.body.classList.remove('glitch'),duration);break;
+    case 'chaos':
+      startChaosVisuals();
+      fadeChaosMusicIn(2000);
+      document.body.classList.add('glitch');
+      setTimeout(()=>document.body.classList.remove('glitch'),600);
+      break;
     case 'glitch': triggerGlitch();break;
     case 'hyper': document.body.classList.add('hyper');setTimeout(()=>document.body.classList.remove('hyper'),duration);break;
     case 'boost': S.multiplier=2;break;
@@ -841,6 +1010,10 @@ function applyEffect(name, duration){
 function removeEffect(name){
   delete S.effects[name];
   if(name==='boost')S.multiplier=1;
+  if(name==='chaos'){
+    stopChaosVisuals();
+    fadeChaosMusicOut(3000);
+  }
   updateEffectsBar();
   document.body.classList.remove('hyper');
 }
@@ -932,12 +1105,38 @@ function handleGift(user,giftName,emoji,coins,count){
   addEnergy(Math.min(25,total/15));
   addCombo();
 
-  // Gift events
-  if(total>=2000){showFullscreenEvent(emoji,escHTML(user),'+'+total+' МОНЕТ!');spawnParticles(emoji,20);shakeScreen();}
-  else if(total>=500){showBigEvent(emoji,escHTML(user),'+'+total+' монет');spawnParticles(emoji,10);}
+  // Gift notification bottom right (always)
+  showGiftNotif(user, emoji, giftName, coins, count);
+
+  // 500+ donor animation
+  if (coins >= 500) {
+    triggerDonorAnimation(user, total);
+  } else {
+    // Play gift sound (only when donor not playing)
+    if (!AUDIO._donorPlaying) playGiftSound(coins);
+
+    // Gift events
+    if(total>=2000){
+      showFullscreenEvent(emoji,escHTML(user),'+'+total+' МОНЕТ!');
+      spawnParticles(emoji,20);
+      spawnCoinRain('💰', 40);
+      shakeScreen();
+      shakeScreen();
+    } else if(total>=500){
+      showBigEvent(emoji,escHTML(user),'+'+total+' монет');
+      spawnParticles(emoji,12);
+      spawnCoinRain('💰', 20);
+    } else if(total>=100){
+      showBigEvent(emoji,escHTML(user),'+'+total+' монет');
+      spawnParticles(emoji,6);
+      spawnCoinRain(emoji, 10);
+    } else if(total>=10){
+      spawnParticles(emoji,3);
+    }
+  }
 
   // Sabotage from cheap gifts
-  if(coins<=25&&Math.random()<0.3&&S.stats.gifts>5){
+  if(coins<=1&&Math.random()<0.3&&S.stats.gifts>5){
     const sab=['Дешёвый подарок сломал барабан! 💀','Символы перемешались! 🌀','Шанс выигрыша снижен! ⬇️'];
     addChatMsg('system','💀',sab[Math.floor(Math.random()*sab.length)]);
     triggerGlitch();
@@ -949,8 +1148,10 @@ function handleGift(user,giftName,emoji,coins,count){
   // Boss damage
   if(S.boss) damageBoss(Math.round(total/5));
 
-  // Auto spin on gift
-  setTimeout(()=>spinSlot(Math.floor(Math.random()*SLOT_TYPES.length)),200);
+  // Auto spin on gift (skip during donor animation phase 1)
+  if (!S._donorActive) {
+    setTimeout(()=>spinSlot(Math.floor(Math.random()*SLOT_TYPES.length)),200);
+  }
 }
 
 function handleComment(user,text){
@@ -1143,6 +1344,212 @@ function spawnParticles(emoji,count){
 }
 
 // ================================================================
+//  COIN RAIN
+// ================================================================
+function spawnCoinRain(count, emoji) {
+  emoji = emoji || '💰';
+  count = count || 20;
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.className = 'coin-rain-coin';
+      c.textContent = emoji;
+      c.style.left = (Math.random() * 100) + 'vw';
+      const dur = 1.2 + Math.random() * 1.8;
+      c.style.animationDuration = dur + 's';
+      c.style.animationDelay = '0s';
+      c.style.fontSize = (16 + Math.random() * 14) + 'px';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), dur * 1000 + 100);
+    }, i * 60);
+  }
+}
+
+// ================================================================
+//  GIFT NOTIFICATION (bottom right)
+// ================================================================
+function showGiftNotif(user, emoji, giftName, coins, count) {
+  const stack = document.getElementById('gift-notif-stack');
+  if (!stack) return;
+  // Limit stack to 4
+  while (stack.children.length >= 4) stack.lastChild?.remove();
+
+  const el = document.createElement('div');
+  el.className = 'gift-notif';
+  const total = coins * (count || 1);
+  const coinColor = total >= 500 ? '#FFD700' : total >= 100 ? '#00F5FF' : total >= 10 ? '#39FF14' : '#888';
+  el.innerHTML = `
+    <div class="gift-notif-emoji">${emoji}</div>
+    <div class="gift-notif-info">
+      <div class="gift-notif-user" style="color:${userColor(user)}">${escHTML(user)}</div>
+      <div class="gift-notif-desc">${escHTML(giftName)}${count>1?' ×'+count:''} <span style="color:${coinColor};font-weight:700">+${total}🪙</span></div>
+    </div>
+  `;
+  stack.insertBefore(el, stack.firstChild);
+  setTimeout(() => {
+    el.classList.add('fade-out');
+    setTimeout(() => el.remove(), 400);
+  }, 3500);
+}
+
+// ================================================================
+//  CHAOS VISUAL ENHANCEMENT
+// ================================================================
+let _chaosFlashEl = null;
+function startChaosVisuals() {
+  document.body.classList.add('chaos-active');
+  document.getElementById('melt-overlay').classList.add('active');
+  if (!_chaosFlashEl) {
+    _chaosFlashEl = document.createElement('div');
+    _chaosFlashEl.className = 'chaos-color-flash';
+    document.body.appendChild(_chaosFlashEl);
+  }
+}
+function stopChaosVisuals() {
+  document.body.classList.remove('chaos-active');
+  document.getElementById('melt-overlay').classList.remove('active');
+  if (_chaosFlashEl) { _chaosFlashEl.remove(); _chaosFlashEl = null; }
+}
+
+// ================================================================
+//  500+ DONOR ANIMATION
+// ================================================================
+function triggerDonorAnimation(user, coins) {
+  // If already playing, queue
+  if (AUDIO._donorPlaying) {
+    AUDIO._donorQueue.push({ user, coins });
+    return;
+  }
+  _runDonorAnimation(user, coins);
+}
+
+function _runDonorAnimation(user, coins) {
+  AUDIO._donorPlaying = true;
+
+  // Mute chaos music during donor
+  if (AUDIO.chaos) {
+    AUDIO._savedChaosVol = AUDIO.chaos.volume;
+    AUDIO.chaos.volume = 0;
+  }
+
+  // Play donor track
+  const track = new Audio(SND.donor);
+  track.volume = 0.85;
+  track.play().catch(()=>{});
+
+  // Phase 1 (0–10.5s): grey screen, all effects suspended
+  const overlay = document.getElementById('donor-overlay');
+  const nickEl  = document.getElementById('donor-nick');
+  const miniEl  = document.getElementById('donor-nick-mini');
+
+  overlay.style.background = 'rgba(20,20,20,0)';
+  overlay.style.display = 'flex';
+  overlay.classList.add('active');
+  miniEl.style.display = 'none';
+  nickEl.textContent = '';
+  nickEl.className = 'donor-nick';
+
+  S._donorActive = true;
+
+  // Fade to grey
+  requestAnimationFrame(() => {
+    overlay.style.transition = 'background 1.5s ease';
+    overlay.style.background = 'rgba(18,18,18,0.97)';
+  });
+
+  // Phase 2 (10.5s): nick bursts in and dances
+  setTimeout(() => {
+    nickEl.textContent = user;
+    nickEl.classList.add('show');
+    setTimeout(() => nickEl.classList.add('dance'), 100);
+    spawnParticles('✨', 20);
+    spawnCoinRain('💰', 30);
+  }, 10500);
+
+  // Phase 3 (30s): nick shrinks to top-left mini
+  setTimeout(() => {
+    nickEl.classList.remove('show', 'dance');
+    nickEl.style.opacity = '0';
+
+    miniEl.textContent = user;
+    miniEl.style.display = 'block';
+    miniEl.style.transition = 'opacity 0.8s ease';
+    requestAnimationFrame(() => miniEl.classList.add('show'));
+  }, 30000);
+
+  // Phase 4: track ends — nick flies to leaderboard tab
+  track.addEventListener('ended', () => {
+    // Restore chaos volume
+    if (AUDIO.chaos && AUDIO._savedChaosVol > 0) {
+      AUDIO.chaos.volume = AUDIO._savedChaosVol;
+    }
+
+    // Mini nick flies to top tab
+    miniEl.classList.remove('show');
+    miniEl.classList.add('fly-away');
+
+    setTimeout(() => {
+      // Flash leaderboard tab
+      const topTab = document.querySelector('.main-tab[onclick*="leaderboard"]');
+      if (topTab) {
+        topTab.style.transition = 'all 0.3s';
+        topTab.style.background = 'rgba(255,215,0,0.4)';
+        topTab.style.boxShadow = '0 0 20px rgba(255,215,0,0.6)';
+        setTimeout(() => {
+          topTab.style.background = '';
+          topTab.style.boxShadow = '';
+        }, 800);
+      }
+
+      // Hide overlay
+      overlay.style.transition = 'background 1s ease';
+      overlay.style.background = 'rgba(20,20,20,0)';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.classList.remove('active');
+        nickEl.className = 'donor-nick';
+        nickEl.style.opacity = '';
+        miniEl.className = 'donor-nick-mini';
+        miniEl.style.display = 'none';
+        S._donorActive = false;
+        AUDIO._donorPlaying = false;
+
+        // Process queue
+        if (AUDIO._donorQueue.length > 0) {
+          // Show queue burst
+          const queued = [...AUDIO._donorQueue];
+          AUDIO._donorQueue = [];
+          _showQueueBurst(queued, () => {
+            if (queued.length > 0) _runDonorAnimation(queued[queued.length-1].user, queued[queued.length-1].coins);
+          });
+        }
+      }, 1200);
+    }, 800);
+  });
+}
+
+function _showQueueBurst(items, cb) {
+  const container = document.createElement('div');
+  container.className = 'queue-burst';
+  document.body.appendChild(container);
+
+  items.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'queue-nick';
+    el.textContent = item.user;
+    el.style.animationDelay = (i * 0.3) + 's';
+    el.style.top = (30 + Math.random() * 40) + '%';
+    el.style.left = (10 + Math.random() * 70) + '%';
+    container.appendChild(el);
+  });
+
+  setTimeout(() => {
+    container.remove();
+    if (cb) cb();
+  }, items.length * 300 + 1400);
+}
+
+// ================================================================
 //  NAVIGATION
 // ================================================================
 function switchMain(name){
@@ -1155,44 +1562,20 @@ function switchMain(name){
 }
 
 // ================================================================
-//  WEBSOCKET — с автопереподключением (экспоненциальный backoff)
+//  WEBSOCKET
 // ================================================================
-function connectStream(isReconnect){
-  const username=isReconnect
-    ?S.username
-    :document.getElementById('username-input').value.trim().replace('@','');
+function connectStream(){
+  const username=document.getElementById('username-input').value.trim().replace('@','');
   if(!username){alert('Введи ник!');return;}
   S.username=username;
-  if(!isReconnect){showGame();S._reconnectDelay=1000;}
-
+  showGame();
   const proto=location.protocol==='https:'?'wss:':'ws:';
   const ws=new WebSocket(`${proto}//${location.host}?username=${encodeURIComponent(username)}`);
   S.ws=ws;
-
-  ws.onopen=()=>{
-    // ✅ FIX 4: Сброс задержки при успешном подключении
-    S._reconnectDelay=1000;
-    setConnected(true);
-    addChatMsg('system','✅',isReconnect?'♻️ Переподключено к @'+username:'Подключено к @'+username);
-  };
+  ws.onopen=()=>{setConnected(true);addChatMsg('system','✅','Подключено к @'+username);};
   ws.onmessage=e=>{try{routeEvent(JSON.parse(e.data));}catch{}};
-  ws.onerror=()=>{setConnected(false);};
-  ws.onclose=()=>{
-    setConnected(false);
-    // ✅ FIX 4: Автопереподключение — только для реального стрима, не для демо
-    if(S.username&&!S.demo){
-      const delay=S._reconnectDelay||1000;
-      addChatMsg('system','🔌','Обрыв! Переподключение через '+Math.round(delay/1000)+'с...');
-      setTimeout(()=>{
-        // Проверяем что пользователь не отключился вручную
-        if(S.username&&!S.demo)connectStream(true);
-      },delay);
-      // Экспоненциальный backoff: 1с → 2с → 4с → ... → макс 30с
-      S._reconnectDelay=Math.min((S._reconnectDelay||1000)*2,30000);
-    } else {
-      addChatMsg('system','🔌','Соединение закрыто');
-    }
-  };
+  ws.onerror=()=>{setConnected(false);addChatMsg('system','❌','Ошибка подключения');};
+  ws.onclose=()=>{setConnected(false);addChatMsg('system','🔌','Соединение закрыто');};
 }
 
 function routeEvent(msg){
@@ -1259,10 +1642,13 @@ function setConnected(v,demo){
 function disconnect(){
   if(S.ws){S.ws.close();S.ws=null;}
   if(S.demoInterval){clearInterval(S.demoInterval);S.demoInterval=null;}
-  // ✅ FIX 4: Сбрасываем username ПЕРВЫМ — это стопит автопереподключение
+  stopChaosVisuals();
+  fadeChaosMusicOut(500);
+  AUDIO._donorPlaying = false;
+  AUDIO._donorQueue = [];
+  S._donorActive = false;
   Object.assign(S,{connected:false,demo:false,username:'',stats:{viewers:0,gifts:0,coins:0},
-    energy:0,level:1,xp:0,leaderboard:{},combo:0,multiplier:1,effects:{},boss:null,
-    _reconnectDelay:1000});
+    energy:0,level:1,xp:0,leaderboard:{},combo:0,multiplier:1,effects:{},boss:null,_donorActive:false});
   document.getElementById('connect-panel').style.display='';
   document.getElementById('game-container').style.display='none';
   document.getElementById('disconnect-btn').style.display='none';
