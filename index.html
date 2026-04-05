@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stream Overlay</title>
+<title>🎙 Stream Overlay</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0A0A14">
+<link rel="manifest" id="pwa-manifest">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -157,6 +162,20 @@ input[type=range]{flex:1;height:4px;accent-color:var(--gold);}
 .fsc-filename{font-size:11px;color:var(--cyan);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .fsc-filename.empty{color:#555;}
 .fsc-controls{display:flex;gap:6px;align-items:center;}
+
+/* BG MUSIC */
+.bgm-card{background:rgba(57,255,20,0.04);border:1px solid rgba(57,255,20,0.2);border-radius:10px;padding:14px;margin-bottom:10px;}
+.bgm-title{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.bgm-status{font-size:9px;font-family:'Rajdhani',sans-serif;font-weight:400;}
+.bgm-desc{font-size:10px;color:#555;margin-bottom:10px;line-height:1.6;}
+.bgm-bars{display:flex;align-items:flex-end;gap:2px;height:18px;margin-right:4px;}
+.bgm-bar{width:3px;background:var(--green);border-radius:2px;animation:bgmPulse 0.6s ease-in-out infinite;}
+.bgm-bar:nth-child(2){animation-delay:0.1s;}
+.bgm-bar:nth-child(3){animation-delay:0.2s;}
+.bgm-bar:nth-child(4){animation-delay:0.15s;}
+@keyframes bgmPulse{0%,100%{height:4px;opacity:0.4;}50%{height:18px;opacity:1;}}
+.bgm-vol-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.bgm-vol-row .vol-label{font-size:10px;color:#555;min-width:100px;}
 </style>
 </head>
 <body>
@@ -290,6 +309,44 @@ input[type=range]{flex:1;height:4px;accent-color:var(--gold);}
   <div class="tab-body" id="tb-sounds">
     <div class="sounds-wrap">
 
+      <!-- ФОНОВАЯ МУЗЫКА -->
+      <div class="bgm-card" id="bgm-card">
+        <div class="bgm-title">
+          <div class="bgm-bars" id="bgm-bars" style="display:none;">
+            <div class="bgm-bar"></div><div class="bgm-bar"></div>
+            <div class="bgm-bar"></div><div class="bgm-bar"></div>
+          </div>
+          🎵 ФОНОВАЯ МУЗЫКА
+          <span class="bgm-status" id="bgm-status" style="color:#555;">не задана</span>
+        </div>
+        <div class="bgm-desc">
+          Играет циклично с самого старта. Когда срабатывает любой триггер или Бобик — громкость поднимается до максимума. После окончания — плавно затихает до 0, но <b style="color:#aaa;">не останавливается</b>.
+        </div>
+        <div class="sc-file" style="margin-bottom:8px;">
+          <span class="sc-filename empty" id="bgm-fname">Файл не выбран</span>
+          <label class="file-label">📁 ВЫБРАТЬ<input type="file" class="file-input" id="bgm-file" accept="audio/*" onchange="loadBgMusic(this)"></label>
+        </div>
+        <div class="bgm-vol-row">
+          <span class="vol-label">Громкость (триггер)</span>
+          <input type="range" min="0" max="100" value="80" id="bgm-trigger-vol" oninput="saveBgmSettings()" style="flex:1;">
+          <span style="font-size:10px;color:var(--green);min-width:30px;" id="bgm-trigger-vol-val">80%</span>
+        </div>
+        <div class="bgm-vol-row">
+          <span class="vol-label">Нарастание (сек)</span>
+          <input type="range" min="1" max="10" value="2" id="bgm-fade-in" oninput="saveBgmSettings()" style="flex:1;">
+          <span style="font-size:10px;color:#aaa;min-width:30px;" id="bgm-fade-in-val">2с</span>
+        </div>
+        <div class="bgm-vol-row">
+          <span class="vol-label">Затухание (сек)</span>
+          <input type="range" min="1" max="15" value="5" id="bgm-fade-out" oninput="saveBgmSettings()" style="flex:1;">
+          <span style="font-size:10px;color:#aaa;min-width:30px;" id="bgm-fade-out-val">5с</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:4px;">
+          <button class="btn btn-ghost btn-xs" onclick="testBgmTrigger()">▶ ТЕСТ ТРИГГЕРА</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteBgMusic()">✕ УДАЛИТЬ</button>
+        </div>
+      </div>
+
       <!-- ЗВУК ЗА ПОДПИСКУ -->
       <div class="follow-sound-card">
         <div class="fsc-title">
@@ -407,7 +464,52 @@ function saveMasterVol(){
 }
 
 // ================================================================
-//  AUDIO — Web Audio API для фоновых звуков
+//  PWA MANIFEST — динамически создаём
+// ================================================================
+(function(){
+  const manifest = {
+    name: 'Stream Overlay',
+    short_name: 'Overlay',
+    display: 'standalone',
+    background_color: '#0A0A14',
+    theme_color: '#FFD700',
+    start_url: '/',
+    icons: [{ src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙</text></svg>", sizes: 'any', type: 'image/svg+xml' }]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  document.getElementById('pwa-manifest').href = url;
+})();
+
+// ================================================================
+//  WAKE LOCK — не даём экрану засыпать
+// ================================================================
+let _wakeLock = null;
+async function requestWakeLock(){
+  if(!('wakeLock' in navigator)) return;
+  try {
+    _wakeLock = await navigator.wakeLock.request('screen');
+    console.log('[WakeLock] ✓ активен');
+    _wakeLock.addEventListener('release', ()=>{ _wakeLock=null; });
+  } catch(e){ console.warn('[WakeLock]', e.message); }
+}
+
+// Переактивируем Wake Lock при возврате на страницу
+document.addEventListener('visibilitychange', async ()=>{
+  if(document.visibilityState === 'visible'){
+    await requestWakeLock();
+    // Если AudioContext был suspended — возобновляем
+    if(_audioCtx && _audioCtx.state === 'suspended') _audioCtx.resume();
+    // Переподключаем WS если оборвался
+    if(S.username && S.ws && S.ws.readyState !== WebSocket.OPEN && !S.demo){
+      sysMsg('📱 Возврат из фона — переподключение...');
+      connectWS();
+    }
+  }
+});
+
+// ================================================================
+//  AUDIO ENGINE
 // ================================================================
 let _audioCtx = null;
 function getAudioCtx(){
@@ -416,17 +518,17 @@ function getAudioCtx(){
   return _audioCtx;
 }
 
-// Играем звук из dataUrl
+// Разовый звук из dataUrl
 async function playDataUrl(dataUrl, vol){
   if(!dataUrl) return;
   try {
     const masterVol = (parseInt(localStorage.getItem('master_vol')||'100'))/100;
-    const trackVol = (vol||80)/100;
+    const trackVol  = (vol||80)/100;
     const ctx = getAudioCtx();
-    const resp = await fetch(dataUrl);
-    const buf = await resp.arrayBuffer();
+    const resp    = await fetch(dataUrl);
+    const buf     = await resp.arrayBuffer();
     const decoded = await ctx.decodeAudioData(buf);
-    const src = ctx.createBufferSource();
+    const src  = ctx.createBufferSource();
     const gain = ctx.createGain();
     gain.gain.value = masterVol * trackVol;
     src.buffer = decoded;
@@ -436,21 +538,175 @@ async function playDataUrl(dataUrl, vol){
   } catch(e){ console.warn('Audio error:', e); }
 }
 
-// Chaos music — looping через HTMLAudio (проще для loop)
-let _chaosHtmlAudio = null;
-const CHAOS_MUSIC_URL = 'https://image2url.com/r2/default/files/1775270805389-4c62e052-57bf-4499-9f3e-d90a4dbfec34.m4a';
+// ================================================================
+//  BGM — ФОНОВАЯ МУЗЫКА С ДИНАМИЧЕСКОЙ ГРОМКОСТЬЮ
+// ================================================================
+const BGM = {
+  audio:      null,   // HTMLAudioElement — циклично играет всегда
+  gainNode:   null,   // Web Audio GainNode для плавной громкости
+  sourceNode: null,   // MediaElementSourceNode
+  ctx:        null,   // AudioContext (shared с _audioCtx)
+  fadeTimer:  null,   // таймер затухания
+  active:     false,  // триггер сейчас активен?
+};
 
-function playChaosMusic(vol){
-  stopChaosMusic();
-  _chaosHtmlAudio = new Audio(CHAOS_MUSIC_URL);
-  _chaosHtmlAudio.loop = true;
-  _chaosHtmlAudio.volume = (vol||80)/100 * (parseInt(localStorage.getItem('master_vol')||'100')/100);
-  _chaosHtmlAudio.play().catch(()=>{});
+function loadBgmSettings(){
+  try{ return JSON.parse(localStorage.getItem('bgm_settings')||'{"triggerVol":80,"fadeIn":2,"fadeOut":5}'); }
+  catch{ return {triggerVol:80, fadeIn:2, fadeOut:5}; }
 }
 
-function stopChaosMusic(){
-  if(_chaosHtmlAudio){ _chaosHtmlAudio.pause(); _chaosHtmlAudio = null; }
+function saveBgmSettings(){
+  const tv = parseInt(document.getElementById('bgm-trigger-vol').value)||80;
+  const fi = parseInt(document.getElementById('bgm-fade-in').value)||2;
+  const fo = parseInt(document.getElementById('bgm-fade-out').value)||5;
+  localStorage.setItem('bgm_settings', JSON.stringify({triggerVol:tv, fadeIn:fi, fadeOut:fo}));
+  document.getElementById('bgm-trigger-vol-val').textContent = tv+'%';
+  document.getElementById('bgm-fade-in-val').textContent     = fi+'с';
+  document.getElementById('bgm-fade-out-val').textContent    = fo+'с';
 }
+
+function loadBgMusic(inp){
+  const f = inp.files[0]; if(!f) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    localStorage.setItem('bgm_data', JSON.stringify({dataUrl: e.target.result, name: f.name}));
+    updateBgmUI(f.name);
+    startBgMusic();
+  };
+  reader.readAsDataURL(f);
+}
+
+function deleteBgMusic(){
+  localStorage.removeItem('bgm_data');
+  stopBgMusic();
+  updateBgmUI(null);
+  const inp = document.getElementById('bgm-file');
+  if(inp) inp.value = '';
+}
+
+function updateBgmUI(name){
+  const fname  = document.getElementById('bgm-fname');
+  const status = document.getElementById('bgm-status');
+  if(name){
+    fname.textContent = name;
+    fname.classList.remove('empty');
+    if(status){ status.textContent='▶ играет'; status.style.color='var(--green)'; }
+  } else {
+    fname.textContent = 'Файл не выбран';
+    fname.classList.add('empty');
+    if(status){ status.textContent='не задана'; status.style.color=''; }
+  }
+}
+
+function updateBgmBars(playing){
+  const bars = document.getElementById('bgm-bars');
+  if(bars) bars.style.display = playing ? 'flex' : 'none';
+}
+
+async function startBgMusic(){
+  const stored = localStorage.getItem('bgm_data');
+  if(!stored) return;
+  const {dataUrl, name} = JSON.parse(stored);
+
+  stopBgMusic();
+
+  // Создаём HTMLAudio для loop
+  const audio = new Audio(dataUrl);
+  audio.loop  = true;
+  audio.crossOrigin = 'anonymous';
+  BGM.audio   = audio;
+
+  // Подключаем к Web Audio для управления громкостью
+  const ctx  = getAudioCtx();
+  BGM.ctx    = ctx;
+  const src  = ctx.createMediaElementSource(audio);
+  const gain = ctx.createGain();
+  gain.gain.value = 0; // стартуем с 0
+  src.connect(gain);
+  gain.connect(ctx.destination);
+  BGM.gainNode   = gain;
+  BGM.sourceNode = src;
+
+  try {
+    await audio.play();
+    updateBgmUI(name);
+    updateBgmBars(true);
+    console.log('[BGM] ▶ фоновая музыка запущена');
+  } catch(e){
+    console.warn('[BGM] Не удалось запустить:', e.message);
+  }
+}
+
+function stopBgMusic(){
+  clearTimeout(BGM.fadeTimer);
+  if(BGM.audio){
+    BGM.audio.pause();
+    BGM.audio = null;
+  }
+  BGM.gainNode   = null;
+  BGM.sourceNode = null;
+  BGM.active     = false;
+  updateBgmBars(false);
+}
+
+// Вызывается при СТАРТЕ любого триггера / Бобика
+function bgmTriggerStart(durationMs){
+  if(!BGM.audio || !BGM.gainNode) return;
+  clearTimeout(BGM.fadeTimer);
+  BGM.active = true;
+
+  const cfg        = loadBgmSettings();
+  const masterVol  = (parseInt(localStorage.getItem('master_vol')||'100'))/100;
+  const targetVol  = (cfg.triggerVol/100) * masterVol;
+  const fadeInSec  = cfg.fadeIn;
+
+  // Плавное нарастание
+  const ctx = BGM.ctx || getAudioCtx();
+  BGM.gainNode.gain.cancelScheduledValues(ctx.currentTime);
+  BGM.gainNode.gain.setValueAtTime(BGM.gainNode.gain.value, ctx.currentTime);
+  BGM.gainNode.gain.linearRampToValueAtTime(targetVol, ctx.currentTime + fadeInSec);
+
+  // После триггера — плавное затухание до 0
+  BGM.fadeTimer = setTimeout(()=> bgmTriggerEnd(), durationMs);
+}
+
+// Вызывается при КОНЦЕ триггера / Бобика
+function bgmTriggerEnd(){
+  if(!BGM.gainNode) return;
+  BGM.active = false;
+
+  const cfg       = loadBgmSettings();
+  const fadeOutSec = cfg.fadeOut;
+  const ctx = BGM.ctx || getAudioCtx();
+
+  BGM.gainNode.gain.cancelScheduledValues(ctx.currentTime);
+  BGM.gainNode.gain.setValueAtTime(BGM.gainNode.gain.value, ctx.currentTime);
+  BGM.gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + fadeOutSec);
+}
+
+function testBgmTrigger(){
+  if(!BGM.audio){ spawnNotif('⚠️','BGM','Сначала выбери файл!'); return; }
+  bgmTriggerStart(5000); // 5 сек тест
+  spawnNotif('🎵','BGM ТЕСТ','5 сек подъём → затухание');
+}
+
+// Восстанавливаем BGM при загрузке страницы
+(function initBgm(){
+  const stored = localStorage.getItem('bgm_data');
+  const cfg    = loadBgmSettings();
+  // Обновляем ползунки
+  const tv = document.getElementById('bgm-trigger-vol');
+  const fi = document.getElementById('bgm-fade-in');
+  const fo = document.getElementById('bgm-fade-out');
+  if(tv){ tv.value = cfg.triggerVol; document.getElementById('bgm-trigger-vol-val').textContent = cfg.triggerVol+'%'; }
+  if(fi){ fi.value = cfg.fadeIn;     document.getElementById('bgm-fade-in-val').textContent     = cfg.fadeIn+'с'; }
+  if(fo){ fo.value = cfg.fadeOut;    document.getElementById('bgm-fade-out-val').textContent    = cfg.fadeOut+'с'; }
+  if(stored){
+    const {name} = JSON.parse(stored);
+    updateBgmUI(name);
+    // Запустится после первого клика пользователя (браузер требует жест)
+  }
+})();
 
 // ================================================================
 //  CHAOS
@@ -460,8 +716,9 @@ function fireBobik(fromTest){
   const cfg = loadBobikSettings();
   S.chaos.active = true;
 
-  // Music
-  playChaosMusic(cfg.vol);
+  // BGM — поднимаем громкость на время хаоса
+  const durMs = cfg.duration * 1000;
+  bgmTriggerStart(durMs);
 
   // Visuals
   document.getElementById('melt-overlay').classList.add('on');
@@ -499,7 +756,7 @@ function fireBobik(fromTest){
 function stopChaos(){
   S.chaos.active = false;
   clearTimeout(S.chaos.timer);
-  stopChaosMusic();
+  // BGM затухает само через bgmTriggerStart таймер
   document.getElementById('melt-overlay').classList.remove('on');
   document.body.classList.remove('chaos-on');
   if(S.chaos.flashEl){ S.chaos.flashEl.remove(); S.chaos.flashEl=null; }
@@ -565,6 +822,8 @@ function fireTrigger(t){
   spawnNotif('⚡', t.word, t.msg||'активирован');
   if(t.action==='sound' && t.dataUrl) playDataUrl(t.dataUrl, t.vol||80);
   if(t.action==='chaos') fireBobik(false);
+  // BGM — поднимаем на 8 секунд для обычных триггеров
+  if(t.action !== 'chaos') bgmTriggerStart(8000);
 }
 
 // ================================================================
@@ -969,6 +1228,8 @@ function connectWS(){
     setConn(true);
     sysMsg('✅ Подключено к @'+username);
     getAudioCtx();
+    requestWakeLock();
+    startBgMusic(); // запускаем фоновую музыку
   };
 
   ws.onmessage = e=>{
@@ -1014,6 +1275,8 @@ function startDemo(){
   setConn(true, true);
   sysMsg('🎮 Демо-режим активен');
   getAudioCtx(); // разблокируем аудио
+  requestWakeLock();
+  startBgMusic();
 
   S.demoInterval = setInterval(()=>{
     const r = Math.random();
