@@ -1,7 +1,7 @@
 {
-  "name": "tiktok-casino",
-  "version": "1.0.0",
-  "description": "TikTok Stream Casino Game",
+  "name": "tiktok-stream-overlay",
+  "version": "2.0.0",
+  "description": "TikTok Stream Overlay + Shop + DonationAlerts",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
