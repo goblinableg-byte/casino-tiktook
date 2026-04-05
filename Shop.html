@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛒 Магазин стрима</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Mulish:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg0: #07070F;
+  --bg1: #0E0E1C;
+  --bg2: #161628;
+  --gold: #F5C842;
+  --gold2: #FFE57A;
+  --pink: #FF3C7E;
+  --cyan: #00E5CC;
+  --purple: #9D4EFF;
+  --green: #2EFF8C;
+  --red: #FF4444;
+  --text: #E8E8F0;
+  --muted: #5A5A7A;
+  --border: rgba(245,200,66,0.15);
+  --card: rgba(255,255,255,0.03);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Mulish', sans-serif;
+  background: var(--bg0);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background grid */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,204,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,204,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glow orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+.orb1 { width: 500px; height: 500px; background: var(--purple); top: -200px; right: -150px; animation: float1 8s ease-in-out infinite; }
+.orb2 { width: 400px; height: 400px; background: var(--pink); bottom: -150px; left: -100px; animation: float2 10s ease-in-out infinite; }
+@keyframes float1 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-30px,30px);} }
+@keyframes float2 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(30px,-20px);} }
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+/* ---- HEADER ---- */
+header {
+  padding: 24px 0 0;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245,200,66,0.08);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 18px;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.logo-badge .dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--green);
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+header h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(24px, 6vw, 42px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+header h1 span.g {
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 420px;
+  margin: 0 auto 24px;
+}
+
+/* DA link */
+.da-link-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0,229,204,0.06);
+  border: 1px solid rgba(0,229,204,0.2);
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin: 0 auto 24px;
+  max-width: 420px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.da-link-box:hover { background: rgba(0,229,204,0.12); transform: translateY(-1px); }
+.da-link-box .icon { font-size: 22px; }
+.da-link-box .info { flex: 1; text-align: left; }
+.da-link-box .lbl { font-size: 10px; color: var(--cyan); font-family: 'Unbounded', sans-serif; letter-spacing: 1px; }
+.da-link-box .url { font-size: 13px; color: var(--text); font-weight: 600; }
+.da-link-box .arr { font-size: 18px; color: var(--muted); }
+
+/* ---- HOW IT WORKS ---- */
+.how {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.how-step {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 14px;
+  text-align: center;
+}
+.how-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px; font-weight: 900;
+  margin: 0 auto 8px;
+  color: #000;
+}
+.how-step p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* ---- CATEGORIES ---- */
+.cat-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.cat-tab {
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-family: 'Unbounded', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.cat-tab.active {
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  color: #000;
+  border-color: transparent;
+}
+.cat-tab:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+
+/* ---- ITEMS GRID ---- */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.item-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.25s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.item-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,0.08), transparent 70%);
+}
+
+.item-card:hover { transform: translateY(-3px); border-color: rgba(245,200,66,0.35); box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+.item-card:hover::before { opacity: 1; }
+
+.item-card.boost   { --accent: var(--cyan);   }
+.item-card.vote    { --accent: var(--purple);  }
+.item-card.event   { --accent: var(--pink);    }
+
+.item-card .top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.item-emoji {
+  font-size: 32px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+
+.cat-badge {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 100px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: rgba(255,255,255,0.03);
+  white-space: nowrap;
+}
+
+.item-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.item-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.item-prices {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.price-rub {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(245,200,66,0.1);
+  border: 1px solid rgba(245,200,66,0.25);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--gold);
+}
+
+.price-coins {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,60,126,0.08);
+  border: 1px solid rgba(255,60,126,0.2);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--pink);
+}
+
+.buy-btn {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  color: #000;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.buy-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+.buy-btn:active { transform: scale(0.98); }
+
+/* ---- VOTE RESULTS ---- */
+.votes-section {
+  margin-bottom: 32px;
+}
+.votes-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vote-poll {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+}
+.vote-poll-title {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10px;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+.vote-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.vbr-label { font-size: 12px; min-width: 80px; color: var(--text); }
+.vbr-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; }
+.vbr-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--purple), var(--pink)); transition: width 0.6s ease; }
+.vbr-pct { font-size: 11px; color: var(--gold); font-family: 'Unbounded', sans-serif; min-width: 35px; text-align: right; }
+
+/* ---- TICKER ---- */
+.ticker-wrap {
+  background: rgba(245,200,66,0.06);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 10px 20px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ticker-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ticker-track {
+  flex: 1;
+  overflow: hidden;
+}
+.ticker-inner {
+  display: flex;
+  gap: 40px;
+  animation: tickerScroll 30s linear infinite;
+  white-space: nowrap;
+}
+.ticker-inner span { font-size: 12px; color: var(--muted); }
+.ticker-inner span b { color: var(--text); }
+@keyframes tickerScroll { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+/* ---- RECENT PURCHASES ---- */
+.recent-section { margin-bottom: 32px; }
+.recent-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.recent-list { display: flex; flex-direction: column; gap: 6px; }
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  animation: slideIn 0.4s ease;
+}
+@keyframes slideIn { from{opacity:0;transform:translateX(-10px);} to{opacity:1;transform:none;} }
+.ri-emoji { font-size: 20px; }
+.ri-info { flex: 1; }
+.ri-info .name { font-size: 12px; font-weight: 700; color: var(--text); }
+.ri-info .user { font-size: 11px; color: var(--muted); }
+.ri-price {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* ---- DA MODAL ---- */
+.modal-bg {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-bg.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--bg1);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  max-width: 400px;
+  width: 100%;
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+}
+.modal-bg.open .modal { transform: scale(1); }
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255,255,255,0.07);
+  border: none; border-radius: 50%;
+  width: 30px; height: 30px;
+  color: var(--muted); font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { color: #fff; }
+.modal-emoji { font-size: 48px; text-align: center; margin-bottom: 12px; display: block; }
+.modal-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px; font-weight: 900;
+  text-align: center; margin-bottom: 6px;
+  color: var(--text);
+}
+.modal-desc { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 20px; }
+.modal-instruction {
+  background: rgba(0,229,204,0.05);
+  border: 1px solid rgba(0,229,204,0.15);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #aaa;
+  margin-bottom: 16px;
+}
+.modal-instruction b { color: var(--cyan); }
+.modal-instruction .amount-hint {
+  display: inline-block;
+  background: rgba(245,200,66,0.12);
+  border: 1px solid rgba(245,200,66,0.3);
+  border-radius: 6px;
+  padding: 2px 8px;
+  color: var(--gold);
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+}
+.modal-da-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--pink));
+  color: #000;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.modal-da-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.modal-note { font-size: 10px; color: var(--muted); text-align: center; margin-top: 10px; line-height: 1.5; }
+
+/* ---- FOOTER ---- */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .how { grid-template-columns: 1fr; }
+  .items-grid { grid-template-columns: 1fr 1fr; }
+  .da-link-box { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<!-- DA MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <span class="modal-emoji" id="m-emoji">🎁</span>
+    <div class="modal-title" id="m-title">Название</div>
+    <div class="modal-desc" id="m-desc">Описание</div>
+    <div class="modal-instruction">
+      1. Нажми <b>ОТКРЫТЬ DONATIONALERTS</b><br>
+      2. Введи сумму: <span class="amount-hint" id="m-amount">100 ₽</span><br>
+      3. В поле <b>сообщение</b> напиши: <b id="m-keyword" style="color:var(--pink)"></b><br>
+      4. Оплати — эффект запустится автоматически! 🚀
+    </div>
+    <a class="modal-da-btn" id="m-da-link" href="#" target="_blank">
+      💳 ОТКРЫТЬ DONATIONALERTS
+    </a>
+    <div class="modal-note">
+      После оплаты эффект активируется в течение нескольких секунд.<br>
+      Поддерживается оплата картой, СБП, криптовалютой.
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="logo-badge"><div class="dot"></div>STREAM SHOP</div>
+    <h1>Влияй на <span class="g">стрим</span><br>прямо сейчас</h1>
+    <p>Задонать через DonationAlerts — и твой эффект запустится на стриме автоматически!</p>
+
+    <a class="da-link-box" id="da-main-link" href="#" target="_blank">
+      <span class="icon">💳</span>
+      <div class="info">
+        <div class="lbl">DONATION ALERTS</div>
+        <div class="url" id="da-url-display">загрузка...</div>
+      </div>
+      <span class="arr">→</span>
+    </a>
+  </header>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-label">🔥 ЛЕНТА</div>
+    <div class="ticker-track">
+      <div class="ticker-inner" id="ticker-inner">
+        <span>Ожидание покупок...</span><span>Ожидание покупок...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <p>Выбери эффект из магазина ниже</p>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <p>Открой донат и введи нужную сумму</p>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <p>Эффект запустится автоматически!</p>
+    </div>
+  </div>
+
+  <!-- VOTE RESULTS -->
+  <div class="votes-section" id="votes-section" style="display:none;">
+    <div class="votes-title">📊 ГОЛОСОВАНИЯ</div>
+    <div id="votes-list"></div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="cat-tabs" id="cat-tabs">
+    <div class="cat-tab active" onclick="filterCat('all')" data-cat="all">ВСЕ</div>
+    <div class="cat-tab" onclick="filterCat('boost')" data-cat="boost">⚡ БУУСТЫ</div>
+    <div class="cat-tab" onclick="filterCat('vote')" data-cat="vote">📊 ГОЛОСА</div>
+    <div class="cat-tab" onclick="filterCat('event')" data-cat="event">🎭 СОБЫТИЯ</div>
+  </div>
+
+  <!-- ITEMS -->
+  <div class="items-grid" id="items-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-family:'Unbounded',sans-serif;font-size:11px;">
+      Загрузка магазина...
+    </div>
+  </div>
+
+  <!-- RECENT -->
+  <div class="recent-section" id="recent-section" style="display:none;">
+    <div class="recent-title">⚡ ПОСЛЕДНИЕ ПОКУПКИ</div>
+    <div class="recent-list" id="recent-list"></div>
+  </div>
+
+  <footer>
+    Powered by DonationAlerts + TikTok Live<br>
+    Все покупки обрабатываются автоматически
+  </footer>
+</div>
+
+<script>
+// ================================================================
+//  CONFIG — заменится при подключении к серверу
+// ================================================================
+const DA_LINK = window.location.hostname === 'localhost'
+  ? 'https://www.donationalerts.com/r/твой_ник'
+  : `https://www.donationalerts.com/r/${window.location.hostname.split('.')[0]}`;
+
+let SHOP_ITEMS = [];
+let currentCat = 'all';
+let votes = {}; // voteId → { title, options: {label: count} }
+let recentPurchases = [];
+
+// ================================================================
+//  INIT
+// ================================================================
+async function init() {
+  // Попытка загрузить items с сервера
+  try {
+    const resp = await fetch('/api/shop');
+    const data = await resp.json();
+    SHOP_ITEMS = data.items || [];
+  } catch(e) {
+    // Фолбэк — дефолтные товары
+    SHOP_ITEMS = getDefaultItems();
+  }
+
+  renderItems();
+  updateDALink();
+  connectWS();
+}
+
+function updateDALink() {
+  const link = DA_LINK;
+  document.getElementById('da-main-link').href = link;
+  document.getElementById('da-url-display').textContent = link.replace('https://', '');
+}
+
+function getDefaultItems() {
+  return [
+    { id:'chaos', category:'boost', emoji:'🌀', name:'ХАОС РЕЖИМ', desc:'Включает хаос на 60 секунд!', price:100, minCoins:2000 },
+    { id:'bobik', category:'event', emoji:'🐶', name:'ВЫЗВАТЬ БОБИКА', desc:'Принудительный Бобик на 30 сек', price:80, minCoins:1500 },
+    { id:'vote_rock', category:'vote', emoji:'🎸', name:'ГОЛОС: РОК', desc:'Голосуй за следующий трек — Рок', price:30, minCoins:500 },
+    { id:'dance', category:'event', emoji:'💃', name:'ТАНЦЕВАЛЬНЫЙ ЧЭЛЛ', desc:'Стример должен потанцевать!', price:90, minCoins:2000 },
+  ];
+}
+
+// ================================================================
+//  RENDER
+// ================================================================
+function filterCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+  renderItems();
+}
+
+function renderItems() {
+  const filtered = currentCat === 'all' ? SHOP_ITEMS : SHOP_ITEMS.filter(i => i.category === currentCat);
+  const grid = document.getElementById('items-grid');
+  if (!filtered.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">Нет товаров в этой категории</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(item => `
+    <div class="item-card ${item.category}" onclick="openBuyModal('${item.id}')">
+      <div class="top">
+        <span class="item-emoji">${item.emoji}</span>
+        <span class="cat-badge">${catLabel(item.category)}</span>
+      </div>
+      <div class="item-name">${item.name}</div>
+      <div class="item-desc">${item.desc}</div>
+      <div class="item-prices">
+        <div class="price-rub">💳 ${item.price} ₽</div>
+        <div class="price-coins">🎁 ${item.minCoins}+ монет</div>
+      </div>
+      <button class="buy-btn">ПОЛУЧИТЬ ЭФФЕКТ →</button>
+    </div>
+  `).join('');
+}
+
+function catLabel(cat) {
+  return { boost: '⚡ БУСТ', vote: '📊 ГОЛОС', event: '🎭 СОБЫТИЕ' }[cat] || cat.toUpperCase();
+}
+
+// ================================================================
+//  VOTES
+// ================================================================
+function updateVotes(voteId, voteTitle, voteOption, user) {
+  if (!votes[voteId]) votes[voteId] = { title: voteTitle || voteId, options: {} };
+  votes[voteId].options[voteOption] = (votes[voteId].options[voteOption] || 0) + 1;
+  renderVotes();
+}
+
+function renderVotes() {
+  const section = document.getElementById('votes-section');
+  const list = document.getElementById('votes-list');
+  if (!Object.keys(votes).length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+
+  list.innerHTML = Object.entries(votes).map(([id, poll]) => {
+    const total = Object.values(poll.options).reduce((a,b)=>a+b, 0) || 1;
+    const bars = Object.entries(poll.options)
+      .sort((a,b)=>b[1]-a[1])
+      .map(([label, count]) => `
+        <div class="vote-bar-row">
+          <div class="vbr-label">${label}</div>
+          <div class="vbr-wrap"><div class="vbr-fill" style="width:${Math.round(count/total*100)}%"></div></div>
+          <div class="vbr-pct">${Math.round(count/total*100)}%</div>
+        </div>`).join('');
+    return `<div class="vote-poll"><div class="vote-poll-title">${poll.title}</div>${bars}</div>`;
+  }).join('');
+}
+
+// ================================================================
+//  RECENT PURCHASES
+// ================================================================
+function addRecent(emoji, name, user, price, source) {
+  recentPurchases.unshift({ emoji, name, user, price, source, ts: Date.now() });
+  if (recentPurchases.length > 8) recentPurchases.pop();
+  renderRecent();
+  updateTicker();
+}
+
+function renderRecent() {
+  const section = document.getElementById('recent-section');
+  const list = document.getElementById('recent-list');
+  if (!recentPurchases.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  list.innerHTML = recentPurchases.slice(0,5).map(r => `
+    <div class="recent-item">
+      <div class="ri-emoji">${r.emoji}</div>
+      <div class="ri-info">
+        <div class="name">${r.name}</div>
+        <div class="user">${r.user} · ${r.source === 'tiktok' ? '🎵 TikTok' : '💳 Донат'}</div>
+      </div>
+      <div class="ri-price">${r.source === 'tiktok' ? r.price+'🪙' : r.price+'₽'}</div>
+    </div>`).join('');
+}
+
+function updateTicker() {
+  const base = recentPurchases.map(r => `<span><b>${r.user}</b> купил ${r.emoji} ${r.name}</span>`);
+  const doubled = [...base, ...base];
+  document.getElementById('ticker-inner').innerHTML = doubled.join('');
+}
+
+// ================================================================
+//  MODAL
+// ================================================================
+function openBuyModal(itemId) {
+  const item = SHOP_ITEMS.find(i => i.id === itemId);
+  if (!item) return;
+
+  document.getElementById('m-emoji').textContent = item.emoji;
+  document.getElementById('m-title').textContent = item.name;
+  document.getElementById('m-desc').textContent = item.desc;
+  document.getElementById('m-amount').textContent = item.price + ' ₽';
+  document.getElementById('m-keyword').textContent = item.id.toUpperCase();
+  document.getElementById('m-da-link').href = DA_LINK;
+  document.getElementById('modal-bg').classList.add('open');
+}
+
+function closeModal(e) { if (e.target === document.getElementById('modal-bg')) closeModalBtn(); }
+function closeModalBtn() { document.getElementById('modal-bg').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModalBtn(); });
+
+// ================================================================
+//  WEBSOCKET — получаем события с сервера
+// ================================================================
+function connectWS() {
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  // Подключаемся как анонимный зритель (без username)
+  const ws = new WebSocket(`${proto}//${location.host}?username=shop_viewer`);
+
+  ws.onmessage = e => {
+    try {
+      const d = JSON.parse(e.data);
+      if (d.type === 'shop_items' && d.items) {
+        SHOP_ITEMS = d.items;
+        renderItems();
+      }
+      if (d.type === 'purchase') {
+        const item = SHOP_ITEMS.find(i => i.id === d.item);
+        if (item) addRecent(item.emoji, item.name, d.user, d.amount, d.source);
+        if (d.action === 'vote' && d.voteId) updateVotes(d.voteId, d.voteId, d.voteOption, d.user);
+      }
+      if (d.type === 'donation') {
+        // Просто показываем в тикере
+      }
+    } catch(err) {}
+  };
+
+  ws.onclose = () => setTimeout(connectWS, 5000);
+}
+
+init();
+</script>
+</body>
+</html>
